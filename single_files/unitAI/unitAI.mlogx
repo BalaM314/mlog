@@ -1,0 +1,53 @@
+#program_type main
+#Generic Unit AI by BalaM314.
+
+start:
+#Variables
+set unitType @fortress
+set onSwitch switch1
+sensor on switch1 @enabled
+jump start notEqual on true
+
+bind_new_unit:
+ubind unitType
+
+check_health:
+#todo
+
+ulocate building turret true outX outY found _
+jump end equal found false
+sensor range @unit @range
+ucontrol getblock outX outY h enemyTurret
+
+choose_ai_type:
+#temporary
+jump bulky always
+
+#For fast moving units like Flare.
+insane:
+
+jump end always
+
+#For medium speed units like Dagger, only effective against some turrets.
+strafe:
+
+jump end always
+
+#For slow and tanky units like fortress, vela, etc.
+bulky:
+ucontrol approach outX outY range
+jump end always
+
+#For super long range units like corvus, omura, etc
+sniper:
+
+jump end always
+
+
+
+end:
+end
+
+
+
+

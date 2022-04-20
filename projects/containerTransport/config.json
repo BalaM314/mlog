@@ -1,0 +1,10 @@
+{
+	"name": "Payload Transport",
+	"authors": ["BalaM314"],
+	"compilerOptions": {
+		"include": [],
+		"removeComments": true,
+		"compileWithErrors": true,
+		"mode": "project"
+	}
+}

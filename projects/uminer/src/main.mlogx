@@ -1,0 +1,11 @@
+#program_type main
+#Uminer by BalaM314, version 0.0.0
+
+
+
+mine:
+sensor unit.mining @unit @mining
+sensor unit.items @unit @totalItems
+sensor unit.itemCapacity @unit @itemCapacity
+
+

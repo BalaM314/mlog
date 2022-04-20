@@ -1,0 +1,19 @@
+_flag_unit:
+print "Flagging unit"
+print name
+printflush stdout
+ubind _unit_type
+sensor __flag_unit__dead @unit @dead
+jump _flag_unit notEqual __flag_unit__dead false
+sensor __flag_unit__flag @unit @flag
+sensor __flag_unit__controlled @unit @controlled
+op equal __flag_unit__unitUnflagged __flag_unit__flag 0
+op equal __flag_unit__unitHasOurFlag __flag_unit__flag cookie
+op equal __flag_unit__unitNotControlled __flag_unit__controlled false
+op or __flag_unit__unitFlagOk __flag_unit__unitUnflagged __flag_unit__unitHasOurFlag
+jump _flag_unit notEqual __flag_unit__unitFlagOk true
+ucontrol flag cookie
+print "Flagged unit"
+print name
+printflush stdout
+set @counter _stack1

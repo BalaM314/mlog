@@ -1,0 +1,19 @@
+op mul cookie @thisx @maph
+op add cookie @thisy cookie
+set x -5
+op abs x x 0
+op add x x 1
+op add x x 5
+print x
+set _unit_type @flare
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump _flag_unit always
+halt:
+jump halt always
+end
+#stdlib
+
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

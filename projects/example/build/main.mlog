@@ -1,0 +1,33 @@
+op mul _cookie @thisx @maph
+op add _cookie @thisy @cookie
+set author BalaM314
+set name example_program
+set _stdout message1
+set _stderr message2
+set _building_type @pulse-conduit
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump _count_buildings always
+set _unit_type @omura
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump _count_units always
+print "Number of "
+print _building_type
+print "s: "
+print _num_buildings
+print "\nNumber of "
+print _unit_type
+print "s: "
+print _num_units
+printflush _stdout
+jump move_unit notEqual @unit null
+set _unit_type @flare
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump _flag_unit always
+move_unit:
+ucontrol move @thisx @thisy 0 0 0
+ucontrol target @thisx @thisy 1 0 0
+set _err "I don't know what to do next"
+jump _err always

@@ -1,0 +1,11 @@
+#require cookie
+
+set x -5
+op abs x
+op add x x 1
+increment x 5
+print x
+
+uflag @flare
+halt:
+jump halt always

@@ -1,0 +1,14 @@
+_flag_unit:
+ubind _unit_type
+sensor dead @unit @dead
+jump _flag_unit notEqual dead false
+sensor __flag @unit @flag
+sensor __controlled @unit @controlled
+op equal __unitUnflagged __flag 0
+op equal __unitHasOurFlag __flag _cookie
+op equal __unitNotControlled __controlled false
+op or __unitFlagOk __unitUnflagged __unitHasOurFlag
+jump _flag_unit notEqual __unitFlagOk true
+jump _flag_unit notEqual __unitNotControlled true
+ucontrol flag _cookie
+set @counter _stack1

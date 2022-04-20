@@ -1,0 +1,102 @@
+set pickX 446
+set pickY 30
+set dropX 405
+set dropY 15
+set unitType @mega
+set payloadType @container
+set name "\n[white]Payload Transport by [blue]BalaM314[white]"
+get_variables:
+set stdout message1
+set stderr message1
+set i 0
+get_variables_loop:
+getlink linkedBuilding i
+sensor linkedBuilding.type linkedBuilding @type
+jump is_message strictEqual linkedBuilding.type @message
+jump next always
+is_message:
+set stdout linkedBuilding
+set stderr linkedBuilding
+jump next always
+next:
+op add i i 1
+jump get_variables_loop lessThanEq i @links
+jump check_variables always
+check_variables:
+op add twoPlusTwo 2 2
+jump invalid_variables notEqual twoPlusTwo 4
+jump bind_unit always
+invalid_variables:
+print "Please make sure all necessary buildings are connected."
+print name
+printflush stderr
+ucontrol flag 0
+ubind null
+jump get_variables always
+bind_unit:
+sensor unit.dead @unit @dead
+jump bind_new_unit equal unit.dead true
+jump main always
+bind_new_unit:
+set _unit_type unitType
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump _flag_unit always
+jump check_unit_payload always
+check_unit_payload:
+sensor unit.payloadCount @unit @payloadCount
+jump unit_payload_invalid notEqual unit.payloadCount 0
+jump main always
+unit_payload_invalid:
+print "Unit has payloads, trying again..."
+print name
+printflush stderr
+jump bind_new_unit always
+main:
+move_payload:
+move_unit_to_pickup:
+set dest.x pickX
+set dest.y pickY
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump move_unit_precise always
+jump check_payload_in_pickupBuilding always
+no_payload:
+print "[orange]Waiting for a payload"
+print name
+printflush stdout
+jump check_payload_in_pickupBuilding always
+invalid_payload:
+print "[red]Payload is of wrong type, refusing to take."
+print name
+printflush stderr
+jump check_payload_in_pickupBuilding always
+check_payload_in_pickupBuilding:
+ucontrol move pickX pickY
+ucontrol getBlock pickX pickY _ pickupBlock
+sensor payloadToTake.type pickupBlock @payloadType
+jump no_payload equal payloadToTake.type null
+jump invalid_payload notEqual payloadToTake.type payloadType
+jump pickup_payload always
+pickup_payload:
+ucontrol payTake false
+move_unit_to_dropoff:
+set dest.x dropX
+set dest.y dropY
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump move_unit_precise always
+jump check_payload_in_dropBuilding always
+dropBuilding_clogged:
+print "[red]Dropoff block has a building, waiting..."
+print name
+printflush stdout
+check_payload_in_dropBuilding:
+ucontrol move dropX dropY
+ucontrol getBlock dropX dropY _ dropoffBlock
+sensor dropoffBlock.payloadCount dropoffBlock @payloadCount
+jump dropBuilding_clogged notEqual dropoffBlock.payloadCount 0
+jump drop_payload always
+drop_payload:
+ucontrol payDrop
+jump main always

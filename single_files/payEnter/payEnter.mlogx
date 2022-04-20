@@ -1,0 +1,26 @@
+#program_type main
+#require cookie
+
+#Config
+set unitType @mega
+set reconstructor reconstructor1
+#Runtime variables
+sensor x reconstructor @x
+sensor y reconstructor @y
+
+bind_unit:
+#Bind a unit, but check if it's alive and unflagged.
+uflag unitType
+
+ucontrol_loop:
+#Constantly tell the unit to move to the reconstructor's coords and payenter.
+ucontrol move x y
+ucontrol payEnter
+sensor dead @unit @dead
+#Once it goes in the reconstructor(or dies), exit the loop.
+jump ucontrol_loop notEqual dead true
+
+unit_dead:
+#Bind a new unit.
+jump bind_unit always
+

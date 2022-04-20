@@ -1,0 +1,104 @@
+op mul cookie @thisx @maph
+op add cookie @thisy cookie
+set unitType @flare
+set itemDropRadius 2
+set pickupItem @copper
+set maxItemsToTake 100
+get_core:
+ubind @flare
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @mono
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+set _err "No units, unable to locate core."
+jump _err always
+
+locate_core:
+ulocate building core false _ coreX coreY _ core
+
+ubind null
+main_loop:
+bind_unit:
+	sensor unit.dead @unit @dead
+	jump check_items notEqual unit.dead true
+	bind_new_unit:
+set _unit_type unitType
+set _stack1 @counter
+op add _stack1 _stack1 2
+jump _flag_unit always
+
+check_items:
+	ucontrol idle
+	ucontrol flag cookie
+	sensor itemsInContainer container1 pickupItem
+	sensor itemCapacity container1 @itemCapacity
+	jump main_loop equal itemsInContainer itemCapacity
+	jump move_unit_to_core always
+move_unit_to_core:
+	sensor unit.dead @unit @dead
+	sensor unit.controller @unit @controller
+	jump bind_new_unit equal unit.dead true
+	jump bind_new_unit notEqual unit.controller @this
+	ucontrol move coreX coreY
+	sensor unit.x @unit @x
+	sensor unit.y @unit @y
+	op sub xDiff_from_core unit.x coreX
+	op sub yDiff_from_core unit.y coreY
+op abs xDiff_from_core xDiff_from_core 0
+
+op abs yDiff_from_core yDiff_from_core 0
+
+	jump move_unit_to_core greaterThan xDiff_from_core itemDropRadius
+	jump move_unit_to_core greaterThan yDiff_from_core itemDropRadius
+drop_current_item:
+	sensor currentItem @unit @firstItem
+	wait 0.5
+	ucontrol itemDrop core 1e10
+pickup_item:
+	sensor unit.dead @unit @dead
+	sensor unit.controller @unit @controller
+	jump bind_new_unit equal unit.dead true
+	jump bind_new_unit notEqual unit.controller @this
+	wait 0.5
+	ucontrol itemTake core pickupItem maxItemsToTake
+	sensor itemsInUnit @unit pickupItem
+	jump drop_current_item equal itemsInUnit 0
+move_unit_to_dest:
+	sensor unit.dead @unit @dead
+	sensor unit.controller @unit @controller
+	jump bind_new_unit equal unit.dead true
+	jump bind_new_unit notEqual unit.controller @this
+	ucontrol move @thisx @thisy
+	sensor unit.x @unit @x
+	sensor unit.y @unit @y
+	op sub xDiff_from_dest unit.x @thisx
+	op sub yDiff_from_dest unit.y @thisy
+op abs xDiff_from_dest xDiff_from_dest 0
+
+op abs yDiff_from_dest yDiff_from_dest 0
+
+	jump move_unit_to_dest greaterThan xDiff_from_dest itemDropRadius
+	jump move_unit_to_dest greaterThan yDiff_from_dest itemDropRadius
+drop_item:
+	wait 0.5
+	ucontrol itemDrop container1 maxItemsToTake
+jump main_loop always
+end
+
+_flag_unit:
+ubind _unit_type
+sensor __flag_unit__dead @unit @dead
+jump _flag_unit notEqual __flag_unit__dead false
+sensor __flag_unit__flag @unit @flag
+sensor __flag_unit__controlled @unit @controlled
+op equal __flag_unit__unitUnflagged __flag_unit__flag 0
+op equal __flag_unit__unitHasOurFlag __flag_unit__flag cookie
+op equal __flag_unit__unitNotControlled __flag_unit__controlled false
+op or __flag_unit__unitFlagOk __flag_unit__unitUnflagged __flag_unit__unitHasOurFlag
+jump _flag_unit notEqual __flag_unit__unitFlagOk true
+ucontrol flag cookie
+set @counter _stack1
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

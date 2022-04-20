@@ -1,0 +1,4 @@
+draw linerect 0 0 50 50 31#Error
+draw image @copper 50 50#Error
+ubind "poly"#Error
+jump -1 never#Error
