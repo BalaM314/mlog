@@ -1,0 +1,23 @@
+set pi 0
+set i 1
+loop:
+op mod odd i 2
+jump odd equal odd true
+even:
+op mul _ -2 i
+op add _ _ 1
+op div _ 4 _
+op add pi pi _
+print pi
+printflush message1
+op add i i 1
+jump loop always
+odd:
+op mul _ 2 i
+op sub _ _ 1
+op div _ 4 _
+op add pi pi _
+print pi
+printflush message1
+op add i i 1
+jump loop always

@@ -1,0 +1,50 @@
+set core nucleus1
+jump main notEqual core null
+getcore:
+ubind @mono
+#If there aren't any monos, just make one :)
+jump on equal @unit null
+#Look for a core
+ulocate building core false @copper 0 0 0 core
+#Unbind the mono
+ubind null
+jump main always
+main:
+sensor off switch1 @enabled
+sensor forceon switch2 @enabled
+jump off equal off true
+jump on equal forceon true
+sensor silicon core @silicon
+sensor lead core @lead
+set minRes 1000
+jump lowsili lessThan silicon minRes
+jump lowlead lessThan lead minRes
+jump on always
+lowsili:
+control enabled unloader1 0
+control enabled unloader2 0
+print "Not enough !\n"
+print silicon
+print " < 1000"
+jump end always
+lowlead:
+control enabled unloader1 0
+control enabled unloader2 0
+print "Not enough !\n"
+print lead
+print " < 1000"
+jump end always
+off:
+control enabled unloader1 0
+control enabled unloader2 0
+print "Manually disabled!\n"
+jump end always
+on:
+control enabled unloader1 1
+control enabled unloader2 1
+print " Running perfectly.\n"
+jump end always
+end:
+print "\nCoreT1 by BalaM314"
+printflush message1
+end

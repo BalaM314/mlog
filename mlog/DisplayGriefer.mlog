@@ -1,0 +1,15 @@
+print "Made by BalaM314. For pranks only."
+set i 0
+set theta 0
+set image @meltdown
+getlink display i
+draw image 90 90 image 128 theta 0
+drawflush display
+op add i i 1
+jump 4 lessThan i @links
+set i 0
+op add theta theta 1
+jump 13 greaterThan theta 360
+jump 14 always x false
+set theta 0
+jump 4 always x false

@@ -1,0 +1,8 @@
+read item cell1 1
+lookup item item item
+set i -1
+source_loop:
+op add i i 1
+getlink building i
+control config building item
+jump source_loop lessThan i @links

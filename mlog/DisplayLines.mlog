@@ -1,0 +1,74 @@
+
+
+draw clear 0 0 0
+drawflush display1
+draw clear 0 0 0
+drawflush display2
+draw clear 0 0 0
+drawflush display3
+draw clear 0 0 0
+drawflush display4
+
+set x1 -32
+
+outer_loop:
+	set y1 -32
+
+	inner_loop:
+		# op mul x1_squared x1 x1
+		# op mul y1_squared y1 y1
+		# op sub x2 x1_squared y1_squared
+		# op mul y2 x1 y1
+		# op mul y2 y2 2
+		op mul x2 y1 -1
+		op add y2 x1 1
+
+		op mul x1_disp x1 5.625
+		op add x1_disp x1_disp 180
+		op mul y1_disp y1 5.625
+		op add y1_disp y1_disp 180
+		op mul x2_disp x2 5.625
+		op add x2_disp x2_disp 180
+		op mul y2_disp y2 5.625
+		op add y2_disp y2_disp 180
+
+		set r x1
+		op add r r 32
+		op mul r r 4
+		set g y1
+		op add g g 32
+		op mul g g 4
+		set b 128
+
+		draw color r g b
+		draw line x1_disp y1_disp x2_disp y2_disp
+		drawflush display1
+
+		op sub x1_disp x1_disp 180
+		op sub x2_disp x2_disp 180
+		draw color r g b
+		draw line x1_disp y1_disp x2_disp y2_disp
+		drawflush display2
+
+		op sub y1_disp y1_disp 180
+		op sub y2_disp y2_disp 180
+		draw color r g b
+		draw line x1_disp y1_disp x2_disp y2_disp
+		drawflush display4
+
+		op add x1_disp x1_disp 180
+		op add x2_disp x2_disp 180
+		draw color r g b
+		draw line x1_disp y1_disp x2_disp y2_disp
+		drawflush display3
+
+
+
+
+		op add y1 y1 2
+		jump inner_loop lessThan y1 32
+
+	op add x1 x1 2
+	jump outer_loop lessThan x1 32
+
+wait 100

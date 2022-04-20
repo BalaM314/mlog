@@ -1,0 +1,24 @@
+set theta 0
+op cos xdiff theta b
+op sin ydiff theta b
+op mul xdiff xdiff 10
+op mul ydiff ydiff 10
+sensor x router1 @x
+sensor y router1 @y
+op add x x xdiff
+op add y y ydiff
+write x cell1 1
+write y cell1 2
+op add theta theta 180
+op cos xdiff theta b
+op sin ydiff theta b
+op mul xdiff xdiff 10
+op mul ydiff ydiff 10
+sensor x router1 @x
+sensor y router1 @y
+op add x x xdiff
+op add y y ydiff
+write x cell1 3
+write y cell1 4
+op sub theta theta 180
+op add theta theta 5
