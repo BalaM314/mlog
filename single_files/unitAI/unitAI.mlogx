@@ -1,47 +1,83 @@
 #program_type main
 #Generic Unit AI by BalaM314.
-
-start:
-#Variables
+set minHealthPercent 0.2
 set unitType @fortress
 set onSwitch switch1
-sensor on switch1 @enabled
-jump start notEqual on true
+set enemyTurret.damageRadius 2
+
+start:
+	#Variables
+	sensor on switch1 @enabled
+	jump start notEqual on true
 
 bind_new_unit:
-ubind unitType
+	ubind unitType
+	sensor unit.flag @unit @flag
+	jump bind_new_unit notEqual unit.flag 0
+	sensor unit.dead @unit @dead
+	jump bind_new_unit equal unit.dead true
+	sensor unit.controller @unit @controller
+	jump bind_new_unit greaterThan 0 #@ctrlPlayer and @ctrlFormation are 2 and 3, so this saves a line.
+
 
 check_health:
-#todo
+	sensor unit.health @unit @health
+	sensor unit.maxHealth @unit @maxHealth
+	op mul minHealth unit.maxHealth minHealthPercent
+	jump low_health lessThan unit.health minHealth
+	jump find_turret always
 
-ulocate building turret true outX outY found _
-jump end equal found false
-sensor range @unit @range
-ucontrol getblock outX outY h enemyTurret
+low_health:
+	ulocate building repair false repair.x repair.y found
+	jump approach_repair equal found false
+	use_core:
+	ulocate building core false repair.x repair.y _
+	approach_repair:
+	ucontrol approach repair.x repair.y 5
+	jump end
+
+find_turret:
+	ulocate building turret true enemyTurret.x enemyTurret.y found _
+	jump next equal found true
+	ulocate building core true enemyTurret.x enemyTurret.y found _
+	jump end equal found false
+	get_turret_range:
+
+get_variables:
+	sensor unit.range @unit @range
+	ucontrol getblock enemyTurret.x enemyTurret.y enemyTurret.type enemyTurret
+	jump turret_out_of_range equal enemyTurret null
+	sensor enemyTurret.range enemyTurret @range
+	sensor enemyTurret.shootX
+	jump choose_ai_type always
+
+turret_out_of_range:
+	set enemyTurret.range unit.range
 
 choose_ai_type:
-#temporary
-jump bulky always
+	#temporary
+	jump bulky always
 
-#For fast moving units like Flare.
+#For mentally unstable units like Flare.
 insane:
 
-jump end always
+	jump end always
 
-#For medium speed units like Dagger, only effective against some turrets.
+#For medium speed units like Dagger, only effective against some turrets(hail, lancer).
 strafe:
 
-jump end always
+	jump end always
 
 #For slow and tanky units like fortress, vela, etc.
 bulky:
-ucontrol approach outX outY range
-jump end always
+	ucontrol approach enemyTurret.x enemyTurret.y unit.range
+	ucontrol target enemyTurret.x enemyTurret.y 
+	jump end always
 
 #For super long range units like corvus, omura, etc
 sniper:
 
-jump end always
+	jump end always
 
 
 
