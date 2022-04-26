@@ -1,5 +1,5 @@
-op mul _cookie @thisx @maph
-op add _cookie @thisy @cookie
+op mul cookie @thisx @maph
+op add cookie @thisy cookie
 set author BalaM314
 set name example_program
 set _stdout message1

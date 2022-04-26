@@ -2,7 +2,7 @@ _count_buildings:
 set _num_buildings 0
 set __i -1
 __next_loop:
-op add __i __i 1
+op add count_block_type__i count_block_type__i 1
 getlink __building __i
 sensor __building_type __building @type
 jump __check_exit_loop notEqual _building_type __building_type

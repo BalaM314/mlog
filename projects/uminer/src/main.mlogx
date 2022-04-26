@@ -1,11 +1,22 @@
 #program_type main
 #Uminer by BalaM314, version 0.0.0
 
-
+set mineOreType @copper
+set stdout message1
+set stderr message1
 
 mine:
-sensor unit.mining @unit @mining
-sensor unit.items @unit @totalItems
-sensor unit.itemCapacity @unit @itemCapacity
+
+	find_ore:
+		ulocate ore mineOreType ore.x ore.y ore.exists
+		jump no_ore equal ore.exists true
+		jump move_unit_to_ore always
+	
+	move_unit_to_ore:
 
 
+no_ore:
+	print "[red]No ore of type "
+	print mineOreType
+	print " found!"
+	printflush stderr

@@ -3,15 +3,13 @@ print "Flagging unit"
 print name
 printflush stdout
 ubind _unit_type
-sensor __flag_unit__dead @unit @dead
-jump _flag_unit notEqual __flag_unit__dead false
-sensor __flag_unit__flag @unit @flag
-sensor __flag_unit__controlled @unit @controlled
-op equal __flag_unit__unitUnflagged __flag_unit__flag 0
-op equal __flag_unit__unitHasOurFlag __flag_unit__flag cookie
-op equal __flag_unit__unitNotControlled __flag_unit__controlled false
-op or __flag_unit__unitFlagOk __flag_unit__unitUnflagged __flag_unit__unitHasOurFlag
-jump _flag_unit notEqual __flag_unit__unitFlagOk true
+sensor unit.dead @unit @dead
+jump _flag_unit notEqual unit.dead false
+sensor unit.flag @unit @flag
+op equal unit.unflagged unit.flag 0
+op equal unit.hasOurFlag unit.flag cookie
+op or unit.flagOk __unitUnflagged __unitHasOurFlag
+jump _flag_unit notEqual unit.flagOk true
 ucontrol flag cookie
 print "Flagged unit"
 print name

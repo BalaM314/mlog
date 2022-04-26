@@ -48,11 +48,13 @@ get_variables:
 	ucontrol getblock enemyTurret.x enemyTurret.y enemyTurret.type enemyTurret
 	jump turret_out_of_range equal enemyTurret null
 	sensor enemyTurret.range enemyTurret @range
-	sensor enemyTurret.shootX
+	sensor enemyTurret.shootX enemyTurret @shootX
+	sensor enemyTurret.shootY enemyTurret @shootY
+	ucontrol within enemyTurret.shootX enemyTurret.shootY enemyTurret.damageRadius unit.isBeingFiredAt
 	jump choose_ai_type always
 
 turret_out_of_range:
-	set enemyTurret.range unit.range
+	jump end always#temporary
 
 choose_ai_type:
 	#temporary
@@ -70,8 +72,7 @@ strafe:
 
 #For slow and tanky units like fortress, vela, etc.
 bulky:
-	ucontrol approach enemyTurret.x enemyTurret.y unit.range
-	ucontrol target enemyTurret.x enemyTurret.y 
+
 	jump end always
 
 #For super long range units like corvus, omura, etc
