@@ -1,0 +1,32 @@
+#Item ThroughputCounter by BalaM314
+set stdout message1
+set container vault1
+sensor container.maxItems container @itemCapacity
+
+no_items:
+	print "Item throughput counter"
+	print " by [#3141FF]BalaM314[white]\n"
+	print "[red]Waiting for items..."
+	printflush message1
+	sensor container.items container @totalItems
+	jump no_items equal container.items 0
+start_timer:
+	set timer @time
+count_items:
+	sensor items container @totalItems
+	print "[blue]Items received:"
+	print items
+	printflush stdout
+	jump count_items notEqual items container.maxItems
+calculate_time:
+	op sub timePassed @time timer
+	op div timePassed timePassed 1000
+	op div fillSpeed container.maxItems timePassed
+	print "[green]"
+	print fillSpeed
+	print " items/second\nWaiting for reset:"
+	printflush stdout
+wait_for_reset:
+	sensor container.items container @totalItems
+	jump wait_for_reset notEqual items 0
+end
