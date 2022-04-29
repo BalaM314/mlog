@@ -1,0 +1,43 @@
+#Sorta bad RC by BalaM314
+#Control module
+set idle.x @thisx
+set idle.y @thisy
+set unitType @quad
+main_loop:
+
+get_variables:
+	sensor isActive arc1 @controlled
+	sensor arc.x arc1 @shootX
+	sensor arc.y arc1 @shootY
+get_unit_type:
+	sensor sorter.item sorter1 @config
+	jump quad equal sorter.item @titanium
+	jump zenith equal sorter.item @metaglass
+	jump horizon equal sorter.item @lead
+	jump antumbra equal sorter.item @plastanium
+	no_unit:
+		set unitType 2
+		jump write always
+	quad:
+		set unitType 3
+		jump write always
+	zenith:
+		set unitType 5
+		jump write always
+	horizon:
+		set unitType 7
+		jump write always
+	antumbra:
+		set unitType 9
+		jump write always
+write:
+	jump idle equal isActive false
+	write unitType cell1 0
+	write arc.x cell1 1
+	write arc.y cell1 2
+	jump main_loop always
+idle:
+	write unitType cell1 0
+	write idle.x cell1 1
+	write idle.y cell1 2
+	jump main_loop always

@@ -1,0 +1,23 @@
+read_cell:
+read x cell1 1
+read y cell1 2
+bind_unit:
+read @counter cell1 0
+ubind @quad
+jump check_flag always
+ubind @zenith
+jump check_flag always
+ubind @horizon
+jump check_flag always
+check_flag:
+sensor unit.flag @unit @flag
+jump bind_unit notEqual flag 0
+move:
+ucontrol move x y
+ucontrol targetp @unit true
+end
+#stdlib
+
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
