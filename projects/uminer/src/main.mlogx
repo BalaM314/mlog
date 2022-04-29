@@ -7,16 +7,16 @@ set approachRadius 5
 set unitType @mega
 
 get_core:
-	ubind mono
+	ubind @mono
 	sensor unit.dead
 	jump _get_core equal unit.dead false
-	ubind flare
+	ubind @flare
 	sensor unit.dead
 	jump _get_core equal unit.dead false
-	ubind mega
+	ubind @mega
 	sensor unit.dead
 	jump _get_core equal unit.dead false
-	ubind poly
+	ubind @poly
 	sensor unit.dead
 	jump _get_core equal unit.dead false
 	jump no_units always
@@ -43,7 +43,7 @@ main_loop:
 
 		find_ore:
 			ulocate ore mineOreType ore.x ore.y ore.exists
-			jump no_ore equal ore.exists true
+			jump no_ore equal ore.exists false
 
 		move_unit_to_ore:
 			ucontrol approach ore.x ore.y approachRadius
@@ -77,7 +77,10 @@ no_units:
 
 no_repair:
 	print "[red]Some units are at low health but there aren't any repair points."
+	printflush stderr
+	end
 
 core_dead:
 	print "[red]Looks like the core is dead. GG"
 	printflush stderr
+	end
