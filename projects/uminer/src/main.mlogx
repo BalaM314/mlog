@@ -9,16 +9,16 @@ set unitType @mega
 get_core:
 	ubind mono
 	sensor unit.dead
-	jump _get_core equal unit.dead true
+	jump _get_core equal unit.dead false
 	ubind flare
 	sensor unit.dead
-	jump _get_core equal unit.dead true
+	jump _get_core equal unit.dead false
 	ubind mega
 	sensor unit.dead
-	jump _get_core equal unit.dead true
+	jump _get_core equal unit.dead false
 	ubind poly
 	sensor unit.dead
-	jump _get_core equal unit.dead true
+	jump _get_core equal unit.dead false
 	jump no_units always
 
 	_get_core:
