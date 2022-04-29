@@ -1,22 +1,83 @@
-#program_type main
 #Uminer by BalaM314, version 0.0.0
 
 set mineOreType @copper
 set stdout message1
 set stderr message1
+set approachRadius 5
+set unitType @mega
 
-mine:
+get_core:
+	ubind mono
+	sensor unit.dead
+	jump _get_core equal unit.dead true
+	ubind flare
+	sensor unit.dead
+	jump _get_core equal unit.dead true
+	ubind mega
+	sensor unit.dead
+	jump _get_core equal unit.dead true
+	ubind poly
+	sensor unit.dead
+	jump _get_core equal unit.dead true
+	jump no_units always
 
-	find_ore:
-		ulocate ore mineOreType ore.x ore.y ore.exists
-		jump no_ore equal ore.exists true
-		jump move_unit_to_ore always
+	_get_core:
+		ulocate building core false core.x core.y core.exists core
+		jump core_dead equal core.exists false
 	
-	move_unit_to_ore:
+
+main_loop:
+
+	bind_unit:
+		ubind unitType
+		sensor unit.flag
+		jump bind_unit notEqual unit.flag 0
+	
+	
+	check_items:
+		sensor unit.totalItems
+		sensor unit.itemCapacity
+		jump drop_items greaterThanEq unit.totalItems unit.itemCapacity
+
+	mine:
+
+		find_ore:
+			ulocate ore mineOreType ore.x ore.y ore.exists
+			jump no_ore equal ore.exists true
+
+		move_unit_to_ore:
+			ucontrol approach ore.x ore.y approachRadius
+		
+		mine_ore:
+			ucontrol mine ore.x ore.y
+			jump main_loop always
+		
+	drop_items:
+		ucontrol move core.x core.y
+		ucontrol itemDrop core 69420
+		jump main_loop always
+
+	low_health:
+		ulocate building repair false repair.x repair.y repair.exists repair
+		jump no_repair equal repair.exists false
+		ucontrol approach repair.x repair.y approachRadius
 
 
 no_ore:
 	print "[red]No ore of type "
 	print mineOreType
 	print " found!"
+	printflush stderr
+	end
+
+no_units:
+	print "[red]No units!"
+	printflush stderr
+	end
+
+no_repair:
+	print "[red]Some units are at low health but there aren't any repair points."
+
+core_dead:
+	print "[red]Looks like the core is dead. GG"
 	printflush stderr

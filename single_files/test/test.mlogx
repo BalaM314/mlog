@@ -1,15 +1,12 @@
 
-set x 5
-set str "str"
-set 5 6
-ubind x
 
-set core nucleus1
-ulocate building core false outX outY found core
 
-read x core 3
 
-ucontrol target @thisy str x #To test if numbers can be used as booleans
+sensor unit.maxHealth
+
+sensor core.totalItems
+
+
 
 
 end

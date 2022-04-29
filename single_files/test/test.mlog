@@ -1,12 +1,5 @@
-set x 5
-set str "str"
-set 5 6
-ubind x
-set core nucleus1
-ulocate building core false _ outX outY found core
-read x core 3
-read 5 cell1 9
-ucontrol target @thisy str x
+sensor unit.maxHealth @unit @maxHealth
+sensor core.totalItems core @totalItems
 end
 end
 #stdlib
