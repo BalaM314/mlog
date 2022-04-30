@@ -3,3 +3,31 @@
 #bombing mode: goes straight to the mouse cursor
 #overange mode: maximizes its range against turrets
 #spread mode: goes in with spreaded formation, then on click assume bombing mode
+
+#this might suck kek
+#initalize needed variables
+set arc arc1
+sensor arc.shootX
+sensor arc.shootY
+set prevShooting arc.shooting
+sensor arc.shooting
+#next movement
+bombing_movement:
+    ucontrol move arc.shootX arc.shootY
+    jump shooting always
+end
+overange_movement:
+    ulocate building turret true @copper outx outy found building
+    jump shooting always
+end
+    
+end
+shooting: #finally shooting
+bombing_target:
+ucontrol targetp @unit shoot
+jump 0 equal prevShooting shooting
+set shoot arc.shooting
+end
+
+overange_target:
+end
