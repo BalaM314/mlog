@@ -1,25 +1,22 @@
 #Sorta bad RC
 #by BalaM314
-#Memory cell layout: [uType, x, y]
-#uType: null=2 quad=3 zenith=5 horizon=7
-read_cell:
+#Memory cell layout: [uType, x, y, approachDistance]
+#uType: null=3 quad=4 zenith=6 horizon=8
+init_read_cell:
+	read unit.id cell1 0
+	read approachDistance cell1 3
+	op notEqual shouldFire approachDistance 24
+	lookup unit unitType unit.id
+	set i 0
+loop:
 	read x cell1 1
 	read y cell1 2
 bind_unit:
-	read @counter cell1 0#hehe optimization goes wheeee
-	ubind @quad
-	jump check_flag always
-	ubind @zenith
-	jump check_flag always
-	ubind @horizon
-	jump check_flag always
-	ubind @antumbra
-	jump check_flag always
-	ubind @eclipse
-	jump check_flag always
-check_flag:
-	sensor unit.flag @unit @flag
-	jump bind_unit notEqual flag 0
+	ubind unitType
+	sensor unit.flag
+	jump bind_unit notEqual unit.flag 0
 move:
-	ucontrol move x y
-	ucontrol targetp @unit true
+	ucontrol approach x y approachDistance
+	ucontrol targetp @unit shouldFire
+	op add i i 1
+	jump loop lessThan i 15

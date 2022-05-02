@@ -2,7 +2,6 @@
 #Control module
 set idle.x @thisx
 set idle.y @thisy
-set unitType @quad
 main_loop:
 
 get_variables:
@@ -19,25 +18,27 @@ get_unit_type:
 		set unitType 2
 		jump write always
 	quad:
-		set unitType 3
+		set unitType 23
 		jump write always
 	zenith:
-		set unitType 5
+		set unitType 17
 		jump write always
 	horizon:
-		set unitType 7
+		set unitType 16
 		jump write always
 	antumbra:
-		set unitType 9
+		set unitType 18
 		jump write always
 write:
 	jump idle equal isActive false
 	write unitType cell1 0
 	write arc.x cell1 1
 	write arc.y cell1 2
+	write 1 cell1 3
 	jump main_loop always
 idle:
 	write unitType cell1 0
 	write idle.x cell1 1
 	write idle.y cell1 2
+	write 24 cell1 3
 	jump main_loop always
