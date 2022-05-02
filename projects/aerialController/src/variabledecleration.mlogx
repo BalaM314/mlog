@@ -1,0 +1,18 @@
+#initalize needed variables
+jump updateVariables equal isDeclared 1
+set isDeclared 1
+set arc arc1
+sensor unit.range
+op add proximity unit.range 1
+op add detectionRange proximity 0
+
+#insert section on knowing if the unit is a bomber, ranger, t5, etc.
+#maybe? idk, once main is fitted with the modes, this section determines if what a unit will do
+#might be a seperate section/mlogx maybe
+
+updateVariables:
+sensor arc.shootX
+sensor arc.shootY
+sensor arc.shooting
+
+#insert section on if the mode behavior needs to be changed

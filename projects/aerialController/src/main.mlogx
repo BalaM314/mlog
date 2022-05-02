@@ -1,0 +1,42 @@
+#multiple ideas:
+#possible inputs: click, move, double click, hold click
+#bombing mode: goes straight to the mouse cursor
+#overange mode: maximizes its range against turrets
+#spread mode: goes in with spreaded formation, then on click assume bombing mode
+#this might suck kek
+
+latch: #no need to hold click
+jump skipLatch equal arc.shooting 0
+jump skipLatch equal prevShooting arc.shooting 
+op xor shoot shoot 1
+skipLatch:
+set prevShooting arc.shooting
+
+#condition checks later
+jump bombing_movement --- #which movement mode?
+jump overange_movement ---
+end
+
+bombing_movement:
+    ucontrol move arc.shootX arc.shootY
+    jump shooting always
+end
+
+overange_movement:
+    ulocate building turret true @copper ox oy isFound enemyTurret
+    #keepdistance based on value, using approach
+    ucontrol approach ox oy proximity
+    jump shooting always
+end
+
+shooting: #finally shooting
+bombing_target:
+ucontrol targetp @unit shoot
+jump 0 equal prevShooting shooting
+set shoot arc.shooting
+end
+
+overange_target:
+    #missing
+end
+
