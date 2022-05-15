@@ -1,4 +1,5 @@
 print "Overkill RC by BalaM314"
+print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
 print "Control module"
 set idle.x @thisx
 set idle.y @thisy

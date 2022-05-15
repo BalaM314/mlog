@@ -3,6 +3,7 @@
 #Memory cell layout: [mode, uType, x, y, approachDistance, shouldFire]
 #mode: 0=off 1=on 2=loading
 print "$name by $authors"
+print "Source code available at $githubUrl"
 print "Movement module"
 print "Settings in micro proc"
 

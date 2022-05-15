@@ -4,6 +4,7 @@
 #Todo
 
 print "$name by $authors"
+print "Source code available at $githubUrl"
 print "Control module"
 set idle.x @thisx
 set idle.y @thisy
@@ -21,16 +22,18 @@ set memcellpos.approachDistance 4
 set memcellpos.shouldFire 5
 set idleApproachDistance 18.5
 op mul idleFireInterval 10 1000
+set mode.normal 1
+set mode.loading 2
 main_loop:
 
 get_settings:
-	set mode 1
+	set mode mode.normal
 	sensor isActive arc1 @controlled
 	sensor mode enabledSwitch @enabled
 	sensor loading loadingSwitch @enabled
 	jump not_loading equal loading false
 	jump not_loading equal mode 0
-	set mode 2
+	set mode mode.loading
 	not_loading:
 	jump unitId_defined notEqual unitIdOverride 0
 	sensor sorter.item sorter1 @config
