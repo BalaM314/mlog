@@ -1,4 +1,4 @@
-#Sorta bad RC by BalaM314
+#Overkill RC by BalaM314
 #Unit loader
 read unit.id cell1 0
 lookup unit unitType unit.id
@@ -7,9 +7,10 @@ bind_unit:
 	ubind unitType
 	sensor unit.flag @unit @flag
 	jump bind_unit notEqual unit.flag 0
-ulocate building core false core.x core.y core.exists core
-sensor unit.firstItem
-jump take_item equal unit.firstItem bombingItem
+should_take_or_drop:
+	ulocate building core false core.x core.y core.exists core
+	sensor unit.firstItem
+	jump take_item equal unit.firstItem bombingItem
 drop_item:
 	ucontrol itemDrop core 9999
 take_item:

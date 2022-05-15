@@ -1,15 +1,14 @@
 {
 	"name": "test",
-	"authors": ["BalaM314"],
+	"authors": [
+		"BalaM314"
+	],
 	"compilerOptions": {
-		"include": [],
+		"include": ["flag_unit"],
 		"removeComments": true,
 		"compileWithErrors": true,
 		"mode": "project",
 		"prependFileName": true,
 		"checkTypes": true
-	},
-	"compilerVariables": {
-		"amogus": "SUSSY REPLACED VALUE"
 	}
 }

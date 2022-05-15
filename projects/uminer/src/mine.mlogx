@@ -1,10 +1,22 @@
 #Uminer by BalaM314, version 0.0.0
+# Memory cell layout: [
+# 0: mode(0 = disabled, 1 = enabled)
+# 1: megas mining @copper
+# 2: megas mining @lead
+# 5: megas mining @sand
+# 6: megas mining @coal
+# 7: megas mining @titanium
+# 9: megas mining @scrap
+# ]
 
-set mineOreType @copper
+#Note: this code (will be)is optimized, and therefore (will) lack error checking. It depends on the control processor to get everything right.
+
+set cell cell1
 set stdout message1
 set stderr message1
 set approachRadius 5
 set unitType @mega
+set memcellOffset 1 #Offset for the memcell array of number of units mining each ore
 
 get_core:
 	ubind @mono
@@ -26,7 +38,21 @@ get_core:
 		jump core_dead equal core.exists false
 	
 
+reset_ore_type:
+	set oreId -1 #Will be incremented to 0(copper) on next line.
+
+get_ore_type:
+	op add oreId 1 #Go to next oreId
+	#Fancy complicated logic.
+	lookup item mineOreType oreId #Find the item with id specified by oreId
+	op add orePointer oreId memcellOffset #Set orePointer to oreId + memcellOffset
+	read numberToMine cell orePointer #Read the number of units that should be set to mine this.
+	jump reset_ore_type greaterThan oreId 8 #If oreId is greater than 8(scrap) go back to 0.
+	
 main_loop:
+
+	check_ore_type:
+		jump get_ore_type equal numberToMine 0 #If the number of units that need to be mining the current ore is 0, go to next ore.
 
 	bind_unit:
 		ubind unitType
@@ -35,6 +61,9 @@ main_loop:
 	
 	
 	check_items:
+		sensor unit.firstItem
+		jump mine equal unit.firstItem null
+		jump drop_items notEqual unit.firstItem mineOreType
 		sensor unit.totalItems
 		sensor unit.itemCapacity
 		jump drop_items greaterThanEq unit.totalItems unit.itemCapacity
@@ -50,6 +79,7 @@ main_loop:
 		
 		mine_ore:
 			ucontrol mine ore.x ore.y
+			op sub numberToMine 1
 			jump main_loop always
 		
 	drop_items:

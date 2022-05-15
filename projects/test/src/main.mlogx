@@ -1,0 +1,9 @@
+#program_type main
+print "test program"
+printflush message1
+call printAmogus
+op add i i 2
+uflag @flare
+move_unit:
+ucontrol move @thisx @thisy
+jump move_unit always

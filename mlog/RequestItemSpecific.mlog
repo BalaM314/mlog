@@ -1,0 +1,168 @@
+#Request Item by BalaM314.
+
+op mul cookie @thisx @maph
+op add cookie @thisy cookie
+set unitType @flare
+set itemDropRadius 2
+set maxItemsToTake 1000
+set idleTimeout 30000
+set itemTakeDelay 0.3
+
+get_core:
+ubind @flare
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @mono
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+print "[red]No units, unable to locate core."
+printflush message1
+
+locate_core:
+ulocate building core false _ coreX coreY _ core
+ubind null
+
+set stdout message1
+set stderr message1
+set pickupItem @titanium
+set outputBuilding conveyor1
+
+main_loop:
+
+	bind_unit:
+		sensor unit.dead @unit @dead
+		jump check_items notEqual unit.dead true
+		jump bind_new_unit always
+
+	unit_died:
+		print "Unit died!"
+		printflush message1
+		jump _bind_new_unit always
+	
+	unit_controlled:
+		print "Unit was controlled by "
+		print unit.controller
+		printflush message1
+		jump _bind_new_unit always
+
+	bind_new_unit:
+		print "Binding new unit\n"
+		print "Item Request by [blue]BalaM314[white]"
+	_bind_new_unit:
+		printflush message1
+		ubind unitType
+		sensor unit.dead @unit @dead
+		jump bind_new_unit notEqual dead false
+		sensor unit.flag @unit @flag
+		op strictEqual unitUnflagged unit.flag 0
+		op strictEqual unitHasOurFlag unit.flag cookie
+		op or unitFlagOk unitUnflagged unitHasOurFlag
+		jump bind_new_unit notEqual unitFlagOk true
+		set lastUsedTime @time
+		jump check_items always
+
+	check_items:
+		print "Checking if items are required\n"
+		print "Item Request by [blue]BalaM314[white]"
+		printflush message1
+		op sub idleTime @time lastUsedTime
+		jump idle greaterThan idleTime idleTimeout
+		ucontrol idle
+		ucontrol flag cookie
+		sensor container.items outputBuilding pickupItem
+		sensor itemCapacity outputBuilding @itemCapacity
+		jump main_loop equal container.items itemCapacity
+		set lastUsedTime @time
+		sensor unit.items @unit pickupItem
+		jump move_unit_to_core equal unit.items 0
+		jump move_unit_to_dest always
+
+	idle:
+		print "Idle, unbound unit.\n"
+		print "Item Request by [blue]BalaM314[white]"
+		printflush message1
+		ucontrol flag 0
+		ubind @null
+		sensor container.items outputBuilding pickupItem
+		sensor itemCapacity outputBuilding @itemCapacity
+		jump idle strictEqual container.items itemCapacity
+		jump main_loop always
+
+	move_unit_to_core:
+		print "Moving unit to core\n"
+		print "Item Request by [blue]BalaM314[white]"
+		printflush message1
+		sensor unit.dead @unit @dead
+		sensor unit.controller @unit @controller
+		jump unit_died equal unit.dead true
+		jump unit_controlled notEqual unit.controller @this
+		ucontrol move coreX coreY
+		sensor unit.x @unit @x
+		sensor unit.y @unit @y
+		op sub xDiff_from_core unit.x coreX
+		op sub yDiff_from_core unit.y coreY
+		op abs xDiff_from_core xDiff_from_core 0
+		op abs yDiff_from_core yDiff_from_core 0
+		jump move_unit_to_core greaterThan xDiff_from_core itemDropRadius
+		jump move_unit_to_core greaterThan yDiff_from_core itemDropRadius
+		sensor unit.items @unit @totalItems
+		jump pickup_item equal unit.items 0
+		jump drop_current_item always
+
+	drop_current_item:
+		print "Dropping item to core\n"
+		print "Item Request by [blue]BalaM314[white]"
+		printflush message1
+		wait itemTakeDelay
+		ucontrol itemDrop core 1e10
+		wait itemTakeDelay
+		sensor items @unit @totalItems
+		jump pickup_item strictEqual items 0
+		ucontrol itemDrop @air 1e10
+		wait itemTakeDelay
+		jump pickup_item always
+
+	pickup_item:
+		print "Taking items from core\n"
+		print "Item Request by [blue]BalaM314[white]"
+		printflush message1
+		sensor unit.dead @unit @dead
+		sensor unit.controller @unit @controller
+		jump unit_died equal unit.dead true
+		jump unit_controlled notEqual unit.controller @this
+		wait itemTakeDelay
+		ucontrol itemTake core pickupItem maxItemsToTake
+		sensor unit.items @unit pickupItem
+		jump drop_current_item equal unit.items 0
+
+	move_unit_to_dest:
+		print "Moving unit to destination\n"
+		print "Item Request by [blue]BalaM314[white]"
+		printflush message1
+		sensor unit.dead @unit @dead
+		sensor unit.controller @unit @controller
+		jump unit_died equal unit.dead true
+		jump unit_controlled notEqual unit.controller @this
+		sensor outputBuilding.x outputBuilding @x
+		sensor outputBuilding.y outputBuilding @y
+		ucontrol move outputBuilding.x outputBuilding.y
+		sensor unit.x @unit @x
+		sensor unit.y @unit @y
+		op sub xDiff_from_dest unit.x outputBuilding.x
+		op sub yDiff_from_dest unit.y outputBuilding.y
+		op abs xDiff_from_dest xDiff_from_dest 0
+		op abs yDiff_from_dest yDiff_from_dest 0
+		jump move_unit_to_dest greaterThan xDiff_from_dest itemDropRadius
+		jump move_unit_to_dest greaterThan yDiff_from_dest itemDropRadius
+
+	drop_item:
+		print "Dropping item\n"
+		print "Item Request by [blue]BalaM314[white]"
+		printflush message1
+		wait itemTakeDelay
+		ucontrol itemDrop outputBuilding maxItemsToTake
+jump main_loop always
+end
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

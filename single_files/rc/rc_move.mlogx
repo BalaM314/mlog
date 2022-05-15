@@ -1,16 +1,20 @@
-#Sorta bad RC
+#Overkill RC
 #by BalaM314
-#Memory cell layout: [uType, x, y, approachDistance]
-#uType: null=3 quad=4 zenith=6 horizon=8
+#Memory cell layout: [mode, uType, x, y, approachDistance]
+#mode: 0=off 1=on 2=loading
 init_read_cell:
-	read unit.id cell1 0
-	read approachDistance cell1 3
+	read mode cell1 0
+	jump init_read_cell equal mode 0
+	sensor bombingItem sorter1 @config
+	jump load_units equal mode 2
+	read unit.id cell1 1
+	read approachDistance cell1 4
 	op notEqual shouldFire approachDistance 24
 	lookup unit unitType unit.id
 	set i 0
-loop:
-	read x cell1 1
-	read y cell1 2
+	read x cell1 2
+	read y cell1 3
+quick_loop:
 bind_unit:
 	ubind unitType
 	sensor unit.flag
@@ -19,4 +23,14 @@ move:
 	ucontrol approach x y approachDistance
 	ucontrol targetp @unit shouldFire
 	op add i i 1
-	jump loop lessThan i 15
+	jump quick_loop lessThan i 15
+	jump init_read_cell always
+load_units:
+	should_take_or_drop:
+		ulocate building core false core.x core.y core.exists core
+		sensor unit.firstItem
+		jump take_item equal unit.firstItem bombingItem
+	drop_item:
+		ucontrol itemDrop core 9999
+	take_item:
+		ucontrol itemTake core bombingItem 9999
