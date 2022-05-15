@@ -1,18 +1,38 @@
 #Overkill RC by BalaM314
 #Control module
+
+#Todo
+
+print "$name by $authors"
+print "Control module"
 set idle.x @thisx
 set idle.y @thisy
-set unitType.none 420
+set unitIdOverride 0
+print "Do not change below"
 set quickLoops 16 #The amount of quick loops to perform before rereading settings.
-set memcellpos.enabled 0
-set memcellpos.unitType 1
+set enabledSwitch switch3
+set loadingSwitch switch2
+set approachSwitch switch1 #NYI
+set memcellpos.mode 0
+set memcellpos.unitId 1
 set memcellpos.x 2
 set memcellpos.y 3
 set memcellpos.approachDistance 4
+set memcellpos.shouldFire 5
+set idleApproachDistance 18.5
+op mul idleFireInterval 10 1000
 main_loop:
 
-get_unit_type:
+get_settings:
+	set mode 1
 	sensor isActive arc1 @controlled
+	sensor mode enabledSwitch @enabled
+	sensor loading loadingSwitch @enabled
+	jump not_loading equal loading false
+	jump not_loading equal mode 0
+	set mode 2
+	not_loading:
+	jump unitId_defined notEqual unitIdOverride 0
 	sensor sorter.item sorter1 @config
 	jump quad equal sorter.item @titanium
 	jump zenith equal sorter.item @metaglass
@@ -22,29 +42,39 @@ get_unit_type:
 	jump flare equal sorter.item @scrap
 	
 	no_unit:
-		set unitType unitType.none
-		jump write always
+		set mode 0
+		jump write_values always
 	quad:
-		set unitType 23
-		jump write always
+		set unitId 23
+		jump write_values always
 	zenith:
-		set unitType 17
-		jump write always
+		set unitId 17
+		jump write_values always
 	horizon:
-		set unitType 16
-		jump write always
+		set unitId 16
+		jump write_values always
 	antumbra:
-		set unitType 18
-		jump write always
+		set unitId 18
+		jump write_values always
 	eclipse:
-		set unitType 19
-		jump write always
+		set unitId 19
+		jump write_values always
 	flare:
-		set unitType 15
-		jump write always
-
+		set unitId 15
+		jump write_values always
+	
+unitId_defined:
+	set unitId unitIdOverride
 #A quick loop, because we don't need to check the unit type every loop.
-set i 0
+write_values:
+	jump idle equal isActive false
+
+start_quick_loop:
+	set i 0
+	write unitId cell1 memcellpos.unitId
+	write mode cell1 memcellpos.mode
+	write 1 cell1 memcellpos.approachDistance
+	write true cell1 memcellpos.shouldFire
 quick_loop:
 
 get_variables:
@@ -52,19 +82,20 @@ get_variables:
 	sensor arc.y arc1 @shootY
 
 write:
-	set _ "Replace this with `set unitType [id]` if you want to use a different unit."
-	jump idle equal isActive false
-	write unitType cell1 memcellpos.unitType
+	op add i i 1
 	write arc.x cell1 memcellpos.x
 	write arc.y cell1 memcellpos.y
-	write 1 cell1 memcellpos.approachDistance
-	op add i i 1
 	jump quick_loop lessThan i quickLoops
 	jump main_loop always
+
 idle:
-	write unitType cell1 memcellpos.unitType
 	write idle.x cell1 memcellpos.x
 	write idle.y cell1 memcellpos.y
-	write 24 cell1 memcellpos.approachDistance
+	write unitId cell1 memcellpos.unitId
+	write mode cell1 memcellpos.mode
+	write idleApproachDistance cell1 memcellpos.approachDistance
+	op mod frames @time idleFireInterval
+	op lessThan shouldFire frames 500
+	write shouldFire cell1 memcellpos.shouldFire
 	jump quick_loop lessThan i quickLoops
 	jump main_loop always

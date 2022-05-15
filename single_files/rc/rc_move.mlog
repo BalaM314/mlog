@@ -1,21 +1,76 @@
+print "Overkill RC by BalaM314"
+print "Movement module"
+print "Settings in micro proc"
+set quickLoops 16
+set memcellpos.enabled 0
+set memcellpos.unitType 1
+set memcellpos.x 2
+set memcellpos.y 3
+set memcellpos.approachDistance 4
+set memcellpos.shouldFire 5
+set logicItemTakeRadius 5
+set bombingItemSorter sorter1
 init_read_cell:
-read unit.id cell1 0
-read approachDistance cell1 3
-op notEqual shouldFire approachDistance 24
+read mode cell1 memcellpos.enabled
+read unit.id cell1 memcellpos.unitType
+read x cell1 memcellpos.x
+read y cell1 memcellpos.y
 lookup unit unitType unit.id
+read approachDistance cell1 memcellpos.approachDistance
+sensor bombingItem bombingItemSorter @config
+read shouldFire cell1 memcellpos.shouldFire
+jump init_read_cell equal mode 0
+jump load_units equal mode 2
 set i 0
-loop:
-read x cell1 1
-read y cell1 2
+ubind unitType
+sensor unit.range @unit @range
+quick_loop:
 bind_unit:
 ubind unitType
 sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
 move:
 ucontrol approach x y approachDistance
-ucontrol targetp @unit shouldFire
+fire:
+ucontrol within x y unit.range targetPosition
+jump targetSelf equal targetPosition false
+targetPosition:
+ucontrol target x y shouldFire
+end_loop:
 op add i i 1
-jump loop lessThan i 15
+jump quick_loop lessThan i quickLoops
+jump init_read_cell always
+targetSelf:
+ucontrol targetp @unit shouldFire
+end_loop_2:
+op add i i 1
+jump quick_loop lessThan i quickLoops
+jump init_read_cell always
+load_units:
+set i 0
+ubind unitType
+sensor unit.itemCapacity @unit @itemCapacity
+quick_loop_2:
+op add i i 1
+ubind unitType
+should_take_or_drop:
+ulocate building core false _ core.x core.y core.exists core
+sensor unit.firstItem @unit @firstItem
+sensor unit.totalItems @unit @totalItems
+jump take_item equal unit.firstItem null
+jump drop_item notEqual unit.firstItem bombingItem
+jump take_item notEqual unit.totalItems unit.itemCapacity
+move_back:
+ucontrol approach x y approachDistance
+jump quick_loop_2 lessThan i quickLoops
+jump init_read_cell always
+drop_item:
+ucontrol itemDrop core 9999
+take_item:
+ucontrol move core.x core.y
+ucontrol itemTake core bombingItem 9999
+jump quick_loop_2 lessThan i quickLoops
+jump init_read_cell always
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"
