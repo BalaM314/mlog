@@ -2,6 +2,7 @@
 #by BalaM314
 #Memory cell layout: [mode, uType, x, y, approachDistance, shouldFire]
 #mode: 0=off 1=on 2=loading
+restart:
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Movement module"
@@ -15,17 +16,22 @@ set memcellpos.y 3
 set memcellpos.approachDistance 4
 set memcellpos.shouldFire 5
 set logicItemTakeRadius 5
+
+restart:
+jump restart equal sorter1 null
+jump restart equal cell1 null
 set bombingItemSorter sorter1
+set cell cell1
 
 init_read_cell:
-	read mode cell1 memcellpos.enabled
-	read unit.id cell1 memcellpos.unitType
-	read x cell1 memcellpos.x
-	read y cell1 memcellpos.y
+	read mode cell memcellpos.enabled
+	read unit.id cell memcellpos.unitType
+	read x cell memcellpos.x
+	read y cell memcellpos.y
 	lookup unit unitType unit.id
-	read approachDistance cell1 memcellpos.approachDistance
+	read approachDistance cell memcellpos.approachDistance
 	sensor bombingItem bombingItemSorter @config
-	read shouldFire cell1 memcellpos.shouldFire
+	read shouldFire cell memcellpos.shouldFire
 	jump init_read_cell equal mode 0
 	jump load_units equal mode 2
 
@@ -40,15 +46,15 @@ quick_loop:
 	move:
 		ucontrol approach x y approachDistance
 	fire:
-		ucontrol within x y unit.range targetPosition
-		jump targetSelf equal targetPosition false
-		targetPosition:
+		ucontrol within x y unit.range target_position
+		jump target_self equal target_position false
+		target_position:
 			ucontrol target x y shouldFire
 		end_loop:
 			op add i i 1
 			jump quick_loop lessThan i quickLoops
 			jump init_read_cell always
-		targetSelf:
+		target_self:
 			ucontrol targetp @unit shouldFire
 		end_loop_2:
 			op add i i 1
