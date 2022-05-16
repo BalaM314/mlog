@@ -28,10 +28,10 @@ check_health:
 	jump find_turret always
 
 low_health:
-	ulocate building repair false repair.x repair.y found
+	ulocate building repair false repair.x repair.y repair.exists repair
 	jump approach_repair equal found false
 	use_core:
-	ulocate building core false repair.x repair.y _
+	ulocate building core false repair.x repair.y repair.exists repair
 	approach_repair:
 	ucontrol approach repair.x repair.y 5
 	jump end
@@ -45,7 +45,7 @@ find_turret:
 
 get_variables:
 	sensor unit.range @unit @range
-	ucontrol getblock enemyTurret.x enemyTurret.y enemyTurret.type enemyTurret
+	ucontrol getBlock enemyTurret.x enemyTurret.y enemyTurret.type enemyTurret
 	jump turret_out_of_range equal enemyTurret null
 	sensor enemyTurret.range enemyTurret @range
 	sensor enemyTurret.shootX enemyTurret @shootX

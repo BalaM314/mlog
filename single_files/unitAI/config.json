@@ -1,0 +1,15 @@
+{
+	"name": "Unit AI",
+	"authors": ["BalaM314"],
+	"compilerOptions": {
+		"include": [],
+		"removeComments": true,
+		"compileWithErrors": false,
+		"mode": "single",
+		"prependFileName": true,
+		"checkTypes": true
+	},
+	"compilerVariables": {
+		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/single_files/unitAI/"
+	}
+}

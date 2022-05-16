@@ -1,15 +1,49 @@
-start:
+set minHealthPercent 0.2
 set unitType @fortress
 set onSwitch switch1
+set enemyTurret.damageRadius 2
+start:
 sensor on switch1 @enabled
 jump start notEqual on true
 bind_new_unit:
 ubind unitType
+sensor unit.flag @unit @flag
+jump bind_new_unit notEqual unit.flag 0
+sensor unit.dead @unit @dead
+jump bind_new_unit equal unit.dead true
+sensor unit.controller @unit @controller
+jump bind_new_unit greaterThan 0
 check_health:
-ulocate building turret true _ outX outY found _
+sensor unit.health @unit @health
+sensor unit.maxHealth @unit @maxHealth
+op mul minHealth unit.maxHealth minHealthPercent
+jump low_health lessThan unit.health minHealth
+jump find_turret always
+low_health:
+ulocate building repair false _ repair.x repair.y repair.exists repair
+jump approach_repair equal found false
+use_core:
+ulocate building core false _ repair.x repair.y repair.exists repair
+approach_repair:
+ucontrol approach repair.x repair.y 5
+jump end
+find_turret:
+ulocate building turret true _ enemyTurret.x enemyTurret.y found _
+jump next equal found true
+ulocate building core true _ enemyTurret.x enemyTurret.y found _
 jump end equal found false
-sensor range @unit @range
-ucontrol getBlock outX outY h enemyTurret#Error
+get_turret_range:
+get_variables:
+sensor unit.range @unit @range
+ucontrol getBlock enemyTurret.x enemyTurret.y enemyTurret.type enemyTurret
+jump turret_out_of_range equal enemyTurret null
+sensor enemyTurret.range enemyTurret @range
+sensor enemyTurret.shootX enemyTurret @shootX
+sensor enemyTurret.shootY enemyTurret @shootY
+ucontrol within enemyTurret.shootX enemyTurret.shootY enemyTurret.damageRadius unit.isBeingFiredAt
+jump choose_ai_type always
+turret_out_of_range:
+jump end always
 choose_ai_type:
 jump bulky always
 insane:
@@ -17,65 +51,11 @@ jump end always
 strafe:
 jump end always
 bulky:
-ucontrol approach outX outY range
 jump end always
 sniper:
 jump end always
 end:
 end
 end
-#stdlib
-
-_count_buildings:
-set _num_buildings 0
-set __count_block_type__i -1
-__count_block_type__next_loop:
-op add __count_block_type__i __count_block_type__i 1
-getlink __count_block_type__building __count_block_type__i
-sensor __count_block_type__building_type __count_block_type__building @type
-jump __count_block_type__check_exit_loop notEqual _building_type __count_block_type__building_type
-op add _num_buildings _num_buildings 1
-__count_block_type__check_exit_loop:
-jump __count_block_type__next_loop lessThan __count_block_type__i @links
-set @counter _stack1
-end
-
-_count_units:
-set _num_units -1
-__count_unit__begin_loop:
-op add _num_units _num_units 1
-ubind _unit_type
-sensor __count_unit__dead @unit @dead
-jump __count_unit__exit_loop equal __count_unit__dead true
-jump __count_unit__check_exit_loop notEqual _num_units 0
-set __count_unit__firstUnit @unit
-jump __count_unit__begin_loop always
-__count_unit__check_exit_loop:
-jump __count_unit__begin_loop notEqual @unit __count_unit__firstUnit
-__count_unit__exit_loop:
-set @counter _stack1
-end
-
-_err:
-print "[red] An error has occured: "
-print _err
-print "\nMake sure all necessary blocks"
-print " are linked and units exist."
-printflush _stderr
-end
-end
-
-_flag_unit:
-ubind _unit_type
-sensor dead @unit @dead
-jump _flag_unit notEqual dead false
-sensor __flag_unit__flag @unit @flag
-sensor __flag_unit__controlled @unit @controlled
-op equal __flag_unit__unitUnflagged __flag_unit__flag 0
-op equal __flag_unit__unitHasOurFlag __flag_unit__flag _cookie
-op equal __flag_unit__unitNotControlled __flag_unit__controlled false
-op or __flag_unit__unitFlagOk __flag_unit__unitUnflagged __flag_unit__unitHasOurFlag
-jump _flag_unit notEqual __flag_unit__unitFlagOk true
-jump _flag_unit notEqual __flag_unit__unitNotControlled true
-ucontrol flag _cookie#Error
-set @counter _stack1
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

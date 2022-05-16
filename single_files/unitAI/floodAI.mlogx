@@ -1,0 +1,30 @@
+print "$name by $authors"
+print "Source code available at $githubUrl"
+
+set unitType @flare
+set minHealth 0.6
+
+
+
+get_static_vars:
+	ubind unitType
+	sensor unit.maxHealth @unit @maxHealth
+	sensor unit.range @unit @range
+	op sub unit.range unit.range 3
+bind_unit:
+	ubind unitType
+	sensor unit.flag @unit @flag
+	jump bind_unit notEqual unit.flag 0
+check_health:
+	sensor unit.health @unit @health
+	op div health unit.health unit.maxHealth
+	jump heal lessThan health minHealth
+attack:
+	ulocate building generator true outx outy found building #Yes, generator. This makes them target flood because of a plugin.
+	ucontrol approach outx outy unit.range
+	ucontrol target outx outy true
+	jump bind_unit always
+heal:
+	ulocate building repair false outx outy found building
+	ucontrol approach outx outy 5
+	jump bind_unit always
