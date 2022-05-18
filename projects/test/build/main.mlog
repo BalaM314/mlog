@@ -1,13 +1,9 @@
 print "test program"
-printflush message1
-set _stack1 @counter
-op add _stack1 _stack1 2
-jump printAmogus always
-op add i i 2
-set _unit_type @flare
-set _stack1 @counter
-op add _stack1 _stack1 2
-jump _flag_unit always
-move_unit:
-ucontrol move @thisx @thisy
-jump move_unit always
+jump jump_label
+print "e"
+jump_label:
+jump does_not_exist
+defined_twice:
+print "oh no"
+defined_twice:
+print "oh no"

@@ -1,0 +1,207 @@
+jump restart always
+print "Resource Manager by BalaM314"
+print "Source code available at https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/"
+print "Usage instructions:"
+print "Bind to core, power node, switches, and all buildings that should be managed."
+print "Then change variables below."
+restart:
+set startingLinks @links
+set stdout message1
+print "Starting..."
+print "\n\nResource Manager by [#3141FF]BalaM314"
+printflush stdout
+print "Edit variables below."
+set input1 @sand
+set input2 @coal
+set input3 null
+set input4 null
+set output @silicon
+set managePower true
+set offSwitch switch1
+set onSwitch switch2
+set powerBuilding node1
+set maxCoreCap 69420
+set minInputPerc 10
+set minOutputPerc 5
+set maxOutputPerc 98
+set minPowerPerc 30
+print "Do not edit below this line."
+printflush stdout
+printflush stdout
+set shouldRun true
+jump get_core always
+core_found:
+main_loop:
+check_links:
+jump restart notEqual @links startingLinks
+get_data:
+sensor core.itemCapacity core @itemCapacity
+op min inputCoreCap core.itemCapacity maxCoreCap
+sensor powerBuilding.powerNetStored powerBuilding @powerNetStored
+sensor powerBuilding.powerNetCapacity powerBuilding @powerNetCapacity
+op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
+op idiv powerPerc powerPerc 0.001
+op div powerPerc powerPerc 10
+sensor core.input1 core input1
+op div inputPerc1 core.input1 inputCoreCap
+op idiv inputPerc1 inputPerc1 0.001
+op div inputPerc1 inputPerc1 10
+sensor core.input2 core input2
+op div inputPerc2 core.input2 inputCoreCap
+op idiv inputPerc2 inputPerc2 0.001
+op div inputPerc2 inputPerc2 10
+sensor core.input3 core input3
+op div inputPerc3 core.input3 inputCoreCap
+op idiv inputPerc3 inputPerc3 0.001
+op div inputPerc3 inputPerc3 10
+sensor core.input4 core input4
+op div inputPerc4 core.input4 inputCoreCap
+op idiv inputPerc4 inputPerc4 0.001
+op div inputPerc4 inputPerc4 10
+sensor core.output core output
+op div outputPerc core.output core.itemCapacity
+op idiv outputPerc outputPerc 0.001
+op div outputPerc outputPerc 10
+jump no_off_switch equal offSwitch null
+sensor offSwitch.enabled offSwitch @enabled
+sensor onSwitch.enabled onSwitch @enabled
+jump process always
+no_off_switch:
+set offSwitch.enabled false
+set onSwitch.enabled false
+process:
+jump power_ok equal managePower false
+jump input1_ok greaterThan powerPerc minPowerPerc
+print "[yellow]Low stored power. ("
+print powerPerc
+print " < "
+print minPowerPerc
+print ")\n"
+set shouldRun false
+power_ok:
+jump input1_ok equal input1 null
+jump input1_ok greaterThan inputPerc1 minInputPerc
+print "[yellow]Low "
+print input1
+print "[]. ("
+print inputPerc1
+print " < "
+print minInputPerc
+print ")\n"
+set shouldRun false
+input1_ok:
+jump input2_ok equal input2 null
+jump input2_ok greaterThanEq inputPerc2 minInputPerc
+print "[yellow]Low "
+print input2
+print "[]. ("
+print inputPerc2
+print " < "
+print minInputPerc
+print ")\n"
+set shouldRun false
+input2_ok:
+jump input3_ok equal input4 null
+jump input3_ok greaterThanEq inputPerc3 minInputPerc
+print "[yellow]Low "
+print input3
+print "[]. ("
+print inputPerc3
+print " < "
+print minInputPerc
+print ")\n"
+set shouldRun false
+input3_ok:
+jump input4_ok equal input4 null
+jump input4_ok greaterThanEq inputPerc4 minInputPerc
+print "[yellow]Low "
+print input4
+print "[]. ("
+print inputPerc4
+print " < "
+print minInputPerc
+print ")\n"
+set shouldRun false
+input4_ok:
+jump output_not_low greaterThanEq outputPerc minOutputPerc
+print "[yellow]Low "
+print output
+print "[]. ("
+print outputPerc
+print " < "
+print minOutputPerc
+print ")\n"
+set shouldRun true
+output_not_low:
+jump output_not_high lessThanEq outputPerc maxOutputPerc
+print "[green]Core is full of "
+print output
+print ".\n"
+set shouldRun false
+output_not_high:
+jump override_off equal offSwitch.enabled true
+jump override_on equal onSwitch.enabled true
+jump print_status always
+override_off:
+print "[red]Manually switched off.[]\n"
+set shouldRun false
+jump print_status always
+override_on:
+print "[red]Manually forced on.[]\n"
+set shouldRun true
+jump print_status always
+print_status:
+jump print_true equal shouldRun true
+print_false:
+print "Running: false.\n"
+jump write always
+print_true:
+print "Running: true.\n"
+write:
+set i 0
+write_loop:
+getlink linkedBuilding i
+op add i i 1
+sensor linkedBuilding.type linkedBuilding @type
+jump next equal linkedBuilding.type @switch
+control enabled linkedBuilding shouldRun
+next:
+jump write_loop lessThan i @links
+print "[white]Resource Manager by [#3141FF]BalaM314"
+printflush message1
+jump main_loop always
+err:
+print "[red]Error: "
+print err
+print "\n\n[white]Resource Manager by [#3141FF]BalaM314"
+printflush stdout
+wait 5
+end
+
+#functions
+get_core:
+set core shard1
+jump core_found notEqual core null
+set core foundation1
+jump core_found notEqual core null
+set core nucleus1
+jump core_found notEqual core null
+ubind @flare
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @mono
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+cant_find_core:
+set err "Can't find the core. Please link the core or make a mono/flare."
+jump err always
+locate_core:
+ulocate building core false _ coreX coreY _ core
+ubind null
+jump core_found always
+end
+
+#stdlib functions
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

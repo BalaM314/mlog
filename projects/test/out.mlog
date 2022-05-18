@@ -1,16 +1,12 @@
 print "test program"
-printflush message1
-set _stack1 @counter
-op add _stack1 _stack1 2
-jump printAmogus always
-op add i i 2
-set _unit_type @flare
-set _stack1 @counter
-op add _stack1 _stack1 2
-jump _flag_unit always
-move_unit:
-ucontrol move @thisx @thisy
-jump move_unit always
+jump jump_label
+print "e"
+jump_label:
+jump does_not_exist
+defined_twice:
+print "oh no"
+defined_twice:
+print "oh no"
 end
 
 #functions
@@ -21,6 +17,18 @@ set @counter _stack1
 end
 
 #stdlib functions
+flag_unit:
+ubind unit_type
+sensor unit.dead @unit @dead
+jump flag_unit notEqual unit.dead false
+sensor unit.flag @unit @flag
+op equal unit.unflagged unit.flag 0
+op equal unit.hasOurFlag unit.flag cookie
+jump flag_unit notEqual unit.unflagged true
+jump flag_unit notEqual unit.hasOurFlag true
+ucontrol flag cookie
+set @counter _stack1
+end
 
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

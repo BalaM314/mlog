@@ -1,0 +1,17 @@
+{
+	"name": "Resource Manager",
+	"authors": [
+		"BalaM314"
+	],
+	"compilerOptions": {
+		"include": [],
+		"removeComments": true,
+		"compileWithErrors": true,
+		"mode": "project",
+		"prependFileName": true,
+		"checkTypes": true
+	},
+	"compilerVariables": {
+		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/"
+	}
+}
