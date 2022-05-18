@@ -8,7 +8,7 @@ restart:
 set startingLinks @links
 set stdout message1
 print "Starting..."
-print "\n\nResource Manager by [#3141FF]BalaM314"
+print "\n\nResource Manager"
 printflush stdout
 print "Edit variables below."
 set input1 @sand
@@ -72,69 +72,69 @@ set onSwitch.enabled false
 process:
 jump power_ok equal managePower false
 jump input1_ok greaterThan powerPerc minPowerPerc
-print "[yellow]Low stored power. ("
+print "[yellow]⚠Low stored power.[white] ("
 print powerPerc
-print " < "
+print "% < "
 print minPowerPerc
-print ")\n"
+print "%)\n"
 set shouldRun false
 power_ok:
 jump input1_ok equal input1 null
 jump input1_ok greaterThan inputPerc1 minInputPerc
-print "[yellow]Low "
+print "[yellow]⚠ Low "
 print input1
 print "[]. ("
 print inputPerc1
-print " < "
+print "% < "
 print minInputPerc
-print ")\n"
+print "%)\n"
 set shouldRun false
 input1_ok:
 jump input2_ok equal input2 null
 jump input2_ok greaterThanEq inputPerc2 minInputPerc
-print "[yellow]Low "
+print "[yellow]⚠ Low "
 print input2
 print "[]. ("
 print inputPerc2
-print " < "
+print "% < "
 print minInputPerc
-print ")\n"
+print "%)\n"
 set shouldRun false
 input2_ok:
 jump input3_ok equal input4 null
 jump input3_ok greaterThanEq inputPerc3 minInputPerc
-print "[yellow]Low "
+print "[yellow]⚠ Low "
 print input3
 print "[]. ("
 print inputPerc3
-print " < "
+print "% < "
 print minInputPerc
-print ")\n"
+print "%)\n"
 set shouldRun false
 input3_ok:
 jump input4_ok equal input4 null
 jump input4_ok greaterThanEq inputPerc4 minInputPerc
-print "[yellow]Low "
+print "[yellow]⚠ Low "
 print input4
 print "[]. ("
 print inputPerc4
-print " < "
+print "% < "
 print minInputPerc
-print ")\n"
+print "%)\n"
 set shouldRun false
 input4_ok:
 jump output_not_low greaterThanEq outputPerc minOutputPerc
-print "[yellow]Low "
+print "[yellow]⚠ Low "
 print output
 print "[]. ("
 print outputPerc
-print " < "
+print "% < "
 print minOutputPerc
-print ")\n"
+print "%)\n"
 set shouldRun true
 output_not_low:
 jump output_not_high lessThanEq outputPerc maxOutputPerc
-print "[green]Core is full of "
+print "[green]✔Core is full of "
 print output
 print ".\n"
 set shouldRun false
@@ -153,10 +153,10 @@ jump print_status always
 print_status:
 jump print_true equal shouldRun true
 print_false:
-print "Running: false.\n"
+print "Status: Disabled.\n"
 jump write always
 print_true:
-print "Running: true.\n"
+print "Status: Enabled.\n"
 write:
 set i 0
 write_loop:
@@ -167,13 +167,13 @@ jump next equal linkedBuilding.type @switch
 control enabled linkedBuilding shouldRun
 next:
 jump write_loop lessThan i @links
-print "[white]Resource Manager by [#3141FF]BalaM314"
+print "\n[slate]Resource Manager"
 printflush message1
 jump main_loop always
 err:
 print "[red]Error: "
 print err
-print "\n\n[white]Resource Manager by [#3141FF]BalaM314"
+print "\n\n[white]Resource Manager"
 printflush stdout
 wait 5
 end
@@ -182,7 +182,7 @@ end
 get_core:
 set core shard1
 jump core_found notEqual core null
-set core foundation1
+set core vault1
 jump core_found notEqual core null
 set core nucleus1
 jump core_found notEqual core null

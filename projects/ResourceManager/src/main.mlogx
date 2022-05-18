@@ -10,7 +10,7 @@ restart:
 set startingLinks @links
 set stdout message1
 print "Starting..."
-print "\n\n$name by [#3141FF]$authors"
+print "\n\n$name"
 printflush stdout
 
 print "Edit variables below."
@@ -82,75 +82,75 @@ main_loop:
 	process:
 		jump power_ok equal managePower false
 		jump input1_ok greaterThan powerPerc minPowerPerc
-		print "[yellow]Low stored power. ("
+		print "[yellow]⚠ Low stored power.[white] ("
 		print powerPerc
-		print " < "
+		print "% < "
 		print minPowerPerc
-		print ")\n"
+		print "%)\n"
 		set shouldRun false
 		power_ok:
 
 		jump input1_ok equal input1 null
 		jump input1_ok greaterThan inputPerc1 minInputPerc
-		print "[yellow]Low "
+		print "[yellow]⚠ Low "
 		print input1
 		print "[]. ("
 		print inputPerc1
-		print " < "
+		print "% < "
 		print minInputPerc
-		print ")\n"
+		print "%)\n"
 		set shouldRun false
 		input1_ok:
 
 		jump input2_ok equal input2 null
 		jump input2_ok greaterThanEq inputPerc2 minInputPerc
-		print "[yellow]Low "
+		print "[yellow]⚠ Low "
 		print input2
 		print "[]. ("
 		print inputPerc2
-		print " < "
+		print "% < "
 		print minInputPerc
-		print ")\n"
+		print "%)\n"
 		set shouldRun false
 		input2_ok:
 
 		jump input3_ok equal input4 null
 		jump input3_ok greaterThanEq inputPerc3 minInputPerc
-		print "[yellow]Low "
+		print "[yellow]⚠ Low "
 		print input3
 		print "[]. ("
 		print inputPerc3
-		print " < "
+		print "% < "
 		print minInputPerc
-		print ")\n"
+		print "%)\n"
 		set shouldRun false
 		input3_ok:
 
 		jump input4_ok equal input4 null
 		jump input4_ok greaterThanEq inputPerc4 minInputPerc
-		print "[yellow]Low "
+		print "[yellow]⚠ Low "
 		print input4
 		print "[]. ("
 		print inputPerc4
-		print " < "
+		print "% < "
 		print minInputPerc
-		print ")\n"
+		print "%)\n"
 		set shouldRun false
 		input4_ok:
 
 		jump output_not_low greaterThanEq outputPerc minOutputPerc
-		print "[yellow]Low "
+		print "[yellow]⚠ Low "
 		print output
 		print "[]. ("
 		print outputPerc
-		print " < "
+		print "% < "
 		print minOutputPerc
-		print ")\n"
+		print "%)\n"
 		set shouldRun true
 		output_not_low:
 
 		jump output_not_high lessThanEq outputPerc maxOutputPerc
-		print "[green]Core is full of "
+		print "[green]✔Core is full of "
 		print output
 		print ".\n"
 		set shouldRun false
@@ -173,10 +173,10 @@ main_loop:
 		print_status:
 			jump print_true equal shouldRun true
 			print_false:
-			print "Running: false.\n"
+			print "Status: [red]Disabled[].\n"
 			jump write
 			print_true:
-			print "Running: true.\n"
+			print "Status: [green]Enabled[].\n"
 	
 	write:
 		set i 0
@@ -185,13 +185,16 @@ main_loop:
 			op add i i 1
 			sensor linkedBuilding.type
 			jump next equal linkedBuilding.type @switch
+			jump next equal linkedBuilding.type @battery
+			jump next equal linkedBuilding.type @large-battery
+			jump next equal linkedBuilding.type @processor
 			#TODO add more buildings that should not be disabled
 			control enabled linkedBuilding shouldRun
 
 			next:
 			jump write_loop lessThan i @links
 
-	print "[white]$name by [#3141FF]$authors"
+	print "\n[slate]$name"
 	printflush message1
 	jump main_loop
 
@@ -199,6 +202,6 @@ main_loop:
 err:
 	print "[red]Error: "
 	print err
-	print "\n\n[white]$name by [#3141FF]$authors"
+	print "\n\n[white]$name"
 	printflush stdout
 	wait 5
