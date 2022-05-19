@@ -22,7 +22,7 @@ set onSwitch switch2
 set powerBuilding node1
 set maxCoreCap 69420
 set minInputPerc 10
-set minOutputPerc 5
+set minOutputPerc 2
 set maxOutputPerc 98
 set minPowerPerc 30
 print "Do not edit below this line."
@@ -42,6 +42,7 @@ sensor powerBuilding.powerNetCapacity powerBuilding @powerNetCapacity
 op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
 op idiv powerPerc powerPerc 0.001
 op div powerPerc powerPerc 10
+jump no_inputs equal input1 null
 sensor core.input1 core input1
 op div inputPerc1 core.input1 inputCoreCap
 op idiv inputPerc1 inputPerc1 0.001
@@ -50,6 +51,7 @@ sensor core.input2 core input2
 op div inputPerc2 core.input2 inputCoreCap
 op idiv inputPerc2 inputPerc2 0.001
 op div inputPerc2 inputPerc2 10
+jump no_inputs equal input3 null
 sensor core.input3 core input3
 op div inputPerc3 core.input3 inputCoreCap
 op idiv inputPerc3 inputPerc3 0.001
@@ -58,6 +60,7 @@ sensor core.input4 core input4
 op div inputPerc4 core.input4 inputCoreCap
 op idiv inputPerc4 inputPerc4 0.001
 op div inputPerc4 inputPerc4 10
+no_inputs:
 sensor core.output core output
 op div outputPerc core.output core.itemCapacity
 op idiv outputPerc outputPerc 0.001
@@ -70,9 +73,10 @@ no_off_switch:
 set offSwitch.enabled false
 set onSwitch.enabled false
 process:
+set shouldRun true
 jump power_ok equal managePower false
 jump input1_ok greaterThan powerPerc minPowerPerc
-print "[yellow]⚠Low stored power.[white] ("
+print "[yellow]⚠ Low stored power.[white] ("
 print powerPerc
 print "% < "
 print minPowerPerc
@@ -123,6 +127,7 @@ print minInputPerc
 print "%)\n"
 set shouldRun false
 input4_ok:
+jump output_not_low equal output null
 jump output_not_low greaterThanEq outputPerc minOutputPerc
 print "[yellow]⚠ Low "
 print output
@@ -136,7 +141,7 @@ output_not_low:
 jump output_not_high lessThanEq outputPerc maxOutputPerc
 print "[green]✔Core is full of "
 print output
-print ".\n"
+print "[].\n"
 set shouldRun false
 output_not_high:
 jump override_off equal offSwitch.enabled true
@@ -153,10 +158,10 @@ jump print_status always
 print_status:
 jump print_true equal shouldRun true
 print_false:
-print "Status: Disabled.\n"
+print "Status: [red]Disabled[].\n"
 jump write always
 print_true:
-print "Status: Enabled.\n"
+print "Status: [green]Enabled[].\n"
 write:
 set i 0
 write_loop:
@@ -164,6 +169,9 @@ getlink linkedBuilding i
 op add i i 1
 sensor linkedBuilding.type linkedBuilding @type
 jump next equal linkedBuilding.type @switch
+jump next equal linkedBuilding.type @battery
+jump next equal linkedBuilding.type @large-battery
+jump next equal linkedBuilding.type @processor
 control enabled linkedBuilding shouldRun
 next:
 jump write_loop lessThan i @links
