@@ -75,7 +75,7 @@ set onSwitch.enabled false
 process:
 set shouldRun true
 jump power_ok equal managePower false
-jump input1_ok greaterThan powerPerc minPowerPerc
+jump power_ok greaterThan powerPerc minPowerPerc
 print "[yellow]⚠ Low stored power.[white] ("
 print powerPerc
 print "% < "
