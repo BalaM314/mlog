@@ -2,7 +2,6 @@
 #by BalaM314
 #Memory cell layout: [mode, uType, x, y, approachDistance, shouldFire]
 #mode: 0=off 1=on 2=loading
-restart:
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Movement module"
@@ -77,6 +76,18 @@ quick_loop_2:
 		jump take_item notEqual unit.totalItems unit.itemCapacity
 	move_back:
 		ucontrol approach x y approachDistance
+
+		ucontrol within x y unit.range target_position
+		jump target_self_2 equal target_position false
+		target_position_2:
+			ucontrol target x y shouldFire
+			jump quick_loop_2 lessThan i quickLoops
+			jump init_read_cell always
+		target_self_2:
+			ucontrol targetp @unit shouldFire
+			jump quick_loop_2 lessThan i quickLoops
+			jump init_read_cell always
+
 		jump quick_loop_2 lessThan i quickLoops
 		jump init_read_cell always
 	drop_item:

@@ -84,7 +84,15 @@ start_quick_loop:
 	set i 0
 	write unitId cell memcellpos.unitId
 	write mode cell memcellpos.mode
-	write 1 cell memcellpos.approachDistance
+	sensor arc.shooting arc1 @shooting
+	jump approach_far equal arc.shooting true
+	approach_close:
+		write 1 cell memcellpos.approachDistance
+		jump approach_chosen always
+	approach_far:
+		write 15 cell memcellpos.approachDistance
+	approach_chosen:
+
 	write true cell memcellpos.shouldFire
 quick_loop:
 
