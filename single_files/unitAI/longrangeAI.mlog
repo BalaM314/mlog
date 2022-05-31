@@ -1,8 +1,9 @@
-set unit.maxHealth 22000
-set unit.range 61.5
-set minHealth 0.5
+set unitType @bryde
+set unit.maxHealth 910
+set unit.range 36
+set minHealth 0.7
 bind_unit:
-ubind @omura
+ubind unitType
 sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
 sensor unit.controlled @unit @controlled

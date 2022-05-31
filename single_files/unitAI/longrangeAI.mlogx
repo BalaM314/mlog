@@ -1,16 +1,11 @@
-#Todos
-#Check for no turrets
-#Check for nearby enemy units
-#Check for no repair
-#optimize health check
-#add rudimentary anti stuck
+set unitType @bryde
 
-set unit.maxHealth 22000
-set unit.range 61.5
-set minHealth 0.5
+set unit.maxHealth 910
+set unit.range 36
+set minHealth 0.7
 
 bind_unit:
-	ubind @omura
+	ubind unitType
 	sensor unit.flag
 	jump bind_unit notEqual unit.flag 0
 	sensor unit.controlled
@@ -40,12 +35,10 @@ get_turret:
 		op min approachDist unit.range
 		jump fire
 
-
 fire:
 	ucontrol approach turret.x turret.y approachDist
 	ucontrol target turret.x turret.y true
 	jump bind_unit
-
 
 heal:
 	ulocate building repair false outx outy found building

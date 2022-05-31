@@ -1,0 +1,12 @@
+#Raytrace AI (?!?!?!!)
+#scrapped, way too hard.
+
+#Notes
+#y-y1=(y2-y1/x2-x1)(x-x1)
+#if sin(2x+90) > 0 iterate through (y2-y1/x2-x1)(x-x1) + y1
+#else iterate through (y-y1)/(y2-y1/x2-x1)+x1
+#
+
+
+#get theta from x axis
+#assume sin(2x+90) > 0
