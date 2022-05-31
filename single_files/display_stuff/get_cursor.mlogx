@@ -1,0 +1,49 @@
+#Gets the cursor x and y positions and writes them to a memcell.
+
+get_variables:
+	radar player distance foreshadow1 1 player
+	jump get_variables equal display1 null
+
+
+sensor display1.x
+sensor display1.y
+sensor display1.size
+op sub xOffset display1.x 3
+op sub yOffset display1.y 3
+op div scale 180 display1.size
+
+main_loop:
+
+	check_player:
+		sensor player.dead
+		jump get_variables equal player.dead true
+	
+	read_player:
+		sensor player.shootX
+		sensor player.shootY
+		sensor player.shooting
+
+	process_data:
+		op sub cursor.x player.shootX xOffset
+		op sub cursor.y player.shootY yOffset
+		op mul cursor.x scale
+		op mul cursor.y scale
+	
+	validate_data:
+		jump cursor_out greaterThan cursor.x 180
+		jump cursor_out greaterThan cursor.y 180
+		jump cursor_out lessThan cursor.x 0
+		jump cursor_out lessThan cursor.y 0
+
+	write:
+		write cursor.x cell1 0
+		write cursor.y cell1 1
+		write player.shooting cell1 2
+		jump main_loop always
+
+	cursor_out:
+		#To save instructions this code is duplicated.
+		write 0 cell1 0
+		write 0 cell1 1
+		write player.shooting cell1 2
+		jump main_loop always

@@ -1,0 +1,29 @@
+#Display Shenanigans proof of concept
+
+set i 0
+set r 0
+main_loop:
+
+	read_data:
+		read cursor.x cell1 0
+		read cursor.y cell1 1
+		read cursor.down cell1 2
+
+	get_cell_coords:
+		op div cursor.xCell cursor.x 20
+		op div cursor.yCell cursor.y 20
+		op floor cursor.xCell
+		op floor cursor.yCell
+		op mul cellId cursor.yCell 6
+		op add cellId cursor.xCell
+	
+	counter_array:
+		set offset @counter
+		op add offset 2
+		op mul offset cellId 2
+
+	
+
+	drawflush display1
+
+	jump main_loop always
