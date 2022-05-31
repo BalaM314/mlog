@@ -1,26 +1,27 @@
-#Overkill RC by BalaM314
-#Control module
-
-#Todo
+#Overkill RC by $authors
+#Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId]
 
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Control module"
+print "Configurable settings below:"
 set idle.x @thisx
 set idle.y @thisy
 set unitIdOverride 0
+set idleApproachDistance 18.5
 print "Do not change below"
 set quickLoops 16 #The amount of quick loops to perform before rereading settings.
-set memcellpos.mode 0
-set memcellpos.unitId 1
-set memcellpos.x 2
-set memcellpos.y 3
-set memcellpos.approachDistance 4
-set memcellpos.shouldFire 5
-set idleApproachDistance 18.5
+set memcellpos.enabled 0
+set memcellpos.loading 1
+set memcellpos.unitId 2
+set memcellpos.destX 3
+set memcellpos.destY 4
+set memcellpos.shootX 5
+set memcellpos.shootY 6
+set memcellpos.shouldFire 7
+set memcellpos.approachDistance 8
+set memcellpos.secondaryUnitId 9
 op mul idleFireInterval 10 1000
-set mode.normal 1
-set mode.loading 2
 
 restart:
 jump restart equal switch1 null
@@ -29,20 +30,16 @@ jump restart equal switch3 null
 jump restart equal cell1 null
 set enabledSwitch switch3
 set loadingSwitch switch2
-set approachSwitch switch1 #NYI
+set longrangeSwitch switch1 #NYI
 set cell cell1
 
 main_loop:
 
 get_settings:
-	set mode mode.normal
 	sensor isActive arc1 @controlled
-	sensor mode enabledSwitch @enabled
+	sensor enabled enabledSwitch @enabled
 	sensor loading loadingSwitch @enabled
-	jump not_loading equal loading false
-	jump not_loading equal mode 0
-	set mode mode.loading
-	not_loading:
+	sensor longrange longrangeSwitch @enabled
 	jump unitId_defined notEqual unitIdOverride 0
 	sensor sorter.item sorter1 @config
 	jump quad equal sorter.item @titanium
@@ -53,7 +50,7 @@ get_settings:
 	jump flare equal sorter.item @scrap
 	
 	no_unit:
-		set mode 0
+		set enabled false
 		jump write_values always
 	quad:
 		set unitId 23
@@ -76,42 +73,79 @@ get_settings:
 	
 unitId_defined:
 	set unitId unitIdOverride
-#A quick loop, because we don't need to check the unit type every loop.
+
+
 write_values:
+	#If idle, just write idle values
 	jump idle equal isActive false
 
-start_quick_loop:
+#Write slow values that don't need to update quickly.
+write_slow_values:
 	set i 0
 	write unitId cell memcellpos.unitId
-	write mode cell memcellpos.mode
+	write unitId cell memcellpos.secondaryUnitId #TODO allow selection of secondary unit
+	write enabled cell memcellpos.enabled
+	write loading cell memcellpos.loading
 	sensor arc.shooting arc1 @shooting
+	write true cell memcellpos.shouldFire #not idle so always shoot
+	jump longrange_quick_loop equal longrange true
 	jump approach_far equal arc.shooting true
 	approach_close:
 		write 1 cell memcellpos.approachDistance
-		jump approach_chosen always
+		jump approach_chosen
 	approach_far:
 		write 15 cell memcellpos.approachDistance
 	approach_chosen:
 
-	write true cell memcellpos.shouldFire
+
 quick_loop:
 
-get_variables:
-	sensor arc.x arc1 @shootX
-	sensor arc.y arc1 @shootY
-
-write:
+	get_variables:
+		sensor arc.x arc1 @shootX
+		sensor arc.y arc1 @shootY
+		
+	write:
+		write arc.x cell memcellpos.destX
+		write arc.y cell memcellpos.destY
+		write arc.x cell memcellpos.shootX
+		write arc.y cell memcellpos.shootY
+		jump quick_loop lessThan i quickLoops
+		jump main_loop always
+	
+	end_quick_loop:
 	op add i i 1
-	write arc.x cell memcellpos.x
-	write arc.y cell memcellpos.y
 	jump quick_loop lessThan i quickLoops
 	jump main_loop always
 
+longrange_quick_loop:
+
+	longrange_get_variables:
+		sensor arc.x arc1 @shootX
+		sensor arc.y arc1 @shootY
+		sensor arc.shooting arc1 @shooting
+		
+	longrange_write:
+		write_dest:
+			write arc.x cell memcellpos.destX
+			write arc.y cell memcellpos.destY
+			jump longrange_end_quick_loop
+		write_target:
+			write arc.x cell memcellpos.shootX
+			write arc.y cell memcellpos.shootY
+
+	longrange_end_quick_loop:
+	op add i i 1
+	jump longrange_quick_loop lessThan i quickLoops
+	jump main_loop always
+
 idle:
-	write idle.x cell memcellpos.x
-	write idle.y cell memcellpos.y
+	write idle.x cell memcellpos.destX
+	write idle.y cell memcellpos.destY
+	write idle.x cell memcellpos.shootX
+	write idle.y cell memcellpos.shootY
 	write unitId cell memcellpos.unitId
-	write mode cell memcellpos.mode
+	write enabled cell memcellpos.enabled
+	write loading cell memcellpos.loading
 	write idleApproachDistance cell memcellpos.approachDistance
 	op mod frames @time idleFireInterval
 	op lessThan shouldFire frames 500

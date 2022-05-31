@@ -1,7 +1,7 @@
 #Overkill RC
-#by BalaM314
-#Memory cell layout: [mode, uType, x, y, approachDistance, shouldFire]
-#mode: 0=off 1=on 2=loading
+#by $authors
+#Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId]
+
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Movement module"
@@ -9,11 +9,15 @@ print "Settings in micro proc"
 
 set quickLoops 16
 set memcellpos.enabled 0
-set memcellpos.unitType 1
-set memcellpos.x 2
-set memcellpos.y 3
-set memcellpos.approachDistance 4
-set memcellpos.shouldFire 5
+set memcellpos.loading 1
+set memcellpos.unitId 2
+set memcellpos.destX 3
+set memcellpos.destY 4
+set memcellpos.shootX 5
+set memcellpos.shootY 6
+set memcellpos.shouldFire 7
+set memcellpos.approachDistance 8
+set memcellpos.secondaryUnitId 9
 set logicItemTakeRadius 5
 
 restart:
@@ -23,77 +27,85 @@ set bombingItemSorter sorter1
 set cell cell1
 
 init_read_cell:
-	read mode cell memcellpos.enabled
-	read unit.id cell memcellpos.unitType
-	read x cell memcellpos.x
-	read y cell memcellpos.y
+	read enabled cell memcellpos.enabled
+	read loading cell memcellpos.loading
+	read unit.id cell memcellpos.unitId
 	lookup unit unitType unit.id
+	read dest.x cell memcellpos.destX
+	read dest.y cell memcellpos.destY
+	read shoot.x cell memcellpos.shootX
+	read shoot.y cell memcellpos.shootY
+	read shouldFire cell memcellpos.shouldFire
 	read approachDistance cell memcellpos.approachDistance
 	sensor bombingItem bombingItemSorter @config
-	read shouldFire cell memcellpos.shouldFire
-	jump init_read_cell equal mode 0
-	jump load_units equal mode 2
+	jump init_read_cell equal enabled false
 
-	set i 0
-	ubind unitType
-	sensor unit.range
-quick_loop:
-	bind_unit:
-		ubind unitType
-		sensor unit.flag
-		jump bind_unit notEqual unit.flag 0
-	move:
-		ucontrol approach x y approachDistance
-	fire:
-		ucontrol within x y unit.range target_position
-		jump target_self equal target_position false
-		target_position:
-			ucontrol target x y shouldFire
-		end_loop:
-			op add i i 1
-			jump quick_loop lessThan i quickLoops
-			jump init_read_cell always
-		target_self:
-			ucontrol targetp @unit shouldFire
-		end_loop_2:
-			op add i i 1
-			jump quick_loop lessThan i quickLoops
-			jump init_read_cell always
+#I didnt have time to finish this, below code is repetitive and was for old memcell values
 
-load_units:
-set i 0
-ubind unitType
-sensor unit.itemCapacity
-quick_loop_2:
-	op add i 1
-	ubind unitType
-	should_take_or_drop:
-		ulocate building core false core.x core.y core.exists core
-		sensor unit.firstItem
-		sensor unit.totalItems
-		jump take_item equal unit.firstItem null
-		jump drop_item notEqual unit.firstItem bombingItem
-		jump take_item notEqual unit.totalItems unit.itemCapacity
-	move_back:
-		ucontrol approach x y approachDistance
 
-		ucontrol within x y unit.range target_position
-		jump target_self_2 equal target_position false
-		target_position_2:
-			ucontrol target x y shouldFire
-			jump quick_loop_2 lessThan i quickLoops
-			jump init_read_cell always
-		target_self_2:
-			ucontrol targetp @unit shouldFire
-			jump quick_loop_2 lessThan i quickLoops
-			jump init_read_cell always
 
-		jump quick_loop_2 lessThan i quickLoops
-		jump init_read_cell always
-	drop_item:
-		ucontrol itemDrop core 9999
-	take_item:
-		ucontrol move core.x core.y #this is a bit weird but it works
-		ucontrol itemTake core bombingItem 9999
-		jump quick_loop_2 lessThan i quickLoops
-		jump init_read_cell always
+
+
+# 	set i 0
+# 	ubind unitType
+# 	sensor unit.range
+# quick_loop:
+# 	bind_unit:
+# 		ubind unitType
+# 		sensor unit.flag
+# 		jump bind_unit notEqual unit.flag 0
+# 	move:
+# 		ucontrol approach x y approachDistance
+# 	fire:
+# 		ucontrol within x y unit.range target_position
+# 		jump target_self equal target_position false
+# 		target_position:
+# 			ucontrol target x y shouldFire
+# 		end_loop:
+# 			op add i i 1
+# 			jump quick_loop lessThan i quickLoops
+# 			jump init_read_cell always
+# 		target_self:
+# 			ucontrol targetp @unit shouldFire
+# 		end_loop_2:
+# 			op add i i 1
+# 			jump quick_loop lessThan i quickLoops
+# 			jump init_read_cell always
+
+# load_units:
+# set i 0
+# ubind unitType
+# sensor unit.itemCapacity
+# quick_loop_2:
+# 	op add i 1
+# 	ubind unitType
+# 	should_take_or_drop:
+# 		ulocate building core false core.x core.y core.exists core
+# 		sensor unit.firstItem
+# 		sensor unit.totalItems
+# 		jump take_item equal unit.firstItem null
+# 		jump drop_item notEqual unit.firstItem bombingItem
+# 		jump take_item notEqual unit.totalItems unit.itemCapacity
+# 	move_back:
+# 		ucontrol approach x y approachDistance
+
+# 		ucontrol within x y unit.range target_position
+# 		jump target_self_2 equal target_position false
+# 		target_position_2:
+# 			ucontrol target x y shouldFire
+# 			jump quick_loop_2 lessThan i quickLoops
+# 			jump init_read_cell always
+# 		target_self_2:
+# 			ucontrol targetp @unit shouldFire
+# 			jump quick_loop_2 lessThan i quickLoops
+# 			jump init_read_cell always
+
+# 		jump quick_loop_2 lessThan i quickLoops
+# 		jump init_read_cell always
+# 	drop_item:
+# 		ucontrol itemDrop core 9999
+# 	take_item:
+# 		ucontrol move core.x core.y #this is a bit weird but it works
+# 		ucontrol itemTake core bombingItem 9999
+# 		jump quick_loop_2 lessThan i quickLoops
+# 		jump init_read_cell always
