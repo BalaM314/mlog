@@ -2,7 +2,7 @@ print "Overkill RC by BalaM314"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
 print "Movement module"
 print "Settings in micro proc"
-set quickLoops 16
+set quickLoops 80
 set memcellpos.enabled 0
 set memcellpos.loading 1
 set memcellpos.unitId 2
@@ -32,6 +32,43 @@ read shouldFire cell memcellpos.shouldFire
 read approachDistance cell memcellpos.approachDistance
 sensor bombingItem bombingItemSorter @config
 jump init_read_cell equal enabled false
+ubind unitType
+sensor unit.range @unit @range
+sensor unit.itemCapacity @unit @itemCapacity
+ulocate building core false _ core.x core.y core.exists core
+set i 0
+send_commands_loop:
+bind_unit:
+ubind unitType
+sensor unit.flag @unit @flag
+jump bind_unit notEqual unit.flag 0
+jump load equal loading true
+send_commands:
+ucontrol approach dest.x dest.y approachDistance
+ucontrol within shoot.x shoot.y unit.range target_position
+jump target_self equal target_position false
+target_position:
+ucontrol target shoot.x shoot.y shouldFire
+jump end_send_commands_loop always
+target_self:
+ucontrol targetp @unit shouldFire
+jump end_send_commands_loop always
+load:
+sensor unit.firstItem @unit @firstItem
+sensor unit.totalItems @unit @totalItems
+jump take_item equal unit.firstItem null
+jump drop_item notEqual unit.firstItem bombingItem
+jump take_item notEqual unit.totalItems unit.itemCapacity
+jump send_commands always
+drop_item:
+ucontrol itemDrop core 9999
+take_item:
+ucontrol move core.x core.y
+ucontrol itemTake core bombingItem 9999
+jump end_send_commands_loop always
+end_send_commands_loop:
+op add i i 1
+jump send_commands_loop lessThan i quickLoops
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

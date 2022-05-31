@@ -92,8 +92,6 @@ write arc.x cell memcellpos.destX
 write arc.y cell memcellpos.destY
 write arc.x cell memcellpos.shootX
 write arc.y cell memcellpos.shootY
-jump quick_loop lessThan i quickLoops
-jump main_loop always
 end_quick_loop:
 op add i i 1
 jump quick_loop lessThan i quickLoops
@@ -103,6 +101,7 @@ longrange_get_variables:
 sensor arc.x arc1 @shootX
 sensor arc.y arc1 @shootY
 sensor arc.shooting arc1 @shooting
+jump write_target equal arc.shooting false
 longrange_write:
 write_dest:
 write arc.x cell memcellpos.destX
