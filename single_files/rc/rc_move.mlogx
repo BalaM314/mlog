@@ -1,11 +1,12 @@
 #Overkill RC
 #by $authors
-#Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId]
+#Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId, healing]
 
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Movement module"
-print "Settings in micro proc"
+set minHealth 0.8
+print "Rest of settings in micro proc"
 
 set quickLoops 80
 set memcellpos.enabled 0
@@ -18,6 +19,7 @@ set memcellpos.shootY 6
 set memcellpos.shouldFire 7
 set memcellpos.approachDistance 8
 set memcellpos.secondaryUnitId 9
+set memcellpos.healing 10
 set logicItemTakeRadius 5
 
 restart:
@@ -37,12 +39,14 @@ init_read_cell:
 	read shoot.y cell memcellpos.shootY
 	read shouldFire cell memcellpos.shouldFire
 	read approachDistance cell memcellpos.approachDistance
+	read healing cell memcellpos.healing
 	sensor bombingItem bombingItemSorter @config
 	jump init_read_cell equal enabled false
 
 	ubind unitType
 	sensor unit.range
 	sensor unit.itemCapacity
+	sensor unit.maxHealth
 	ulocate building core false core.x core.y core.exists core
 
 set i 0
@@ -52,6 +56,7 @@ send_commands_loop:
 		sensor unit.flag
 		jump bind_unit notEqual unit.flag 0
 	jump load equal loading true
+	jump heal equal healing true
 	
 	send_commands:
 		ucontrol approach dest.x dest.y approachDistance
@@ -75,11 +80,10 @@ send_commands_loop:
 		jump send_commands
 	heal:
 		sensor unit.health
-		sensor unit.maxHealth
 		op div unit.healthPercentage unit.health unit.maxHealth
-		jump send_commands lessThan 0.985 unit.healthPercentage #TODO: make var for healThreshold? idk
+		jump send_commands greaterThan unit.healthPercentage minHealth #TODO: make var for healThreshold? idk
 		ulocate building repair false healTurret.x healTurret.y isFound healTurret
-		jump send_commands equal isFound false
+		jump send_commands equal isFound false #remove this check eventually as the rc schem will have repair turret spam
 		ucontrol move healTurret.x healTurret.y
 		jump send_commands
 	

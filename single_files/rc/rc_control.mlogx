@@ -22,6 +22,7 @@ set memcellpos.shootY 6
 set memcellpos.shouldFire 7
 set memcellpos.approachDistance 8
 set memcellpos.secondaryUnitId 9
+set memcellpos.healing 10
 #When idle, the units will fire every 10 seconds.
 op mul idleFireInterval 10 1000
 
@@ -30,7 +31,9 @@ restart:
 jump restart equal switch1 null
 jump restart equal switch2 null
 jump restart equal switch3 null
+jump restart equal switch4 null
 jump restart equal cell1 null
+set healingSwitch switch4
 set enabledSwitch switch3
 set loadingSwitch switch2
 set longrangeSwitch switch1
@@ -44,6 +47,7 @@ get_settings:
 	sensor enabled enabledSwitch @enabled
 	sensor loading loadingSwitch @enabled
 	sensor longrange longrangeSwitch @enabled
+	sensor healing healingSwitch @enabled
 	jump unitId_defined notEqual unitIdOverride 0
 
 	choose_unit:
@@ -92,6 +96,7 @@ write_slow_values:
 	write unitId cell memcellpos.secondaryUnitId #TODO allow selection of secondary unit
 	write enabled cell memcellpos.enabled
 	write loading cell memcellpos.loading
+	write healing cell memcellpos.healing
 	sensor arc.shooting arc1 @shooting
 	write true cell memcellpos.shouldFire #not idle so always shoot
 	jump longrange_quick_loop equal longrange true

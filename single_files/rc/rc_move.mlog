@@ -1,7 +1,8 @@
 print "Overkill RC by BalaM314"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
 print "Movement module"
-print "Settings in micro proc"
+set minHealth 0.8
+print "Rest of settings in micro proc"
 set quickLoops 80
 set memcellpos.enabled 0
 set memcellpos.loading 1
@@ -13,6 +14,7 @@ set memcellpos.shootY 6
 set memcellpos.shouldFire 7
 set memcellpos.approachDistance 8
 set memcellpos.secondaryUnitId 9
+set memcellpos.healing 10
 set logicItemTakeRadius 5
 restart:
 jump restart equal sorter1 null
@@ -30,11 +32,13 @@ read shoot.x cell memcellpos.shootX
 read shoot.y cell memcellpos.shootY
 read shouldFire cell memcellpos.shouldFire
 read approachDistance cell memcellpos.approachDistance
+read healing cell memcellpos.healing
 sensor bombingItem bombingItemSorter @config
 jump init_read_cell equal enabled false
 ubind unitType
 sensor unit.range @unit @range
 sensor unit.itemCapacity @unit @itemCapacity
+sensor unit.maxHealth @unit @maxHealth
 ulocate building core false _ core.x core.y core.exists core
 set i 0
 send_commands_loop:
@@ -43,6 +47,7 @@ ubind unitType
 sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
 jump load equal loading true
+jump heal equal healing true
 send_commands:
 ucontrol approach dest.x dest.y approachDistance
 ucontrol within shoot.x shoot.y unit.range target_position
@@ -59,6 +64,14 @@ sensor unit.totalItems @unit @totalItems
 jump take_item equal unit.firstItem null
 jump drop_item notEqual unit.firstItem bombingItem
 jump take_item notEqual unit.totalItems unit.itemCapacity
+jump send_commands always
+heal:
+sensor unit.health @unit @health
+op div unit.healthPercentage unit.health unit.maxHealth
+jump send_commands greaterThan unit.healthPercentage minHealth
+ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
+jump send_commands equal isFound false
+ucontrol move healTurret.x healTurret.y
 jump send_commands always
 drop_item:
 ucontrol itemDrop core 9999
