@@ -51,7 +51,6 @@ send_commands_loop:
 		ubind unitType
 		sensor unit.flag
 		jump bind_unit notEqual unit.flag 0
-
 	jump load equal loading true
 	
 	send_commands:
@@ -73,6 +72,15 @@ send_commands_loop:
 		jump take_item equal unit.firstItem null
 		jump drop_item notEqual unit.firstItem bombingItem
 		jump take_item notEqual unit.totalItems unit.itemCapacity
+		jump send_commands
+	heal:
+		sensor unit.health
+		sensor unit.maxHealth
+		op div unit.healthPercentage unit.health unit.maxHealth
+		jump send_commands lessThan 0.985 unit.healthPercentage #TODO: make var for healThreshold? idk
+		ulocate building repair false healTurret.x healTurret.y isFound healTurret
+		jump send_commands equal isFound false
+		ucontrol move healTurret.x healTurret.y
 		jump send_commands
 	
 	drop_item:
