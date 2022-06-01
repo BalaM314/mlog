@@ -10,6 +10,17 @@
 		"checkTypes": true
 	},
 	"compilerVariables": {
-		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
+		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/single_files/rc/",
+		"memcellpos.enabled": 0,
+		"memcellpos.loading": 1,
+		"memcellpos.unitId": 2,
+		"memcellpos.destX": 3,
+		"memcellpos.destY": 4,
+		"memcellpos.shootX": 5,
+		"memcellpos.shootY": 6,
+		"memcellpos.shouldFire": 7,
+		"memcellpos.approachDistance": 8,
+		"memcellpos.secondaryUnitId": 9,
+		"memcellpos.healing": 10
 	}
 }

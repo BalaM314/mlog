@@ -9,17 +9,17 @@ set minHealth 0.8
 print "Rest of settings in micro proc"
 
 set quickLoops 80
-set memcellpos.enabled 0
-set memcellpos.loading 1
-set memcellpos.unitId 2
-set memcellpos.destX 3
-set memcellpos.destY 4
-set memcellpos.shootX 5
-set memcellpos.shootY 6
-set memcellpos.shouldFire 7
-set memcellpos.approachDistance 8
-set memcellpos.secondaryUnitId 9
-set memcellpos.healing 10
+set $memcellpos.enabled 0
+set $memcellpos.loading 1
+set $memcellpos.unitId 2
+set $memcellpos.destX 3
+set $memcellpos.destY 4
+set $memcellpos.shootX 5
+set $memcellpos.shootY 6
+set $memcellpos.shouldFire 7
+set $memcellpos.approachDistance 8
+set $memcellpos.secondaryUnitId 9
+set $memcellpos.healing 10
 set logicItemTakeRadius 5
 
 restart:
@@ -29,17 +29,17 @@ set bombingItemSorter sorter1
 set cell cell1
 
 init_read_cell:
-	read enabled cell memcellpos.enabled
-	read loading cell memcellpos.loading
-	read unit.id cell memcellpos.unitId
+	read enabled cell $memcellpos.enabled
+	read loading cell $memcellpos.loading
+	read unit.id cell $memcellpos.unitId
 	lookup unit unitType unit.id
-	read dest.x cell memcellpos.destX
-	read dest.y cell memcellpos.destY
-	read shoot.x cell memcellpos.shootX
-	read shoot.y cell memcellpos.shootY
-	read shouldFire cell memcellpos.shouldFire
-	read approachDistance cell memcellpos.approachDistance
-	read healing cell memcellpos.healing
+	read dest.x cell $memcellpos.destX
+	read dest.y cell $memcellpos.destY
+	read shoot.x cell $memcellpos.shootX
+	read shoot.y cell $memcellpos.shootY
+	read shouldFire cell $memcellpos.shouldFire
+	read approachDistance cell $memcellpos.approachDistance
+	read healing cell $memcellpos.healing
 	sensor bombingItem bombingItemSorter @config
 	jump init_read_cell equal enabled false
 

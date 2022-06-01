@@ -4,17 +4,17 @@ print "Movement module"
 set minHealth 0.8
 print "Rest of settings in micro proc"
 set quickLoops 80
-set memcellpos.enabled 0
-set memcellpos.loading 1
-set memcellpos.unitId 2
-set memcellpos.destX 3
-set memcellpos.destY 4
-set memcellpos.shootX 5
-set memcellpos.shootY 6
-set memcellpos.shouldFire 7
-set memcellpos.approachDistance 8
-set memcellpos.secondaryUnitId 9
-set memcellpos.healing 10
+set 0 0
+set 1 1
+set 2 2
+set 3 3
+set 4 4
+set 5 5
+set 6 6
+set 7 7
+set 8 8
+set 9 9
+set 10 10
 set logicItemTakeRadius 5
 restart:
 jump restart equal sorter1 null
@@ -22,17 +22,17 @@ jump restart equal cell1 null
 set bombingItemSorter sorter1
 set cell cell1
 init_read_cell:
-read enabled cell memcellpos.enabled
-read loading cell memcellpos.loading
-read unit.id cell memcellpos.unitId
+read enabled cell 0
+read loading cell 1
+read unit.id cell 2
 lookup unit unitType unit.id
-read dest.x cell memcellpos.destX
-read dest.y cell memcellpos.destY
-read shoot.x cell memcellpos.shootX
-read shoot.y cell memcellpos.shootY
-read shouldFire cell memcellpos.shouldFire
-read approachDistance cell memcellpos.approachDistance
-read healing cell memcellpos.healing
+read dest.x cell 3
+read dest.y cell 4
+read shoot.x cell 5
+read shoot.y cell 6
+read shouldFire cell 7
+read approachDistance cell 8
+read healing cell 10
 sensor bombingItem bombingItemSorter @config
 jump init_read_cell equal enabled false
 ubind unitType

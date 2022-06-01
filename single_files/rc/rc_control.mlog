@@ -8,17 +8,17 @@ set unitIdOverride 0
 set idleApproachDistance 18.5
 print "Do not change below"
 set quickLoops 16
-set memcellpos.enabled 0
-set memcellpos.loading 1
-set memcellpos.unitId 2
-set memcellpos.destX 3
-set memcellpos.destY 4
-set memcellpos.shootX 5
-set memcellpos.shootY 6
-set memcellpos.shouldFire 7
-set memcellpos.approachDistance 8
-set memcellpos.secondaryUnitId 9
-set memcellpos.healing 10
+set 0 0
+set 1 1
+set 2 2
+set 3 3
+set 4 4
+set 5 5
+set 6 6
+set 7 7
+set 8 8
+set 9 9
+set 10 10
 op mul idleFireInterval 10 1000
 restart:
 jump restart equal switch1 null
@@ -74,30 +74,30 @@ write_values:
 jump idle equal isActive false
 write_slow_values:
 set i 0
-write unitId cell memcellpos.unitId
-write unitId cell memcellpos.secondaryUnitId
-write enabled cell memcellpos.enabled
-write loading cell memcellpos.loading
-write healing cell memcellpos.healing
+write unitId cell 2
+write unitId cell 9
+write enabled cell 0
+write loading cell 1
+write healing cell 10
 sensor arc.shooting arc1 @shooting
-write true cell memcellpos.shouldFire
+write true cell 7
 jump longrange_quick_loop equal longrange true
 jump approach_far equal arc.shooting true
 approach_close:
-write 1 cell memcellpos.approachDistance
+write 1 cell 8
 jump approach_chosen always
 approach_far:
-write 15 cell memcellpos.approachDistance
+write 15 cell 8
 approach_chosen:
 quick_loop:
 get_variables:
 sensor arc.x arc1 @shootX
 sensor arc.y arc1 @shootY
 write:
-write arc.x cell memcellpos.destX
-write arc.y cell memcellpos.destY
-write arc.x cell memcellpos.shootX
-write arc.y cell memcellpos.shootY
+write arc.x cell 3
+write arc.y cell 4
+write arc.x cell 5
+write arc.y cell 6
 end_quick_loop:
 op add i i 1
 jump quick_loop lessThan i quickLoops
@@ -110,28 +110,28 @@ sensor arc.shooting arc1 @shooting
 jump write_target equal arc.shooting false
 longrange_write:
 write_dest:
-write arc.x cell memcellpos.destX
-write arc.y cell memcellpos.destY
+write arc.x cell 3
+write arc.y cell 4
 jump longrange_end_quick_loop always
 write_target:
-write arc.x cell memcellpos.shootX
-write arc.y cell memcellpos.shootY
+write arc.x cell 5
+write arc.y cell 6
 longrange_end_quick_loop:
 op add i i 1
 jump longrange_quick_loop lessThan i quickLoops
 jump main_loop always
 idle:
-write idle.x cell memcellpos.destX
-write idle.y cell memcellpos.destY
-write idle.x cell memcellpos.shootX
-write idle.y cell memcellpos.shootY
-write unitId cell memcellpos.unitId
-write enabled cell memcellpos.enabled
-write loading cell memcellpos.loading
-write idleApproachDistance cell memcellpos.approachDistance
+write idle.x cell 3
+write idle.y cell 4
+write idle.x cell 5
+write idle.y cell 6
+write unitId cell 2
+write enabled cell 0
+write loading cell 1
+write idleApproachDistance cell 8
 op mod frames @time idleFireInterval
 op lessThan shouldFire frames 500
-write shouldFire cell memcellpos.shouldFire
+write shouldFire cell 7
 jump quick_loop lessThan i quickLoops
 jump main_loop always
 end
