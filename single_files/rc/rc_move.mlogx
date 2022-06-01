@@ -8,6 +8,7 @@ print "Movement module"
 set minHealth 0.8
 print "Rest of settings in micro proc"
 
+#declare memcellpositions for vars
 set quickLoops 80
 set $memcellpos.enabled 0
 set $memcellpos.loading 1
@@ -22,16 +23,18 @@ set $memcellpos.secondaryUnitId 9
 set $memcellpos.healing 10
 set logicItemTakeRadius 5
 
+#null check for schem blocks
 restart:
 jump restart equal sorter1 null
 jump restart equal cell1 null
 set bombingItemSorter sorter1
 set cell cell1
 
+#initialize mostly static vars
 init_read_cell:
 	read enabled cell $memcellpos.enabled
 	read loading cell $memcellpos.loading
-	read unit.id cell $memcellpos.unitId
+	read unit.id cell $memcellpos.unitId #might be a problem in multiUnit control, either make new vars or make this var dynamic
 	lookup unit unitType unit.id
 	read dest.x cell $memcellpos.destX
 	read dest.y cell $memcellpos.destY
@@ -50,7 +53,7 @@ init_read_cell:
 	ulocate building core false core.x core.y core.exists core
 
 set i 0
-send_commands_loop:
+send_commands_loop: #actions being made
 	bind_unit:
 		ubind unitType
 		sensor unit.flag
@@ -58,12 +61,13 @@ send_commands_loop:
 	jump load equal loading true
 	jump heal equal healing true
 	
+	#start movement and shooting
 	send_commands:
 		ucontrol approach dest.x dest.y approachDistance
 		ucontrol within shoot.x shoot.y unit.range target_position
 		jump target_self equal target_position false
 
-		target_position:
+		target_position:  #TODO: make overrange code
 			ucontrol target shoot.x shoot.y shouldFire
 			jump end_send_commands_loop
 		target_self:
@@ -78,15 +82,17 @@ send_commands_loop:
 		jump drop_item notEqual unit.firstItem bombingItem
 		jump take_item notEqual unit.totalItems unit.itemCapacity
 		jump send_commands
+
 	heal:
 		sensor unit.health
 		op div unit.healthPercentage unit.health unit.maxHealth
-		jump send_commands greaterThan unit.healthPercentage minHealth #TODO: make var for healThreshold? idk
+		jump send_commands greaterThan unit.healthPercentage minHealth
 		ulocate building repair false healTurret.x healTurret.y isFound healTurret
 		jump send_commands equal isFound false #remove this check eventually as the rc schem will have repair turret spam
 		ucontrol move healTurret.x healTurret.y
-		jump send_commands
+		jump end_send_commands_loop
 	
+	#item control
 	drop_item:
 		ucontrol itemDrop core 9999
 	take_item:

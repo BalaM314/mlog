@@ -5,12 +5,15 @@ print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Control module"
 print "Configurable settings below:"
+
+#Custom vars inputed
 set idle.x @thisx
 set idle.y @thisy
 set unitIdOverride 0
 set idleApproachDistance 18.5
 print "Do not change below"
 set quickLoops 16 #The amount of quick loops to perform before rereading settings.
+
 #Mem cell positions.
 set $memcellpos.enabled 0
 set $memcellpos.loading 1
@@ -23,6 +26,7 @@ set $memcellpos.shouldFire 7
 set $memcellpos.approachDistance 8
 set $memcellpos.secondaryUnitId 9
 set $memcellpos.healing 10
+
 #When idle, the units will fire every 10 seconds.
 op mul idleFireInterval 10 1000
 
@@ -149,6 +153,7 @@ longrange_quick_loop:
 	jump longrange_quick_loop lessThan i quickLoops
 	jump main_loop always
 
+#set idle vars for quick_loop to send out
 idle:
 	write idle.x cell $memcellpos.destX
 	write idle.y cell $memcellpos.destY
