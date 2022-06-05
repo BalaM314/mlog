@@ -1,1 +1,3 @@
-[#0057B8]BalaM[#FFD700]314
+sensor reactor.heat reactor1 @heat
+op lessThan cool reactor.heat 0.9
+control enabled reactor1 cool

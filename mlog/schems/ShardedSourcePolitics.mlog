@@ -1,0 +1,33 @@
+set greenCore.x 284
+set greenCore.y 255
+
+
+
+get_unit:
+	ubind @mono
+	jump get_unit equal @unit null
+
+
+find_core_loop:
+	ucontrol move @thisx @thisy
+	ulocate building core true _ core.x core.y core
+	jump core_destroyed notEqual core.x greenCore.x
+	jump core_destroyed notEqual core.y greenCore.y
+	radar player any any distance @this 0 player
+	jump player_near notEqual player null
+	jump find_core_loop always
+
+core_destroyed:
+	write 1 cell1 0
+	jump halt always
+
+unit_killed:
+	write 2 cell1 0
+	jump halt always
+
+player_near:
+	write 2 cell1 0
+	jump halt always
+
+halt:
+	jump halt always

@@ -1,1 +1,15 @@
-{"name":"reactorController","authors":["BalaM314"],"compilerOptions":{"include":[],"removeComments":true,"compileWithErrors":true,"mode":"project","prependFileName":true,"checkTypes":true}}
+{
+	"name": "Reactor Controller",
+	"authors": ["BalaM314"],
+	"compilerOptions": {
+		"include": [],
+		"removeComments": true,
+		"compileWithErrors": true,
+		"mode": "project",
+		"checkTypes": true
+	},
+	"compilerVariables": {
+		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/projects/reactorController/",
+		"minimumCryofluid": "10"
+	}
+}

@@ -1,9 +1,27 @@
-#Reactor Controller by BalaM314.
+print "Reactor Controller\n"
+print "by [#3141FF]BalaM314[]"
 
-get_buildings_loop:
-	get_next_building:
+set i 0
+control_loop:
 	getlink building i
-	jump handle_building always
-	op add i i 1
-	jump get_next_building lessThan i @links
-	set i 0
+	get_type:
+		sensor building.type
+		jump thorium_reactor equal building.type @thorium-reactor
+
+	
+	thorium_reactor:
+		sensor building.cryofluid
+		op greaterThan building.isCool building.cryofluid $minimumCryofluid
+		control enabled building building.isCool
+		#end_control_loop
+		op add i i 1
+		jump control_loop lessThan i @links
+
+	impact_reactor:
+		#todo implement
+
+
+	end_control_loop:
+		op add i i 1
+		jump control_loop lessThan i @links
+

@@ -3,19 +3,8 @@ print "Source code available at https://github.com/BalaM314/mlog/tree/main/singl
 print "Movement module"
 set minHealth 0.8
 print "Rest of settings in micro proc"
-set quickLoops 80
-set 0 0
-set 1 1
-set 2 2
-set 3 3
-set 4 4
-set 5 5
-set 6 6
-set 7 7
-set 8 8
-set 9 9
-set 10 10
 set logicItemTakeRadius 5
+set quickLoops 80
 restart:
 jump restart equal sorter1 null
 jump restart equal cell1 null
@@ -46,8 +35,10 @@ bind_unit:
 ubind unitType
 sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
-jump load equal loading true
 jump heal equal healing true
+healed:
+jump load equal loading true
+loaded:
 send_commands:
 ucontrol approach dest.x dest.y approachDistance
 ucontrol within shoot.x shoot.y unit.range target_position
@@ -64,15 +55,15 @@ sensor unit.totalItems @unit @totalItems
 jump take_item equal unit.firstItem null
 jump drop_item notEqual unit.firstItem bombingItem
 jump take_item notEqual unit.totalItems unit.itemCapacity
-jump send_commands always
+jump loaded always
 heal:
 sensor unit.health @unit @health
 op div unit.healthPercentage unit.health unit.maxHealth
-jump send_commands greaterThan unit.healthPercentage minHealth
+jump healed greaterThan unit.healthPercentage minHealth
 ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
 jump send_commands equal isFound false
 ucontrol move healTurret.x healTurret.y
-jump send_commands always
+jump end_send_commands_loop always
 drop_item:
 ucontrol itemDrop core 9999
 take_item:

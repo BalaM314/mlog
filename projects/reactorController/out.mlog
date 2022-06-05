@@ -1,0 +1,25 @@
+print "Reactor Controller\n"
+print "by [#3141FF]BalaM314[]"
+set i 0
+control_loop:
+getlink building i
+get_type:
+sensor building.type building @type
+jump thorium_reactor equal building.type @thorium-reactor
+thorium_reactor:
+sensor building.cryofluid building @cryofluid
+op greaterThan building.isCool building.cryofluid 10
+control enabled building building.isCool
+jump end_control_loop always 0 0
+impact_reactor:
+end_control_loop:
+op add i i 1
+jump control_loop lessThan i @links
+end
+
+#functions
+
+#stdlib functions
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

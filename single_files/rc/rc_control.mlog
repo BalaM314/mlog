@@ -8,17 +8,6 @@ set unitIdOverride 0
 set idleApproachDistance 18.5
 print "Do not change below"
 set quickLoops 16
-set 0 0
-set 1 1
-set 2 2
-set 3 3
-set 4 4
-set 5 5
-set 6 6
-set 7 7
-set 8 8
-set 9 9
-set 10 10
 op mul idleFireInterval 10 1000
 restart:
 jump restart equal switch1 null
@@ -78,7 +67,7 @@ write unitId cell 2
 write unitId cell 9
 write enabled cell 0
 write loading cell 1
-write healing cell 10
+write false cell 10
 sensor arc.shooting arc1 @shooting
 write true cell 7
 jump longrange_quick_loop equal longrange true
@@ -128,6 +117,7 @@ write idle.y cell 6
 write unitId cell 2
 write enabled cell 0
 write loading cell 1
+write healing cell 10
 write idleApproachDistance cell 8
 op mod frames @time idleFireInterval
 op lessThan shouldFire frames 500
