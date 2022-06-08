@@ -57,8 +57,19 @@ send_commands_loop: #A loop to bind a ton of units and send commands to them, us
 		ucontrol within shoot.x shoot.y unit.range target_position
 		jump target_self equal target_position false
 
-		target_position:  #TODO: make overrange code
-			ucontrol target shoot.x shoot.y shouldFire
+		target_position:
+			sensor unit.x
+			sensor unit.y
+			op sub diffrence.x unit.x shoot.x #get diffrence
+			op sub diffrence.y unit.y shoot.y
+			op angle shoot.angle diffrence.x diffrence.y #normalization
+			op cos shoot.x.normalized shoot.angle
+			op sin shoot.y.normalized shoot.angle
+			op mul shooting.x shoot.x.normalized unitRange #scale and position back
+			op add shooting.x unit.x
+			op mul shooting.y shoot.y.normalized unitRange
+			op add shooting.y unit.y
+			ucontrol target shooting.x shooting.y shouldFire
 			jump end_send_commands_loop
 		target_self:
 			ucontrol targetp @unit shouldFire
