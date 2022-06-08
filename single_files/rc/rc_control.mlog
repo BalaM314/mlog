@@ -85,7 +85,7 @@ jump longrange_quick_loop equal longrange true
 jump approach_far equal arc.shooting true
 approach_close:
 write 1 cell 8
-jump approach_chosen always
+jump approach_chosen always 0 0
 approach_far:
 write 15 cell 8
 approach_chosen:
@@ -112,7 +112,7 @@ longrange_write:
 write_dest:
 write arc.x cell 3
 write arc.y cell 4
-jump longrange_end_quick_loop always
+jump longrange_end_quick_loop always 0 0
 write_target:
 write arc.x cell 5
 write arc.y cell 6

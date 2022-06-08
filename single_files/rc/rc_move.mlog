@@ -57,25 +57,25 @@ sensor unit.x @unit @x
 sensor unit.y @unit @y
 op sub diffrence.x unit.x shoot.x
 op sub diffrence.y unit.y shoot.y
-op angle shoot.angle diffrence.x diffrence.y
-op cos shoot.x.normalized shoot.x.normalized shoot.angle
-op sin shoot.y.normalized shoot.y.normalized shoot.angle
-op mul shooting.x shoot.x.normalized unitRange
+op len shoot.magnitude diffrence.x diffrence.y
+op div shoot.x.normalized diffrence.x shoot.magnitude
+op div shoot.y.normalized diffrence.y shoot.magnitude
+op mul shooting.x shoot.x.normalized unit.range
 op add shooting.x shooting.x unit.x
-op mul shooting.y shoot.y.normalized unitRange
+op mul shooting.y shoot.y.normalized unit.range
 op add shooting.y shooting.y unit.y
 ucontrol target shooting.x shooting.y shouldFire
-jump end_send_commands_loop always
+jump end_send_commands_loop always 0 0
 target_self:
 ucontrol targetp @unit shouldFire
-jump end_send_commands_loop always
+jump end_send_commands_loop always 0 0
 load:
 sensor unit.firstItem @unit @firstItem
 sensor unit.totalItems @unit @totalItems
 jump take_item equal unit.firstItem null
 jump drop_item notEqual unit.firstItem bombingItem
 jump take_item notEqual unit.totalItems unit.itemCapacity
-jump send_commands always
+jump send_commands always 0 0
 heal:
 sensor unit.health @unit @health
 op div unit.healthPercentage unit.health unit.maxHealth
@@ -83,7 +83,7 @@ jump send_commands greaterThan unit.healthPercentage minHealth
 ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
 jump send_commands equal isFound false
 ucontrol move healTurret.x healTurret.y
-jump end_send_commands_loop always
+jump end_send_commands_loop always 0 0
 drop_item:
 ucontrol itemDrop core 9999
 take_item:
