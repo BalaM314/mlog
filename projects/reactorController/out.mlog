@@ -1,0 +1,15 @@
+get_buildings_loop:
+get_next_building:
+getlink building i
+jump handle_building always
+op add i i 1
+jump get_next_building lessThan i @links
+set i 0
+end
+
+#functions
+
+#stdlib functions
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

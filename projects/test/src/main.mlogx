@@ -5,6 +5,7 @@ print "e"
 jump_label:
 jump does_not_exist
 
+
 defined_twice:
 print "oh no"
 defined_twice:

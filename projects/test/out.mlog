@@ -1,8 +1,8 @@
 print "test program"
-jump jump_label
+jump jump_label always 0 0
 print "e"
 jump_label:
-jump does_not_exist
+jump does_not_exist always 0 0
 defined_twice:
 print "oh no"
 defined_twice:

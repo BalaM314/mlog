@@ -1,0 +1,105 @@
+
+start:
+print "Keter-class Containment Cell\n"
+print "Status: Starting...\n"
+print "\nby [#3141FF]BalaM314[]"
+printflush message1
+control enabled scorch1 false
+control enabled scorch2 false
+
+
+get_enemy:
+	print "Keter-class Containment Cell\n"
+	print "Status: Identifying contained entity...\n"
+	print "\nby [#3141FF]BalaM314[]"
+	printflush message1
+	radar enemy any any distance @this 1 keter
+	sensor keter.x keter @x
+	sensor keter.y keter @y
+	sensor keter.maxHealth keter @maxHealth
+bind_unit:
+	print "Keter-class Containment Cell\n"
+	print "Status: Binding unit...\n"
+	print "Contained entity: "
+	print keter
+	print "\nby [#3141FF]BalaM314[]"
+	printflush message1
+	ubind @flare
+	sensor unit.flag @unit @flag
+	jump bind_unit notEqual unit.flag 0
+	ucontrol flag
+
+main_loop:
+
+	print "Keter-class Containment Cell\n"
+
+	get_data:
+		sensor keter.shooting keter @shooting
+		sensor keter.rotation keter @rotation
+		sensor keter.health keter @health
+		sensor keter.dead keter @dead
+		radar player any any distance @this 1 player
+		sensor terminate switch1 @enabled
+	kill_if_enabled:
+		control enabled scorch1 terminate
+		control enabled scorch2 terminate
+		control enabled scorch3 terminate
+		control enabled scorch4 terminate
+		control enabled scorch5 terminate
+		control enabled scorch6 terminate
+		control enabled scorch7 terminate
+		control enabled scorch8 terminate
+		control enabled scorch9 terminate
+		control enabled scorch10 terminate
+		control enabled scorch11 terminate
+		control enabled scorch12 terminate
+		control enabled scorch13 terminate
+		control enabled scorch14 terminate
+		control enabled scorch15 terminate
+		control enabled scorch16 terminate
+		control enabled scorch17 terminate
+		control enabled scorch18 terminate
+		control enabled scorch19 terminate
+		control enabled scorch20 terminate
+		control enabled scorch21 terminate
+		control enabled scorch22 terminate
+		control enabled scorch23 terminate
+		control enabled scorch24 terminate
+
+	print_data:
+		jump not_dead equal keter.dead false
+			print "[red]Entity terminated![]\n"
+			jump end_main_loop always
+		not_dead:
+		jump not_terminating equal terminate false
+			print "[red]Terminating entity...[]\n"
+			print "Termination device enabled. Termination imminent.\n"
+			jump end_main_loop always
+		not_terminating:
+		jump health_ok equal keter.health keter.maxHealth
+			print "[yellow][[WARN] Entity is damaged.[]\n"
+		health_ok:
+		jump no_player_nearby equal player null
+			print "[yellow][[WARN] Player nearby. This may cause issues with the anti-target system. Please move away from the containment cell.[]\n"
+		no_player_nearby:
+
+	bait:
+		ucontrol within keter.x keter.y 6 tooClose 0
+		jump get_target equal tooClose false
+		too_close:
+			ucontrol approach keter.x keter.y 12 0 0
+			jump end_main_loop always 0 0
+		get_target:
+			op sub theta keter.rotation 90
+			op cos relX theta b
+			op sin relY theta b
+			op mul relX relX 10
+			op mul relY relY 10
+			op add target.x relX keter.x
+			op add target.y relY keter.y
+		ucontrol move target.x target.y 0 0 0
+
+	end_main_loop:
+	print "\nby [#3141FF]BalaM314[]"
+	printflush message1
+	jump main_loop always 0 0

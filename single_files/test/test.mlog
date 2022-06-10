@@ -1,9 +1,16 @@
 sensor unit.maxHealth @unit @maxHealth
 sensor core.totalItems core @totalItems
 sensor sussy.amogus arc1 @shooting
-print "Filname: test"
+print "Filename: test"
 print "amogus: SUSSY REPLACED VALUE"
 print "Mono: "
+print "watch is awesome"
+print "but infinite loops are bad"
+print "its so much faster than tsc"
+print "why extra compilation"
+print "because windows sucks"
+print eeee
+print "recursive compiler!"
 end
 end
 print "Made with mlogx"
