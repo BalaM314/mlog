@@ -11,24 +11,11 @@ set idle.x @thisx
 set idle.y @thisy
 set unitIdOverride 0
 set idleApproachDistance 18.5
+op mul idleFireInterval 10 1000
 print "Do not change below"
 set quickLoops 16 #The amount of quick loops to perform before rereading settings.
 
-#Mem cell positions.
-set $memcellpos.enabled 0
-set $memcellpos.loading 1
-set $memcellpos.unitId 2
-set $memcellpos.destX 3
-set $memcellpos.destY 4
-set $memcellpos.shootX 5
-set $memcellpos.shootY 6
-set $memcellpos.shouldFire 7
-set $memcellpos.approachDistance 8
-set $memcellpos.secondaryUnitId 9
-set $memcellpos.healing 10
-
 #When idle, the units will fire every 10 seconds.
-op mul idleFireInterval 10 1000
 
 #Null check, doesnt start running until the schem is fully built.
 restart:
@@ -36,11 +23,13 @@ jump restart equal switch1 null
 jump restart equal switch2 null
 jump restart equal switch3 null
 jump restart equal switch4 null
+jump restart equal switch5 null
 jump restart equal cell1 null
-set healingSwitch switch4
-set enabledSwitch switch3
-set loadingSwitch switch2
 set longrangeSwitch switch1
+set loadingSwitch switch2
+set enabledSwitch switch3
+set healingSwitch switch4
+set overrangeSwitch switch5
 set cell cell1
 
 main_loop:
@@ -52,6 +41,7 @@ get_settings:
 	sensor loading loadingSwitch @enabled
 	sensor longrange longrangeSwitch @enabled
 	sensor healing healingSwitch @enabled
+	sensor overrange overrangeSwitch @enabled
 	jump unitId_defined notEqual unitIdOverride 0
 
 	choose_unit:
@@ -103,6 +93,7 @@ write_slow_values:
 	write healing cell $memcellpos.healing
 	sensor arc.shooting arc1 @shooting
 	write true cell $memcellpos.shouldFire #not idle so always shoot
+	write overrange cell $memcellpos.overrange
 	jump longrange_quick_loop equal longrange true
 	jump approach_far equal arc.shooting true
 	approach_close:

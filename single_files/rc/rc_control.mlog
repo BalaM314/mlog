@@ -1,4 +1,4 @@
-print "Overkill RC by BalaM314"
+print "Overkill RC by BalaM314, Someone'sShade"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
 print "Control module"
 print "Configurable settings below:"
@@ -6,30 +6,21 @@ set idle.x @thisx
 set idle.y @thisy
 set unitIdOverride 0
 set idleApproachDistance 18.5
+op mul idleFireInterval 10 1000
 print "Do not change below"
 set quickLoops 16
-set 0 0
-set 1 1
-set 2 2
-set 3 3
-set 4 4
-set 5 5
-set 6 6
-set 7 7
-set 8 8
-set 9 9
-set 10 10
-op mul idleFireInterval 10 1000
 restart:
 jump restart equal switch1 null
 jump restart equal switch2 null
 jump restart equal switch3 null
 jump restart equal switch4 null
+jump restart equal switch5 null
 jump restart equal cell1 null
-set healingSwitch switch4
-set enabledSwitch switch3
-set loadingSwitch switch2
 set longrangeSwitch switch1
+set loadingSwitch switch2
+set enabledSwitch switch3
+set healingSwitch switch4
+set overrangeSwitch switch5
 set cell cell1
 main_loop:
 get_settings:
@@ -38,6 +29,7 @@ sensor enabled enabledSwitch @enabled
 sensor loading loadingSwitch @enabled
 sensor longrange longrangeSwitch @enabled
 sensor healing healingSwitch @enabled
+sensor overrange overrangeSwitch @enabled
 jump unitId_defined notEqual unitIdOverride 0
 choose_unit:
 sensor sorter.item sorter1 @config
@@ -81,6 +73,7 @@ write loading cell 1
 write healing cell 10
 sensor arc.shooting arc1 @shooting
 write true cell 7
+write overrange cell 11
 jump longrange_quick_loop equal longrange true
 jump approach_far equal arc.shooting true
 approach_close:

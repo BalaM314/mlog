@@ -1,20 +1,9 @@
-print "Overkill RC by BalaM314"
+print "Overkill RC by BalaM314, Someone'sShade"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
 print "Movement module"
 set minHealth 0.8
 print "Rest of settings in micro proc"
 set quickLoops 80
-set 0 0
-set 1 1
-set 2 2
-set 3 3
-set 4 4
-set 5 5
-set 6 6
-set 7 7
-set 8 8
-set 9 9
-set 10 10
 set logicItemTakeRadius 5
 restart:
 jump restart equal sorter1 null
@@ -25,7 +14,6 @@ init_read_cell:
 read enabled cell 0
 read loading cell 1
 read unit.id cell 2
-lookup unit unitType unit.id
 read dest.x cell 3
 read dest.y cell 4
 read shoot.x cell 5
@@ -33,8 +21,11 @@ read shoot.y cell 6
 read shouldFire cell 7
 read approachDistance cell 8
 read healing cell 10
-sensor bombingItem bombingItemSorter @config
+read overrange cell 11
 jump init_read_cell equal enabled false
+get_static_vars:
+sensor bombingItem bombingItemSorter @config
+lookup unit unitType unit.id
 ubind unitType
 sensor unit.range @unit @range
 sensor unit.itemCapacity @unit @itemCapacity
@@ -47,24 +38,30 @@ ubind unitType
 sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
 jump load equal loading true
+loaded:
 jump heal equal healing true
+healed:
 send_commands:
 ucontrol approach dest.x dest.y approachDistance
-ucontrol within shoot.x shoot.y unit.range target_position
-jump target_self equal target_position false
-target_position:
+ucontrol within shoot.x shoot.y unit.range unit.targetInRange
+jump target_position equal unit.targetInRange true
+jump target_self equal overrange false
+target_overrange:
 sensor unit.x @unit @x
 sensor unit.y @unit @y
-op sub diffrence.x unit.x shoot.x
-op sub diffrence.y unit.y shoot.y
-op len shoot.magnitude diffrence.x diffrence.y
-op div shoot.x.normalized diffrence.x shoot.magnitude
-op div shoot.y.normalized diffrence.y shoot.magnitude
+op sub difference.x unit.x shoot.x
+op sub difference.y unit.y shoot.y
+op len shoot.magnitude difference.x difference.y
+op div shoot.x.normalized difference.x shoot.magnitude
+op div shoot.y.normalized difference.y shoot.magnitude
 op mul shooting.x shoot.x.normalized unit.range
 op add shooting.x shooting.x unit.x
 op mul shooting.y shoot.y.normalized unit.range
 op add shooting.y shooting.y unit.y
 ucontrol target shooting.x shooting.y shouldFire
+jump end_send_commands_loop always 0 0
+target_position:
+ucontrol target shoot.x shoot.y shouldFire
 jump end_send_commands_loop always 0 0
 target_self:
 ucontrol targetp @unit shouldFire
@@ -75,21 +72,21 @@ sensor unit.totalItems @unit @totalItems
 jump take_item equal unit.firstItem null
 jump drop_item notEqual unit.firstItem bombingItem
 jump take_item notEqual unit.totalItems unit.itemCapacity
-jump send_commands always 0 0
-heal:
-sensor unit.health @unit @health
-op div unit.healthPercentage unit.health unit.maxHealth
-jump send_commands greaterThan unit.healthPercentage minHealth
-ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
-jump send_commands equal isFound false
-ucontrol move healTurret.x healTurret.y
-jump end_send_commands_loop always 0 0
+jump loaded always 0 0
 drop_item:
 ucontrol itemDrop core 9999
 take_item:
 ucontrol move core.x core.y
 ucontrol itemTake core bombingItem 9999
 jump end_send_commands_loop always
+heal:
+sensor unit.health @unit @health
+op div unit.healthPercentage unit.health unit.maxHealth
+jump healed greaterThan unit.healthPercentage minHealth
+ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
+jump healed equal isFound false
+ucontrol move healTurret.x healTurret.y
+jump end_send_commands_loop always 0 0
 end_send_commands_loop:
 op add i i 1
 jump send_commands_loop lessThan i quickLoops

@@ -1,6 +1,6 @@
 {
 	"name": "Overkill RC",
-	"authors": ["BalaM314"],
+	"authors": ["BalaM314", "Someone'sShade"],
 	"compilerOptions": {
 		"include": [],
 		"removeComments": true,
@@ -21,6 +21,7 @@
 		"memcellpos.shouldFire": 7,
 		"memcellpos.approachDistance": 8,
 		"memcellpos.secondaryUnitId": 9,
-		"memcellpos.healing": 10
+		"memcellpos.healing": 10,
+		"memcellpos.overrange": 11
 	}
 }

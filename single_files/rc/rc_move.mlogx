@@ -1,26 +1,13 @@
 #Overkill RC
 #by $authors
-#Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId, healing]
+#Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId, healing, overrange]
 
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Movement module"
 set minHealth 0.8
 print "Rest of settings in micro proc"
-
-#declare memcellpositions for vars
 set quickLoops 80
-set $memcellpos.enabled 0
-set $memcellpos.loading 1
-set $memcellpos.unitId 2
-set $memcellpos.destX 3
-set $memcellpos.destY 4
-set $memcellpos.shootX 5
-set $memcellpos.shootY 6
-set $memcellpos.shouldFire 7
-set $memcellpos.approachDistance 8
-set $memcellpos.secondaryUnitId 9
-set $memcellpos.healing 10
 set logicItemTakeRadius 5
 
 #null check for schem blocks
@@ -30,12 +17,11 @@ jump restart equal cell1 null
 set bombingItemSorter sorter1
 set cell cell1
 
-#initialize mostly static vars
+#Read things from the memory cell
 init_read_cell:
 	read enabled cell $memcellpos.enabled
 	read loading cell $memcellpos.loading
 	read unit.id cell $memcellpos.unitId #might be a problem in multiUnit control, either make new vars or make this var dynamic
-	lookup unit unitType unit.id
 	read dest.x cell $memcellpos.destX
 	read dest.y cell $memcellpos.destY
 	read shoot.x cell $memcellpos.shootX
@@ -43,43 +29,54 @@ init_read_cell:
 	read shouldFire cell $memcellpos.shouldFire
 	read approachDistance cell $memcellpos.approachDistance
 	read healing cell $memcellpos.healing
-	sensor bombingItem bombingItemSorter @config
+	read overrange cell $memcellpos.overrange
 	jump init_read_cell equal enabled false
 
-	ubind unitType
-	sensor unit.range
-	sensor unit.itemCapacity
-	sensor unit.maxHealth
-	ulocate building core false core.x core.y core.exists core
+	get_static_vars:
+		sensor bombingItem bombingItemSorter @config
+		lookup unit unitType unit.id
+		ubind unitType
+		sensor unit.range
+		sensor unit.itemCapacity
+		sensor unit.maxHealth
+		ulocate building core false core.x core.y core.exists core
 
 set i 0
-send_commands_loop: #actions being made
+send_commands_loop:
 	bind_unit:
 		ubind unitType
 		sensor unit.flag
 		jump bind_unit notEqual unit.flag 0
+	
+	#if loading or healing jump there and then jump back
 	jump load equal loading true
+	loaded:
 	jump heal equal healing true
+	healed:
 	
 	#start movement and shooting
 	send_commands:
 		ucontrol approach dest.x dest.y approachDistance
-		ucontrol within shoot.x shoot.y unit.range target_position
-		jump target_self equal target_position false
+		ucontrol within shoot.x shoot.y unit.range unit.targetInRange
+		jump target_position equal unit.targetInRange true
+		jump target_self equal overrange false
 
-		target_position:
+		target_overrange:
 			sensor unit.x
 			sensor unit.y
-			op sub diffrence.x unit.x shoot.x #get diffrence
-			op sub diffrence.y unit.y shoot.y
-			op len shoot.magnitude diffrence.x diffrence.y #normalization
-			op div shoot.x.normalized diffrence.x shoot.magnitude
-			op div shoot.y.normalized diffrence.y shoot.magnitude
+			op sub difference.x unit.x shoot.x #get difference
+			op sub difference.y unit.y shoot.y
+			op len shoot.magnitude difference.x difference.y #normalization
+			op div shoot.x.normalized difference.x shoot.magnitude
+			op div shoot.y.normalized difference.y shoot.magnitude
 			op mul shooting.x shoot.x.normalized unit.range #scale and position back
 			op add shooting.x unit.x
 			op mul shooting.y shoot.y.normalized unit.range
 			op add shooting.y unit.y
 			ucontrol target shooting.x shooting.y shouldFire
+			jump end_send_commands_loop
+		target_position:
+			ucontrol target shoot.x shoot.y shouldFire
 			jump end_send_commands_loop
 		target_self:
 			ucontrol targetp @unit shouldFire
@@ -92,17 +89,8 @@ send_commands_loop: #actions being made
 		jump take_item equal unit.firstItem null
 		jump drop_item notEqual unit.firstItem bombingItem
 		jump take_item notEqual unit.totalItems unit.itemCapacity
-		jump send_commands
+		jump loaded
 
-	heal:
-		sensor unit.health
-		op div unit.healthPercentage unit.health unit.maxHealth
-		jump send_commands greaterThan unit.healthPercentage minHealth
-		ulocate building repair false healTurret.x healTurret.y isFound healTurret
-		jump send_commands equal isFound false #remove this check eventually as the rc schem will have repair turret spam
-		ucontrol move healTurret.x healTurret.y
-		jump end_send_commands_loop
-	
 	#item control
 	drop_item:
 		ucontrol itemDrop core 9999
@@ -111,79 +99,16 @@ send_commands_loop: #actions being made
 		ucontrol itemTake core bombingItem 9999
 		jump end_send_commands_loop always
 
+	heal:
+		sensor unit.health
+		op div unit.healthPercentage unit.health unit.maxHealth
+		jump healed greaterThan unit.healthPercentage minHealth
+		ulocate building repair false healTurret.x healTurret.y isFound healTurret
+		jump healed equal isFound false #remove this check eventually as the rc schem will have repair turret spam
+		ucontrol move healTurret.x healTurret.y
+		jump end_send_commands_loop
+	
+
 	end_send_commands_loop:
 	op add i 1
 	jump send_commands_loop lessThan i quickLoops
-
-
-
-
-#I didnt have time to finish this, below code is repetitive and was for old memcell values
-
-
-
-
-
-# 	set i 0
-# 	ubind unitType
-# 	sensor unit.range
-# quick_loop:
-# 	bind_unit:
-# 		ubind unitType
-# 		sensor unit.flag
-# 		jump bind_unit notEqual unit.flag 0
-# 	move:
-# 		ucontrol approach x y approachDistance
-# 	fire:
-# 		ucontrol within x y unit.range target_position
-# 		jump target_self equal target_position false
-# 		target_position:
-# 			ucontrol target x y shouldFire
-# 		end_loop:
-# 			op add i i 1
-# 			jump quick_loop lessThan i quickLoops
-# 			jump init_read_cell always
-# 		target_self:
-# 			ucontrol targetp @unit shouldFire
-# 		end_loop_2:
-# 			op add i i 1
-# 			jump quick_loop lessThan i quickLoops
-# 			jump init_read_cell always
-
-# load_units:
-# set i 0
-# ubind unitType
-# sensor unit.itemCapacity
-# quick_loop_2:
-# 	op add i 1
-# 	ubind unitType
-# 	should_take_or_drop:
-# 		ulocate building core false core.x core.y core.exists core
-# 		sensor unit.firstItem
-# 		sensor unit.totalItems
-# 		jump take_item equal unit.firstItem null
-# 		jump drop_item notEqual unit.firstItem bombingItem
-# 		jump take_item notEqual unit.totalItems unit.itemCapacity
-# 	move_back:
-# 		ucontrol approach x y approachDistance
-
-# 		ucontrol within x y unit.range target_position
-# 		jump target_self_2 equal target_position false
-# 		target_position_2:
-# 			ucontrol target x y shouldFire
-# 			jump quick_loop_2 lessThan i quickLoops
-# 			jump init_read_cell always
-# 		target_self_2:
-# 			ucontrol targetp @unit shouldFire
-# 			jump quick_loop_2 lessThan i quickLoops
-# 			jump init_read_cell always
-
-# 		jump quick_loop_2 lessThan i quickLoops
-# 		jump init_read_cell always
-# 	drop_item:
-# 		ucontrol itemDrop core 9999
-# 	take_item:
-# 		ucontrol move core.x core.y #this is a bit weird but it works
-# 		ucontrol itemTake core bombingItem 9999
-# 		jump quick_loop_2 lessThan i quickLoops
-# 		jump init_read_cell always
