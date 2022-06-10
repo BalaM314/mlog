@@ -16,11 +16,15 @@ jump restart equal switch3 null
 jump restart equal switch4 null
 jump restart equal switch5 null
 jump restart equal cell1 null
-set longrangeSwitch switch1
+jump restart equal sorter1 null
+jump restart equal sorter2 null
+set enabledSwitch switch1
 set loadingSwitch switch2
-set enabledSwitch switch3
+set longrangeSwitch switch3
 set healingSwitch switch4
 set overrangeSwitch switch5
+set unitSorter sorter1
+set bombingItemSorter sorter2
 set cell cell1
 main_loop:
 get_settings:
@@ -30,9 +34,11 @@ sensor loading loadingSwitch @enabled
 sensor longrange longrangeSwitch @enabled
 sensor healing healingSwitch @enabled
 sensor overrange overrangeSwitch @enabled
+sensor bombingItem bombingItemSorter @config
+op and loading loading bombingItem
 jump unitId_defined notEqual unitIdOverride 0
 choose_unit:
-sensor sorter.item sorter1 @config
+sensor sorter.item unitSorter @config
 jump quad equal sorter.item @titanium
 jump zenith equal sorter.item @metaglass
 jump horizon equal sorter.item @lead
@@ -70,7 +76,7 @@ write unitId cell 2
 write unitId cell 9
 write enabled cell 0
 write loading cell 1
-write healing cell 10
+write false cell 10
 sensor arc.shooting arc1 @shooting
 write true cell 7
 write overrange cell 11
