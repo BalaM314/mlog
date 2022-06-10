@@ -18,6 +18,7 @@ jump restart equal switch5 null
 jump restart equal cell1 null
 jump restart equal sorter1 null
 jump restart equal sorter2 null
+jump restart equal arc1 null
 set enabledSwitch switch1
 set loadingSwitch switch2
 set longrangeSwitch switch3
@@ -26,9 +27,10 @@ set overrangeSwitch switch5
 set unitSorter sorter1
 set bombingItemSorter sorter2
 set cell cell1
+set arc arc1
 main_loop:
 get_settings:
-sensor isActive arc1 @controlled
+sensor isActive arc @controlled
 sensor enabled enabledSwitch @enabled
 sensor loading loadingSwitch @enabled
 sensor longrange longrangeSwitch @enabled
@@ -71,13 +73,12 @@ set unitId unitIdOverride
 write_values:
 jump idle equal isActive false
 write_slow_values:
-set i 0
 write unitId cell 2
 write unitId cell 9
 write enabled cell 0
 write loading cell 1
 write false cell 10
-sensor arc.shooting arc1 @shooting
+sensor arc.shooting arc @shooting
 write true cell 7
 write overrange cell 11
 jump longrange_quick_loop equal longrange true
@@ -88,33 +89,34 @@ jump approach_chosen always 0 0
 approach_far:
 write 15 cell 8
 approach_chosen:
+set i 0
 quick_loop:
 get_variables:
-sensor arc.x arc1 @shootX
-sensor arc.y arc1 @shootY
+sensor arc.shootX arc @shootX
+sensor arc.shootY arc @shootY
 write:
-write arc.x cell 3
-write arc.y cell 4
-write arc.x cell 5
-write arc.y cell 6
+write arc.shootX cell 3
+write arc.shootY cell 4
+write arc.shootX cell 5
+write arc.shootY cell 6
 end_quick_loop:
 op add i i 1
 jump quick_loop lessThan i quickLoops
 jump main_loop always
 longrange_quick_loop:
 longrange_get_variables:
-sensor arc.x arc1 @shootX
-sensor arc.y arc1 @shootY
-sensor arc.shooting arc1 @shooting
+sensor arc.shootX arc @shootX
+sensor arc.shootY arc @shootY
+sensor arc.shooting arc @shooting
 jump write_target equal arc.shooting false
 longrange_write:
 write_dest:
-write arc.x cell 3
-write arc.y cell 4
+write arc.shootX cell 3
+write arc.shootY cell 4
 jump longrange_end_quick_loop always 0 0
 write_target:
-write arc.x cell 5
-write arc.y cell 6
+write arc.shootX cell 5
+write arc.shootY cell 6
 longrange_end_quick_loop:
 op add i i 1
 jump longrange_quick_loop lessThan i quickLoops
@@ -127,6 +129,7 @@ write idle.y cell 6
 write unitId cell 2
 write enabled cell 0
 write loading cell 1
+write overrange cell 11
 write idleApproachDistance cell 8
 op mod frames @time idleFireInterval
 op lessThan shouldFire frames 500

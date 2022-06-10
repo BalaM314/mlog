@@ -27,6 +27,7 @@ jump restart equal switch5 null
 jump restart equal cell1 null
 jump restart equal sorter1 null
 jump restart equal sorter2 null
+jump restart equal arc1 null
 set enabledSwitch switch1
 set loadingSwitch switch2
 set longrangeSwitch switch3
@@ -35,12 +36,13 @@ set overrangeSwitch switch5
 set unitSorter sorter1
 set bombingItemSorter sorter2
 set cell cell1
+set arc arc1
 
 main_loop:
 
 get_settings:
 	#Get variables that don't change often.
-	sensor isActive arc1 @controlled
+	sensor isActive arc @controlled
 	sensor enabled enabledSwitch @enabled
 	sensor loading loadingSwitch @enabled
 	sensor longrange longrangeSwitch @enabled
@@ -91,13 +93,12 @@ write_values:
 
 #Write slow values that don't need to update quickly.
 write_slow_values:
-	set i 0
 	write unitId cell $memcellpos.unitId
 	write unitId cell $memcellpos.secondaryUnitId #TODO allow selection of secondary unit
 	write enabled cell $memcellpos.enabled
 	write loading cell $memcellpos.loading
 	write false cell $memcellpos.healing #Don't heal when not idle
-	sensor arc.shooting arc1 @shooting
+	sensor arc.shooting
 	write true cell $memcellpos.shouldFire #not idle so always shoot
 	write overrange cell $memcellpos.overrange
 	jump longrange_quick_loop equal longrange true
@@ -110,17 +111,18 @@ write_slow_values:
 	approach_chosen:
 
 #A quick loop to write the shoot pos quickly.
+set i 0
 quick_loop:
 
 	get_variables:
-		sensor arc.x arc1 @shootX
-		sensor arc.y arc1 @shootY
+		sensor arc.shootX
+		sensor arc.shootY
 		
 	write:
-		write arc.x cell $memcellpos.destX
-		write arc.y cell $memcellpos.destY
-		write arc.x cell $memcellpos.shootX
-		write arc.y cell $memcellpos.shootY
+		write arc.shootX cell $memcellpos.destX
+		write arc.shootY cell $memcellpos.destY
+		write arc.shootX cell $memcellpos.shootX
+		write arc.shootY cell $memcellpos.shootY
 	
 	end_quick_loop:
 	op add i i 1
@@ -130,20 +132,20 @@ quick_loop:
 longrange_quick_loop:
 
 	longrange_get_variables:
-		sensor arc.x arc1 @shootX
-		sensor arc.y arc1 @shootY
-		sensor arc.shooting arc1 @shooting
+		sensor arc.shootX
+		sensor arc.shootY
+		sensor arc.shooting
 		jump write_target equal arc.shooting false
 		#When mouse down, set movement target and shoot target.
 
 	longrange_write:
 		write_dest:
-			write arc.x cell $memcellpos.destX
-			write arc.y cell $memcellpos.destY
+			write arc.shootX cell $memcellpos.destX
+			write arc.shootY cell $memcellpos.destY
 			jump longrange_end_quick_loop
 		write_target:
-			write arc.x cell $memcellpos.shootX
-			write arc.y cell $memcellpos.shootY
+			write arc.shootX cell $memcellpos.shootX
+			write arc.shootY cell $memcellpos.shootY
 
 	longrange_end_quick_loop:
 	op add i i 1
@@ -159,6 +161,7 @@ idle:
 	write unitId cell $memcellpos.unitId
 	write enabled cell $memcellpos.enabled
 	write loading cell $memcellpos.loading
+	write overrange cell $memcellpos.overrange
 	write idleApproachDistance cell $memcellpos.approachDistance
 	op mod frames @time idleFireInterval
 	op lessThan shouldFire frames 500

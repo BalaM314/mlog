@@ -49,14 +49,14 @@ jump target_self equal overrange false
 target_overrange:
 sensor unit.x @unit @x
 sensor unit.y @unit @y
-op sub difference.x unit.x shoot.x
-op sub difference.y unit.y shoot.y
-op len shoot.magnitude difference.x difference.y
-op div shoot.x.normalized difference.x shoot.magnitude
-op div shoot.y.normalized difference.y shoot.magnitude
-op mul shooting.x shoot.x.normalized unit.range
+op sub difference.x shoot.x unit.x
+op sub difference.y shoot.y unit.y
+op angle shoot.angle difference.x difference.y
+op cos shoot.normalized.x shoot.angle 0
+op sin shoot.normalized.y shoot.angle 0
+op mul shooting.x shoot.normalized.x unit.range
+op mul shooting.y shoot.normalized.y unit.range
 op add shooting.x shooting.x unit.x
-op mul shooting.y shoot.y.normalized unit.range
 op add shooting.y shooting.y unit.y
 ucontrol target shooting.x shooting.y shouldFire
 jump end_send_commands_loop always 0 0
