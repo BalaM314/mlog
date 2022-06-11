@@ -35,7 +35,7 @@ jump bind notEqual unit.flag flag
 sensor unit.controlled
 jump bind greaterThanEq unit.controlled 2
 sensor unit.dead
-jump bind_end notEqual unit.dead 0
+jump bind_end equal unit.dead 0
     bind:
     # Binding
     op add bindAttempts bindAttempts 1
@@ -74,7 +74,7 @@ bind_end:
 
 # Core approach distance
 ulocate building core 0 0 core.x core.y core.found core
-jump coreRadius_end notEqual core cached.core
+jump coreRadius_end equal core cached.core
     set cached.core core
     sensor core.size
     jump coreRadius_end equal core.size cached.core.size
@@ -106,7 +106,6 @@ itemdrop_titanium:
         itemdrop_titanium_droploop:
         ucontrol itemDrop conveyor1 999
 
-
         sensor unit.firstItem
         jump nextUnit equal unit.firstItem null
     jump nextUnit always 0
@@ -136,14 +135,15 @@ jump nextUnit equal coreIsWithin 0
 
         ucontrol itemTake core @phase-fabric 999
         sensor unit.firstItem
-        jump itemtake_end notEqual unit.firstItem null
+        jump itemtake_end equal unit.firstItem null
         ucontrol approach projector1.x projector1.y 6.25
+        set takingPhase 1
         jump itemtake_end always 0
 
     itemtake_titanium:
         ucontrol itemTake core @titanium 999
         sensor unit.firstItem
-        jump itemtake_end notEqual unit.firstItem null
+        jump itemtake_end equal unit.firstItem null
         ucontrol approach conveyor1.x conveyor1.y 5.75
         jump itemtake_end always 0
 
@@ -153,6 +153,7 @@ itemtake_end:
 # Next unit iteration
 
 nextUnit:
+set bindAttempts 0
 
 op add unitIndex unitIndex 1
 jump unitLoop lessThan unitIndex 4
@@ -165,7 +166,7 @@ idle:
 
 # Core approach distance
 ulocate building core 0 0 core.x core.y core.found core
-jump idle_coreRadius_end notEqual core cached.core
+jump idle_coreRadius_end equal core cached.core
     set cached.core core
     sensor core.size
     jump idle_coreRadius_end equal core.size cached.core.size

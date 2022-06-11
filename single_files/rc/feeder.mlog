@@ -23,7 +23,7 @@ jump bind notEqual unit.flag flag
 sensor unit.controlled @unit @controlled
 jump bind greaterThanEq unit.controlled 2
 sensor unit.dead @unit @dead
-jump bind_end notEqual unit.dead 0
+jump bind_end equal unit.dead 0
 bind:
 op add bindAttempts bindAttempts 1
 jump bind_skip greaterThanEq bindAttempts 16
@@ -48,7 +48,7 @@ set bindAttempts 0
 jump nextUnit always 0
 bind_end:
 ulocate building core 0 0 core.x core.y core.found core
-jump coreRadius_end notEqual core cached.core
+jump coreRadius_end equal core cached.core
 set cached.core core
 sensor core.size core @size
 jump coreRadius_end equal core.size cached.core.size
@@ -92,24 +92,26 @@ jump nextUnit equal coreIsWithin 0
 jump itemtake_titanium equal takingPhase 1
 ucontrol itemTake core @phase-fabric 999
 sensor unit.firstItem @unit @firstItem
-jump itemtake_end notEqual unit.firstItem null
+jump itemtake_end equal unit.firstItem null
 ucontrol approach projector1.x projector1.y 6.25
+set takingPhase 1
 jump itemtake_end always 0
 itemtake_titanium:
 ucontrol itemTake core @titanium 999
 sensor unit.firstItem @unit @firstItem
-jump itemtake_end notEqual unit.firstItem null
+jump itemtake_end equal unit.firstItem null
 ucontrol approach conveyor1.x conveyor1.y 5.75
 jump itemtake_end always 0
 itemtake_end:
 nextUnit:
+set bindAttempts 0
 op add unitIndex unitIndex 1
 jump unitLoop lessThan unitIndex 4
 set unitIndex 0
 jump start always 0
 idle:
 ulocate building core 0 0 core.x core.y core.found core
-jump idle_coreRadius_end notEqual core cached.core
+jump idle_coreRadius_end equal core cached.core
 set cached.core core
 sensor core.size core @size
 jump idle_coreRadius_end equal core.size cached.core.size
@@ -120,3 +122,6 @@ op sub coreApproachRadius coreWithinRadius 0.5
 idle_coreRadius_end:
 ucontrol approach core.x core.y coreApproachRadius
 jump unitLoop always 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
