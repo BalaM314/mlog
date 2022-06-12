@@ -131,6 +131,7 @@ write enabled cell 0
 write loading cell 1
 write overrange cell 11
 write idleApproachDistance cell 8
+write healing cell 10
 op mod frames @time idleFireInterval
 op lessThan shouldFire frames 500
 write shouldFire cell 7

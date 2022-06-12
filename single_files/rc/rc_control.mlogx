@@ -163,6 +163,7 @@ idle:
 	write loading cell $memcellpos.loading
 	write overrange cell $memcellpos.overrange
 	write idleApproachDistance cell $memcellpos.approachDistance
+	write healing cell $memcellpos.healing
 	op mod frames @time idleFireInterval
 	op lessThan shouldFire frames 500
 	write shouldFire cell $memcellpos.shouldFire

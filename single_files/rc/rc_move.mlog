@@ -2,15 +2,22 @@ print "Overkill RC by BalaM314, Someone'sShade"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
 print "Movement module"
 set minHealth 0.8
+set unitOverride null
 print "Rest of settings in micro proc"
 set quickLoops 80
 set logicItemTakeRadius 5
+get_wait_time:
+op add pos @thisx @thisy
+op mod pos pos 20
+op div waitTime pos 200
+op add waitTime waitTime 0.02
 restart:
 jump restart equal sorter1 null
 jump restart equal cell1 null
 set bombingItemSorter sorter1
 set cell cell1
 init_read_cell:
+wait waitTime
 read enabled cell 0
 read loading cell 1
 read unit.id cell 2
@@ -26,11 +33,13 @@ jump init_read_cell equal enabled false
 get_static_vars:
 sensor bombingItem bombingItemSorter @config
 lookup unit unitType unit.id
+jump no_unit_override equal unitOverride null
+set unitType unitOverride
+no_unit_override:
 ubind unitType
 sensor unit.range @unit @range
 sensor unit.itemCapacity @unit @itemCapacity
 sensor unit.maxHealth @unit @maxHealth
-ulocate building core false _ core.x core.y core.exists core
 set i 0
 send_commands_loop:
 bind_unit:
@@ -69,6 +78,7 @@ jump end_send_commands_loop always 0 0
 load:
 sensor unit.firstItem @unit @firstItem
 sensor unit.totalItems @unit @totalItems
+ulocate building core false _ core.x core.y core.exists core
 jump take_item equal unit.firstItem null
 jump drop_item notEqual unit.firstItem bombingItem
 jump take_item notEqual unit.totalItems unit.itemCapacity
