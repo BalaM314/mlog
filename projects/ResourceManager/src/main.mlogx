@@ -49,31 +49,31 @@ main_loop:
 		sensor powerBuilding.powerNetStored
 		sensor powerBuilding.powerNetCapacity
 		op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
-		op idiv powerPerc 0.001
-		op div powerPerc 10
+		op idiv powerPerc powerPerc 0.001
+		op div powerPerc powerPerc 10
 		jump no_inputs equal input1 null
 		sensor core.input1 core input1
 		op div inputPerc1 core.input1 inputCoreCap
-		op idiv inputPerc1 0.001
-		op div inputPerc1 10
+		op idiv inputPerc1 inputPerc1 0.001
+		op div inputPerc1 inputPerc1 10
 		sensor core.input2 core input2
 		op div inputPerc2 core.input2 inputCoreCap
-		op idiv inputPerc2 0.001
-		op div inputPerc2 10
+		op idiv inputPerc2 inputPerc2 0.001
+		op div inputPerc2 inputPerc2 10
 		jump no_inputs equal input3 null
 		sensor core.input3 core input3
 		op div inputPerc3 core.input3 inputCoreCap
-		op idiv inputPerc3 0.001
-		op div inputPerc3 10
+		op idiv inputPerc3 inputPerc3 0.001
+		op div inputPerc3 inputPerc3 10
 		sensor core.input4 core input4
 		op div inputPerc4 core.input4 inputCoreCap
-		op idiv inputPerc4 0.001
-		op div inputPerc4 10
+		op idiv inputPerc4 inputPerc4 0.001
+		op div inputPerc4 inputPerc4 10
 		no_inputs:
 		sensor core.output core output
 		op div outputPerc core.output core.itemCapacity
-		op idiv outputPerc 0.001
-		op div outputPerc 10
+		op idiv outputPerc outputPerc 0.001
+		op div outputPerc outputPerc 10
 		jump no_off_switch equal offSwitch null
 		sensor offSwitch.enabled
 		sensor onSwitch.enabled

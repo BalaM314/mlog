@@ -13,8 +13,8 @@ sensor unit.dead @unit @dead
 jump locate_core notEqual unit.dead true
 cant_find_core:
 set err "Can't find the core. Please link the core or make a mono/flare."
-jump err always
+jump err always 0 0
 locate_core:
 ulocate building core false _ coreX coreY _ core
 ubind null
-jump core_found always
+jump core_found always 0 0

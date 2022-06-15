@@ -1,4 +1,4 @@
-jump restart always
+jump restart always 0 0
 print "Resource Manager by BalaM314"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/"
 print "Usage instructions:"
@@ -29,7 +29,7 @@ print "Do not edit below this line."
 printflush stdout
 printflush stdout
 set shouldRun true
-jump get_core always
+jump get_core always 0 0
 core_found:
 main_loop:
 check_links:
@@ -68,7 +68,7 @@ op div outputPerc outputPerc 10
 jump no_off_switch equal offSwitch null
 sensor offSwitch.enabled offSwitch @enabled
 sensor onSwitch.enabled onSwitch @enabled
-jump process always
+jump process always 0 0
 no_off_switch:
 set offSwitch.enabled false
 set onSwitch.enabled false
@@ -146,7 +146,7 @@ set shouldRun false
 output_not_high:
 jump override_off equal offSwitch.enabled true
 jump override_on equal onSwitch.enabled true
-jump print_status always
+jump print_status always 0 0
 override_off:
 print "[red]Manually switched off.[]\n"
 set shouldRun false
@@ -159,7 +159,7 @@ print_status:
 jump print_true equal shouldRun true
 print_false:
 print "Status: [red]Disabled[].\n"
-jump write always
+jump write always 0 0
 print_true:
 print "Status: [green]Enabled[].\n"
 write:
@@ -177,7 +177,7 @@ next:
 jump write_loop lessThan i @links
 print "\n[slate]Resource Manager"
 printflush message1
-jump main_loop always
+jump main_loop always 0 0
 err:
 print "[red]Error: "
 print err
