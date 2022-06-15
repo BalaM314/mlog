@@ -38,10 +38,9 @@ sensor unit.dead @unit @dead
 jump bind_new_unit equal unit.dead true
 jump main always
 bind_new_unit:
-set _unit_type unitType
-set _stack1 @counter
-op add _stack1 _stack1 2
-jump _flag_unit always
+set unit_type unitType
+op add @counter _stack1 1
+jump flag_unit always
 jump check_unit_payload always
 check_unit_payload:
 sensor unit.payloadCount @unit @payloadCount
@@ -57,8 +56,7 @@ move_payload:
 move_unit_to_pickup:
 set dest.x pickX
 set dest.y pickY
-set _stack1 @counter
-op add _stack1 _stack1 2
+op add @counter _stack1 1
 jump move_unit_precise always
 jump check_payload_in_pickupBuilding always
 no_payload:
@@ -83,8 +81,7 @@ ucontrol payTake false
 move_unit_to_dropoff:
 set dest.x dropX
 set dest.y dropY
-set _stack1 @counter
-op add _stack1 _stack1 2
+op add @counter _stack1 1
 jump move_unit_precise always
 jump check_payload_in_dropBuilding always
 dropBuilding_clogged:

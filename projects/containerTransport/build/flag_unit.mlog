@@ -8,7 +8,7 @@ jump _flag_unit notEqual unit.dead false
 sensor unit.flag @unit @flag
 op equal unit.unflagged unit.flag 0
 op equal unit.hasOurFlag unit.flag cookie
-op or unit.flagOk __unitUnflagged __unitHasOurFlag
+op or unit.flagOk flag_unit__unitUnflagged flag_unit__unitHasOurFlag
 jump _flag_unit notEqual unit.flagOk true
 ucontrol flag cookie
 print "Flagged unit"

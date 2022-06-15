@@ -38,10 +38,9 @@ sensor unit.dead @unit @dead
 jump bind_new_unit equal unit.dead true
 jump main always
 bind_new_unit:
-set _unit_type unitType
-set _stack1 @counter
-op add _stack1 _stack1 2
-jump _flag_unit always
+set unit_type unitType
+op add @counter _stack1 1
+jump flag_unit always
 jump check_unit_payload always
 check_unit_payload:
 sensor unit.payloadCount @unit @payloadCount
@@ -57,8 +56,7 @@ move_payload:
 move_unit_to_pickup:
 set dest.x pickX
 set dest.y pickY
-set _stack1 @counter
-op add _stack1 _stack1 2
+op add @counter _stack1 1
 jump move_unit_precise always
 jump check_payload_in_pickupBuilding always
 no_payload:
@@ -83,8 +81,7 @@ ucontrol payTake false
 move_unit_to_dropoff:
 set dest.x dropX
 set dest.y dropY
-set _stack1 @counter
-op add _stack1 _stack1 2
+op add @counter _stack1 1
 jump move_unit_precise always
 jump check_payload_in_dropBuilding always
 dropBuilding_clogged:
@@ -101,8 +98,8 @@ drop_payload:
 ucontrol payDrop
 jump main always
 end
-#functions
 
+#functions
 _flag_unit:
 print "Flagging unit"
 print name
@@ -113,7 +110,7 @@ jump _flag_unit notEqual unit.dead false
 sensor unit.flag @unit @flag
 op equal unit.unflagged unit.flag 0
 op equal unit.hasOurFlag unit.flag cookie
-op or unit.flagOk __unitUnflagged __unitHasOurFlag
+op or unit.flagOk flag_unit__unitUnflagged flag_unit__unitHasOurFlag
 jump _flag_unit notEqual unit.flagOk true
 ucontrol flag cookie
 print "Flagged unit"
@@ -121,7 +118,6 @@ print name
 printflush stdout
 set @counter _stack1
 end
-
 move_unit_precise:
 sensor unit.dead @unit @dead
 jump bind_unit equal unit.dead true
@@ -142,3 +138,9 @@ printflush stdout
 ucontrol within dest.x dest.y 0.5 destinationReached
 jump move_unit_precise equal destinationReached false
 set @counter _stack1
+end
+
+#stdlib functions
+
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
