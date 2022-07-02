@@ -1,0 +1,17 @@
+#BuggedTurretAI by BalaM314
+#Logic for Crux, The World
+
+set theta 0
+loop:
+	op cos x theta
+	op sin y theta
+	op mul x x 20
+	op mul y y 20
+	op add x x 57
+	op add y y 71
+	control shoot salvo1 x y 0
+	control shoot salvo2 x y 0
+	control shoot salvo3 x y 0
+	control shoot salvo4 x y 0
+	op add theta theta 5
+	jump loop lessThan theta 360
