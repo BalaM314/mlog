@@ -1,33 +1,33 @@
 
 set x 1
 namespace a {
-    set x 2
+	set x 2
 }
 namespace b {
-    set x 3
-    namespace c {
-    set x 4
-    }
-    namespace d {
-    set x 5
-    namespace e {
-        set x 6
-        namespace f {
-            set x 7
-        }
-        namespace g {
-            set x 8
-    }
-    set x 9
-    namespace h {
-        set x 10
-        }
-        set x 11
-    }
-    namespace i {
-        set x 12
+	set x 3
+	namespace c {
+	set x 4
+	}
+	namespace d {
+	set x 5
+	namespace e {
+		set x 6
+		namespace f {
+			set x 7
+		}
+		namespace g {
+			set x 8
+	}
+	set x 9
+	namespace h {
+		set x 10
+		}
+		set x 11
+	}
+	namespace i {
+		set x 12
 }
 namespace j {
-    set x 13
+	set x 13
 }
 set x 999
