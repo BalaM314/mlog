@@ -1,0 +1,41 @@
+#Code for DontVin's erekir map by BalaM314.
+set author "BalaM314"
+start:
+	setrule mapArea 10 325 300 200 200
+set t 300
+display_map_expanding_loop:
+	print "Map expanding in "
+	print t
+	print " seconds."
+	message mission
+	wait 1
+	op sub t t 1
+	jump display_map_expanding_loop greaterThan t 0
+expand_map:
+	setrule mapArea 10 207 100 290 500
+	print "Destroy 2 enemy cores below."
+	message mission
+check_cores_destroyed:
+	fetch coreCount core @malis
+	jump check_cores_destroyed greaterThan core 3
+open_map:
+	setrule mapArea 10 10 40 500 500
+set t 120
+display_enemy_units_loop:
+	print "Enemy units in "
+	print t
+	print " seconds."
+	message mission
+	wait 1
+	op sub t t 1
+	jump display_enemy_units_loop greaterThan t 0
+warn_t3s:
+	print "[red]Tier 3 enemies incoming!"
+	message notify 5
+display_remaining_cores_loop:
+	fetch coreCount core @malis
+	print "Destroy the "
+	print coreCount
+	print " remaining enemy cores."
+	message mission
+	jump display_remaining_cores_loop always
