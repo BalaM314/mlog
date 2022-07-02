@@ -1,0 +1,17 @@
+set x 1
+set _a_x 2
+set _b_x 3
+set _b_c_x 4
+set _b_d_x 5
+set _b_d_e_x 6
+set _b_d_e_f_x 7
+set _b_d_e_g_x 8
+set _b_d_e_x 9
+set _b_d_e_h_x 10
+set _b_d_e_x 11
+set _b_d_i_x 12
+set _b_d_j_x 13
+set _b_d_x 999
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

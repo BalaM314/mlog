@@ -8,6 +8,9 @@ sensor core.totalItems
 
 sensor sussy.amogus arc1 @shooting
 
+sensor @this.x
+sensor projector1.phase-fabric
+
 print "Filename: $filename"
 print "amogus: $amogus"
 print "Mono: $_mono"
@@ -18,5 +21,24 @@ print "why extra compilation"
 print "because windows sucks"
 print eeee
 print "recursive compiler!"
+
+set x 10
+
+namespace amogus {
+
+	set x 2
+	print x
+	ulocate building core true outX outY found core
+	sensor core.health
+	
+	jump lebal
+	lebal:
+
+	jump amogus_sus equal x 5
+	jump amogus_sus
+
+}
+
+print x
 
 end
