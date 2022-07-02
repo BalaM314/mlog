@@ -133,6 +133,7 @@ quick_loop:
 
 #A quick loop to rapidly update the shoot pos, but for longrange mode.
 longrange_quick_loop:
+	write 1 cell $memcellpos.approachDistance
 
 	longrange_get_variables:
 		sensor arc.shootX
