@@ -73,7 +73,7 @@ bind_end:
 
 
 # Core approach distance
-ulocate building core 0 0 core.x core.y core.found core
+ulocate building core false core.x core.y core.found core
 jump coreRadius_end equal core cached.core
     set cached.core core
     sensor core.size
@@ -165,7 +165,7 @@ jump start always 0
 idle:
 
 # Core approach distance
-ulocate building core 0 0 core.x core.y core.found core
+ulocate building core false core.x core.y core.found core
 jump idle_coreRadius_end equal core cached.core
     set cached.core core
     sensor core.size
