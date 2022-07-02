@@ -5,22 +5,47 @@
 set unitType @mega
 set reconstructor reconstructor1
 #Runtime variables
-sensor x reconstructor @x
-sensor y reconstructor @y
+sensor reconstructor.x
+sensor reconstructor.y
+jump bind_unit
+unit_unbound:
+	print "[red]Unit unbound."
+	printflush message1
+	wait 0.5
 
 bind_unit:
-#Bind a unit, but check if it's alive and unflagged.
-uflag unitType
+	#Bind a unit, but check if it's alive and unflagged.
+	print "Binding a unit..."
+	printflush message1
+	ubind unitType
+	sensor unit.flag
+	sensor unit.x
+	sensor unit.y
+	sensor unit.controlled
+	jump bind_unit notEqual unit.flag 0
+	jump bind_unit greaterThan unit.controlled 1
+	ucontrol flag cookie
 
 ucontrol_loop:
-#Constantly tell the unit to move to the reconstructor's coords and payenter.
-ucontrol move x y
-ucontrol payEnter
-sensor dead @unit @dead
-#Once it goes in the reconstructor(or dies), exit the loop.
-jump ucontrol_loop notEqual dead true
+	#Constantly tell the unit to move to the reconstructor's coords and payenter.
+	ucontrol move reconstructor.x reconstructor.y
+	sensor unit.dead
+	sensor unit.controlled
+	jump unit_unbound equal unit.dead true
+	jump unit_unbound greaterThan unit.controlled 1
+	print_data:
+		sensor unit.x
+		sensor unit.y
+		print "Moving unit to reconstructor. ("
+		print unit.x
+		print ", "
+		print unit.y
+		print ")"
+		printflush message1
+	ucontrol within reconstructor.x reconstructor.y 2 close
+	jump ucontrol_loop equal close false
 
-unit_dead:
-#Bind a new unit.
-jump bind_unit always
+ucontrol payEnter
+
+jump ucontrol_loop
 

@@ -1,0 +1,15 @@
+{
+	"name":"payEnter",
+	"authors":["BalaM314"],
+	"compilerOptions":{
+		"include":[],
+		"removeComments":true,
+		"compileWithErrors":true,
+		"mode":"single",
+		"prependFileName":true,
+		"checkTypes":true
+	},
+	"compilerVariables":{
+		"message": "[orange]Core T4 Payenter[] by [#3141FF]BalaM314[]"
+	}
+}
