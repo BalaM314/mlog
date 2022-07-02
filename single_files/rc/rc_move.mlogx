@@ -1,35 +1,38 @@
 #Overkill RC
 #by $authors
 #Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId, healing, overrange]
+
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Movement module"
-set minHealth 0.8
+set minHealthFrac 0.8
 set unitOverride null
 print "Rest of settings in micro proc"
 set quickLoops 80
 set logicItemTakeRadius 5
 
 get_wait_time:
+	#Because the same code is in 4 hyper processors, the same units will be bound and commanded in the same order, wasting a ton of instructions.
+	#To fix this, we wait by a different amount of time after binding {quickLoops} units.
 	op add pos @thisx @thisy
-	op mod pos 20
-	op div waitTime pos 200
-	op add waitTime 0.02
+	op mod pos pos 20
+	op div waitTime pos 800
+	op add waitTime waitTime 0.01
 
 
-#null check for schem blocks
+#Null check, doesnt start running until the schem is fully built.
 restart:
-jump restart equal sorter1 null
-jump restart equal cell1 null
-set bombingItemSorter sorter1
-set cell cell1
+	jump restart equal sorter1 null
+	jump restart equal cell1 null
+	set bombingItemSorter sorter1
+	set cell cell1
 
 #Read things from the memory cell
 init_read_cell:
 	wait waitTime #Without this, the movement processors would be binding the same units in the same order, therefore being useless.
 	read enabled cell $memcellpos.enabled
 	read loading cell $memcellpos.loading
-	read unit.id cell $memcellpos.unitId #might be a problem in multiUnit control, either make new vars or make this var dynamic
+	read unit.id cell $memcellpos.unitId
 	read dest.x cell $memcellpos.destX
 	read dest.y cell $memcellpos.destY
 	read shoot.x cell $memcellpos.shootX
@@ -50,6 +53,7 @@ init_read_cell:
 		sensor unit.range
 		sensor unit.itemCapacity
 		sensor unit.maxHealth
+		op mul minHealth unit.maxHealth minHealthFrac
 
 set i 0
 send_commands_loop:
@@ -58,13 +62,12 @@ send_commands_loop:
 		sensor unit.flag
 		jump bind_unit notEqual unit.flag 0
 	
-	#if loading or healing jump there and then jump back
+	#If loading or healing jump there and then jump back
 	jump load equal loading true
 	loaded:
 	jump heal equal healing true
 	healed:
 	
-	#start movement and shooting
 	send_commands:
 		ucontrol approach dest.x dest.y approachDistance
 		ucontrol within shoot.x shoot.y unit.range unit.targetInRange
@@ -74,52 +77,73 @@ send_commands_loop:
 		target_overrange:
 			sensor unit.x
 			sensor unit.y
-			op sub difference.x shoot.x unit.x #get diffrence
+
+			#Trigonometry!
+			#Get the difference in position
+			op sub difference.x shoot.x unit.x
 			op sub difference.y shoot.y unit.y
-			op angle shoot.angle difference.x difference.y #normalization
-			op cos shoot.normalized.x shoot.angle 0
-			op sin shoot.normalized.y shoot.angle 0
-			op mul shooting.x shoot.normalized.x unit.range #scale and position back
+			#Make normalized vector
+			op angle shoot.angle difference.x difference.y
+			op cos shoot.normalized.x shoot.angle
+			op sin shoot.normalized.y shoot.angle
+			#Scale vector
+			op mul shooting.x shoot.normalized.x unit.range
 			op mul shooting.y shoot.normalized.y unit.range
-			op add shooting.x unit.x
-			op add shooting.y unit.y
+			#Move to unit position
+			op add shooting.x shooting.x unit.x
+			op add shooting.y shooting.y unit.y
+
+			#Fire!
 			ucontrol target shooting.x shooting.y shouldFire
-			jump end_send_commands_loop
+			#end_send_commands_loop
+			op add i i 1
+			jump send_commands_loop lessThan i quickLoops
+			jump init_read_cell
+		
 		target_position:
 			ucontrol target shoot.x shoot.y shouldFire
-			jump end_send_commands_loop
+			#end_send_commands_loop
+			op add i i 1
+			jump send_commands_loop lessThan i quickLoops
+			jump init_read_cell
+		
 		target_self:
 			ucontrol targetp @unit shouldFire
-			jump end_send_commands_loop
+			#end_send_commands_loop
+			op add i i 1
+			jump send_commands_loop lessThan i quickLoops
+			jump init_read_cell
 
 
 	load:
+		#Optimization is painful.
 		sensor unit.firstItem
 		sensor unit.totalItems
-		ulocate building core false core.x core.y core.exists core
-		jump take_item equal unit.firstItem null
-		jump drop_item notEqual unit.firstItem bombingItem
-		jump take_item notEqual unit.totalItems unit.itemCapacity
-		jump loaded
+		jump handle_take_item notEqual unit.firstItem bombingItem
+		jump loaded equal unit.totalItems unit.itemCapacity
 
-	#item control
+	handle_take_item:
+		move_to_core:
+			ulocate building core false core.x core.y core.exists core #Core needs to be ulocated for each unit.
+			ucontrol move core.x core.y
+		jump item_cleared equal unit.firstItem null
 	drop_item:
 		ucontrol itemDrop core 9999
-	take_item:
-		ucontrol move core.x core.y
+	item_cleared:
 		ucontrol itemTake core bombingItem 9999
-		jump end_send_commands_loop always
+		#end_send_commands_loop
+		op add i i 1
+		jump send_commands_loop lessThan i quickLoops
+		jump init_read_cell
 
 	heal:
 		sensor unit.health
-		op div unit.healthPercentage unit.health unit.maxHealth
-		jump healed greaterThan unit.healthPercentage minHealth
+		jump healed greaterThan unit.health minHealth
 		ulocate building repair false healTurret.x healTurret.y isFound healTurret
 		jump healed equal isFound false #remove this check eventually as the rc schem will have repair turret spam
 		ucontrol move healTurret.x healTurret.y
-		jump end_send_commands_loop
+		#end_send_commands_loop
+		op add i i 1
+		jump send_commands_loop lessThan i quickLoops
+		jump init_read_cell
 	
-
-	end_send_commands_loop:
-	op add i 1
-	jump send_commands_loop lessThan i quickLoops

@@ -1,7 +1,7 @@
 print "Overkill RC by BalaM314, Someone'sShade"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/rc/"
 print "Movement module"
-set minHealth 0.8
+set minHealthFrac 0.8
 set unitOverride null
 print "Rest of settings in micro proc"
 set quickLoops 80
@@ -9,8 +9,8 @@ set logicItemTakeRadius 5
 get_wait_time:
 op add pos @thisx @thisy
 op mod pos pos 20
-op div waitTime pos 200
-op add waitTime waitTime 0.02
+op div waitTime pos 800
+op add waitTime waitTime 0.01
 restart:
 jump restart equal sorter1 null
 jump restart equal cell1 null
@@ -40,6 +40,7 @@ ubind unitType
 sensor unit.range @unit @range
 sensor unit.itemCapacity @unit @itemCapacity
 sensor unit.maxHealth @unit @maxHealth
+op mul minHealth unit.maxHealth minHealthFrac
 set i 0
 send_commands_loop:
 bind_unit:
@@ -61,45 +62,52 @@ sensor unit.y @unit @y
 op sub difference.x shoot.x unit.x
 op sub difference.y shoot.y unit.y
 op angle shoot.angle difference.x difference.y
-op cos shoot.normalized.x shoot.angle 0
-op sin shoot.normalized.y shoot.angle 0
+op cos shoot.normalized.x shoot.angle
+op sin shoot.normalized.y shoot.angle
 op mul shooting.x shoot.normalized.x unit.range
 op mul shooting.y shoot.normalized.y unit.range
 op add shooting.x shooting.x unit.x
 op add shooting.y shooting.y unit.y
 ucontrol target shooting.x shooting.y shouldFire
-jump end_send_commands_loop always 0 0
+op add i i 1
+jump send_commands_loop lessThan i quickLoops
+jump init_read_cell always 0 0
 target_position:
 ucontrol target shoot.x shoot.y shouldFire
-jump end_send_commands_loop always 0 0
+op add i i 1
+jump send_commands_loop lessThan i quickLoops
+jump init_read_cell always 0 0
 target_self:
 ucontrol targetp @unit shouldFire
-jump end_send_commands_loop always 0 0
+op add i i 1
+jump send_commands_loop lessThan i quickLoops
+jump init_read_cell always 0 0
 load:
 sensor unit.firstItem @unit @firstItem
 sensor unit.totalItems @unit @totalItems
+jump handle_take_item notEqual unit.firstItem bombingItem
+jump loaded equal unit.totalItems unit.itemCapacity
+handle_take_item:
+move_to_core:
 ulocate building core false _ core.x core.y core.exists core
-jump take_item equal unit.firstItem null
-jump drop_item notEqual unit.firstItem bombingItem
-jump take_item notEqual unit.totalItems unit.itemCapacity
-jump loaded always 0 0
+ucontrol move core.x core.y
+jump item_cleared equal unit.firstItem null
 drop_item:
 ucontrol itemDrop core 9999
-take_item:
-ucontrol move core.x core.y
+item_cleared:
 ucontrol itemTake core bombingItem 9999
-jump end_send_commands_loop always
+op add i i 1
+jump send_commands_loop lessThan i quickLoops
+jump init_read_cell always 0 0
 heal:
 sensor unit.health @unit @health
-op div unit.healthPercentage unit.health unit.maxHealth
-jump healed greaterThan unit.healthPercentage minHealth
+jump healed greaterThan unit.health minHealth
 ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
 jump healed equal isFound false
 ucontrol move healTurret.x healTurret.y
-jump end_send_commands_loop always 0 0
-end_send_commands_loop:
 op add i i 1
 jump send_commands_loop lessThan i quickLoops
+jump init_read_cell always 0 0
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

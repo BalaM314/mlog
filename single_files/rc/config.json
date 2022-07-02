@@ -5,7 +5,7 @@
 		"include": [],
 		"removeComments": true,
 		"compileWithErrors": true,
-		"mode": "project",
+		"mode": "single",
 		"prependFileName": true,
 		"checkTypes": true
 	},

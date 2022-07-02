@@ -1,42 +1,44 @@
 #Overkill RC by $authors
 #Memory cell layout: [enabled, load, unitId, destX, destY, shootX, shootY, shouldFire, approachDistance, secondaryUnitId]
 
+#The code at the top is only run once, the main code is an infinite loop.
+
 print "$name by $authors"
 print "Source code available at $githubUrl"
 print "Control module"
 print "Configurable settings below:"
 
-#Custom vars inputed
+#Settings
 set idle.x @thisx
 set idle.y @thisy
 set unitIdOverride 0
 set idleApproachDistance 18.5
+#When idle, the units will fire every 10 seconds.
 op mul idleFireInterval 10 1000
 print "Do not change below"
 set quickLoops 16 #The amount of quick loops to perform before rereading settings.
 
-#When idle, the units will fire every 10 seconds.
 
 #Null check, doesnt start running until the schem is fully built.
 restart:
-jump restart equal switch1 null
-jump restart equal switch2 null
-jump restart equal switch3 null
-jump restart equal switch4 null
-jump restart equal switch5 null
-jump restart equal cell1 null
-jump restart equal sorter1 null
-jump restart equal sorter2 null
-jump restart equal arc1 null
-set enabledSwitch switch1
-set loadingSwitch switch2
-set longrangeSwitch switch3
-set healingSwitch switch4
-set overrangeSwitch switch5
-set unitSorter sorter1
-set bombingItemSorter sorter2
-set cell cell1
-set arc arc1
+	jump restart equal switch1 null
+	jump restart equal switch2 null
+	jump restart equal switch3 null
+	jump restart equal switch4 null
+	jump restart equal switch5 null
+	jump restart equal cell1 null
+	jump restart equal sorter1 null
+	jump restart equal sorter2 null
+	jump restart equal arc1 null
+	set enabledSwitch switch1
+	set loadingSwitch switch2
+	set longrangeSwitch switch3
+	set healingSwitch switch4
+	set overrangeSwitch switch5
+	set unitSorter sorter1
+	set bombingItemSorter sorter2
+	set cell cell1
+	set arc arc1
 
 main_loop:
 
@@ -49,7 +51,7 @@ get_settings:
 	sensor healing healingSwitch @enabled
 	sensor overrange overrangeSwitch @enabled
 	sensor bombingItem bombingItemSorter @config
-	op and loading bombingItem
+	op and loading loading bombingItem
 	jump unitId_defined notEqual unitIdOverride 0
 
 	choose_unit:
@@ -110,7 +112,7 @@ write_slow_values:
 		write 15 cell $memcellpos.approachDistance
 	approach_chosen:
 
-#A quick loop to write the shoot pos quickly.
+#A quick loop to rapidly update the shoot pos.
 set i 0
 quick_loop:
 
@@ -129,6 +131,7 @@ quick_loop:
 	jump quick_loop lessThan i quickLoops
 	jump main_loop always
 
+#A quick loop to rapidly update the shoot pos, but for longrange mode.
 longrange_quick_loop:
 
 	longrange_get_variables:
@@ -152,7 +155,7 @@ longrange_quick_loop:
 	jump longrange_quick_loop lessThan i quickLoops
 	jump main_loop always
 
-#set idle vars for quick_loop to send out
+#Just write the vars once as the RC is idle
 idle:
 	write idle.x cell $memcellpos.destX
 	write idle.y cell $memcellpos.destY
