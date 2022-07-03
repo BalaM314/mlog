@@ -8,7 +8,7 @@ print "Movement module"
 set minHealthFrac 0.8
 set unitOverride null
 print "Rest of settings in micro proc"
-set quickLoops 80
+set quickLoops 30
 set logicItemTakeRadius 5
 
 get_wait_time:
