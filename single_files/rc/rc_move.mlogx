@@ -8,7 +8,8 @@ print "Movement module"
 set minHealthFrac 0.8
 set unitOverride null
 print "Rest of settings in micro proc"
-set quickLoops 30
+set quickLoops 5
+set unitControlLoops 10
 set logicItemTakeRadius 5
 
 get_wait_time:
@@ -46,6 +47,12 @@ init_read_cell:
 	get_static_vars:
 		sensor bombingItem bombingItemSorter @config
 		lookup unit unitType unit.id
+		jump disable_overrange equal unitType @quad
+		jump disable_overrange equal unitType @horizon
+		jump overrange_disabled
+		disable_overrange:
+		set overrange false
+		overrange_disabled:
 		jump no_unit_override equal unitOverride null
 		set unitType unitOverride
 		no_unit_override:
@@ -54,6 +61,9 @@ init_read_cell:
 		sensor unit.itemCapacity
 		sensor unit.maxHealth
 		op mul minHealth unit.maxHealth minHealthFrac
+
+set j 0
+quick_loop:
 
 set i 0
 send_commands_loop:
@@ -97,21 +107,27 @@ send_commands_loop:
 			ucontrol target shooting.x shooting.y shouldFire
 			#end_send_commands_loop
 			op add i i 1
-			jump send_commands_loop lessThan i quickLoops
+			jump send_commands_loop lessThan i unitControlLoops
+			op add j j 1
+			jump send_commands_loop lessThan j quickLoops
 			jump init_read_cell
 		
 		target_position:
 			ucontrol target shoot.x shoot.y shouldFire
 			#end_send_commands_loop
 			op add i i 1
-			jump send_commands_loop lessThan i quickLoops
+			jump send_commands_loop lessThan i unitControlLoops
+			op add j j 1
+			jump send_commands_loop lessThan j quickLoops
 			jump init_read_cell
 		
 		target_self:
 			ucontrol targetp @unit shouldFire
 			#end_send_commands_loop
 			op add i i 1
-			jump send_commands_loop lessThan i quickLoops
+			jump send_commands_loop lessThan i unitControlLoops
+			op add j j 1
+			jump send_commands_loop lessThan j quickLoops
 			jump init_read_cell
 
 
@@ -133,7 +149,9 @@ send_commands_loop:
 		ucontrol itemTake core bombingItem 9999
 		#end_send_commands_loop
 		op add i i 1
-		jump send_commands_loop lessThan i quickLoops
+		jump send_commands_loop lessThan i unitControlLoops
+		op add j j 1
+		jump send_commands_loop lessThan j quickLoops
 		jump init_read_cell
 
 	heal:
@@ -144,6 +162,8 @@ send_commands_loop:
 		ucontrol move healTurret.x healTurret.y
 		#end_send_commands_loop
 		op add i i 1
-		jump send_commands_loop lessThan i quickLoops
+		jump send_commands_loop lessThan i unitControlLoops
+		op add j j 1
+		jump send_commands_loop lessThan j quickLoops
 		jump init_read_cell
 	

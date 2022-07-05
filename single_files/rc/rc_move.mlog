@@ -4,7 +4,8 @@ print "Movement module"
 set minHealthFrac 0.8
 set unitOverride null
 print "Rest of settings in micro proc"
-set quickLoops 30
+set quickLoops 5
+set unitControlLoops 10
 set logicItemTakeRadius 5
 get_wait_time:
 op add pos @thisx @thisy
@@ -33,6 +34,12 @@ jump init_read_cell equal enabled false
 get_static_vars:
 sensor bombingItem bombingItemSorter @config
 lookup unit unitType unit.id
+jump disable_overrange equal unitType @quad
+jump disable_overrange equal unitType @horizon
+jump overrange_disabled always 0 0
+disable_overrange:
+set overrange false
+overrange_disabled:
 jump no_unit_override equal unitOverride null
 set unitType unitOverride
 no_unit_override:
@@ -41,6 +48,8 @@ sensor unit.range @unit @range
 sensor unit.itemCapacity @unit @itemCapacity
 sensor unit.maxHealth @unit @maxHealth
 op mul minHealth unit.maxHealth minHealthFrac
+set j 0
+quick_loop:
 set i 0
 send_commands_loop:
 bind_unit:
@@ -70,17 +79,23 @@ op add shooting.x shooting.x unit.x
 op add shooting.y shooting.y unit.y
 ucontrol target shooting.x shooting.y shouldFire
 op add i i 1
-jump send_commands_loop lessThan i quickLoops
+jump send_commands_loop lessThan i unitControlLoops
+op add j j 1
+jump send_commands_loop lessThan j quickLoops
 jump init_read_cell always 0 0
 target_position:
 ucontrol target shoot.x shoot.y shouldFire
 op add i i 1
-jump send_commands_loop lessThan i quickLoops
+jump send_commands_loop lessThan i unitControlLoops
+op add j j 1
+jump send_commands_loop lessThan j quickLoops
 jump init_read_cell always 0 0
 target_self:
 ucontrol targetp @unit shouldFire
 op add i i 1
-jump send_commands_loop lessThan i quickLoops
+jump send_commands_loop lessThan i unitControlLoops
+op add j j 1
+jump send_commands_loop lessThan j quickLoops
 jump init_read_cell always 0 0
 load:
 sensor unit.firstItem @unit @firstItem
@@ -97,7 +112,9 @@ ucontrol itemDrop core 9999
 item_cleared:
 ucontrol itemTake core bombingItem 9999
 op add i i 1
-jump send_commands_loop lessThan i quickLoops
+jump send_commands_loop lessThan i unitControlLoops
+op add j j 1
+jump send_commands_loop lessThan j quickLoops
 jump init_read_cell always 0 0
 heal:
 sensor unit.health @unit @health
@@ -106,7 +123,9 @@ ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
 jump healed equal isFound false
 ucontrol move healTurret.x healTurret.y
 op add i i 1
-jump send_commands_loop lessThan i quickLoops
+jump send_commands_loop lessThan i unitControlLoops
+op add j j 1
+jump send_commands_loop lessThan j quickLoops
 jump init_read_cell always 0 0
 end
 print "Made with mlogx"
