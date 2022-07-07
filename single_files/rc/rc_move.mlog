@@ -38,7 +38,7 @@ jump disable_overrange equal unitType @quad
 jump disable_overrange equal unitType @horizon
 jump overrange_disabled always 0 0
 disable_overrange:
-set overrange false
+set overrange 0
 overrange_disabled:
 jump no_unit_override equal unitOverride null
 set unitType unitOverride
