@@ -47,15 +47,15 @@ init_read_cell:
 	get_static_vars:
 		sensor bombingItem bombingItemSorter @config
 		lookup unit unitType unit.id
+		jump no_unit_override equal unitOverride null
+		set unitType unitOverride
+		no_unit_override:
 		jump disable_overrange equal unitType @quad
 		jump disable_overrange equal unitType @horizon
 		jump overrange_disabled
 		disable_overrange:
 		set overrange 0
 		overrange_disabled:
-		jump no_unit_override equal unitOverride null
-		set unitType unitOverride
-		no_unit_override:
 		ubind unitType
 		sensor unit.range
 		sensor unit.itemCapacity
