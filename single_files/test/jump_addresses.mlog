@@ -1,0 +1,4 @@
+set x 5
+print "sussy"
+jump 1 always x false
+print "baka"

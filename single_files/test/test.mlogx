@@ -11,6 +11,8 @@ sensor sussy.amogus arc1 @shooting
 sensor @this.x
 sensor projector1.phase-fabric
 
+print /*comment*/"sussy amogus"
+
 print "Filename: $filename"
 print "amogus: $amogus"
 print "Mono: $_mono"

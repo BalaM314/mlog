@@ -3,6 +3,7 @@ sensor core.totalItems core @totalItems
 sensor sussy.amogus arc1 @shooting
 sensor @this.x @this @x
 sensor projector1.phase-fabric projector1 @phase-fabric
+print "sussy amogus"
 print "Filename: test"
 print "amogus: SUSSY REPLACED VALUE"
 print "Mono: "

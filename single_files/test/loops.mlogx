@@ -1,0 +1,8 @@
+#loop
+print "begin loops"
+&for n 0 5 {
+	check_$n:
+	print "n: $n"
+	set sussy$n "amogus"
+}
+print "end loops"

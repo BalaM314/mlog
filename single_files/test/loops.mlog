@@ -1,0 +1,23 @@
+print "begin loops"
+check_0:
+print "n: 0"
+set sussy0 "amogus"
+check_1:
+print "n: 1"
+set sussy1 "amogus"
+check_2:
+print "n: 2"
+set sussy2 "amogus"
+check_3:
+print "n: 3"
+set sussy3 "amogus"
+check_4:
+print "n: 4"
+set sussy4 "amogus"
+check_5:
+print "n: 5"
+set sussy5 "amogus"
+print "end loops"
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
