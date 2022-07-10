@@ -22,22 +22,22 @@ main_loop:
 	check_units:
 		&for n 1 $numReconstructors {
 			check_unit$n_ok:
-				sensor unit$n.dead
-				sensor unit$n.controlled
-				jump bind_unit$n equal unit$n.dead true
-				jump bind_unit$n greaterThan unit$n.controlled 1
+			sensor unit$n.dead
+			sensor unit$n.controlled
+			jump bind_unit$n equal unit$n.dead true
+			jump bind_unit$n greaterThan unit$n.controlled 1
 			unit$n_ok:
 		}
 
 	move_units:
 		&for n 1 $numReconstructors {
 			move_unit$n:
-				ubind unit$n
-				ucontrol move reconstructor$n.x reconstructor$n.y
-				ucontrol within reconstructor$n.x reconstructor$n.y 3 unit$n.reached
-				jump unit$n_moved equal unit$n.reached false
-				#unit reached destination, payenter
-				ucontrol payEnter
+			ubind unit$n
+			ucontrol move reconstructor$n.x reconstructor$n.y
+			ucontrol within reconstructor$n.x reconstructor$n.y 3 unit$n.reached
+			jump unit$n_moved equal unit$n.reached false
+			#unit reached destination, payenter
+			ucontrol payEnter
 			unit$n_moved:
 		}
 		
@@ -46,15 +46,15 @@ main_loop:
 		
 	&for n 1 $numReconstructors {
 		bind_unit$n:
-			#Bind a unit, but check if it's alive and unflagged.
-			ubind unitType
-			sensor unit.flag
-			sensor unit.x
-			sensor unit.y
-			sensor unit.controlled
-			jump bind_unit$n notEqual unit.flag 0
-			jump bind_unit$n greaterThan unit.controlled 1
-			ucontrol flag cookie
-			set unit$n @unit
-			jump unit$n_ok
+		#Bind a unit, but check if it's alive and unflagged.
+		ubind unitType
+		sensor unit.flag
+		sensor unit.x
+		sensor unit.y
+		sensor unit.controlled
+		jump bind_unit$n notEqual unit.flag 0
+		jump bind_unit$n greaterThan unit.controlled 1
+		ucontrol flag cookie
+		set unit$n @unit
+		jump unit$n_ok
 	}
