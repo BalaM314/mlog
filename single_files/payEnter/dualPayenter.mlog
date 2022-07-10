@@ -1,0 +1,82 @@
+op mul cookie @thisx @maph
+op add cookie @thisy cookie
+set unitType @horizon
+restart:
+jump restart equal reconstructor1 null
+jump restart equal reconstructor2 null
+jump restart equal reconstructor3 null
+jump restart equal reconstructor4 null
+jump restart equal reconstructor5 null
+jump restart equal reconstructor6 null
+sensor reconstructor1.x reconstructor1 @x
+sensor reconstructor1.y reconstructor1 @y
+sensor reconstructor2.x reconstructor2 @x
+sensor reconstructor2.y reconstructor2 @y
+sensor reconstructor3.x reconstructor3 @x
+sensor reconstructor3.y reconstructor3 @y
+sensor reconstructor4.x reconstructor4 @x
+sensor reconstructor4.y reconstructor4 @y
+sensor reconstructor5.x reconstructor5 @x
+sensor reconstructor5.y reconstructor5 @y
+sensor reconstructor6.x reconstructor6 @x
+sensor reconstructor6.y reconstructor6 @y
+set unit1 null
+set unit2 null
+set unit3 null
+set unit4 null
+set unit5 null
+set unit6 null
+main_loop:
+check_unit1_ok:
+sensor unit1.dead unit1 @dead
+sensor unit1.controlled unit1 @controlled
+jump bind_unit1 equal unit1.dead true
+jump bind_unit1 greaterThan unit1.controlled 1
+unit1_ok:
+check_unit2_ok:
+sensor unit2.dead unit2 @dead
+sensor unit2.controlled unit2 @controlled
+jump bind_unit2 equal unit2.dead true
+jump bind_unit2 greaterThan unit2.controlled 1
+unit2_ok:
+move_units:
+move_unit1:
+ubind unit1
+ucontrol move reconstructor1.x reconstructor1.y
+ucontrol within reconstructor1.x reconstructor1.y 3 unit1.reached
+jump unit1_moved equal unit1.reached false
+ucontrol payEnter
+unit1_moved:
+move_unit2:
+ubind unit2
+ucontrol move reconstructor2.x reconstructor2.y
+ucontrol within reconstructor2.x reconstructor2.y 3 unit2.reached
+jump unit2_moved equal unit2.reached false
+ucontrol payEnter
+unit2_moved:
+jump main_loop always 0 0
+bind_unit1:
+ubind unitType
+sensor unit.flag @unit @flag
+sensor unit.x @unit @x
+sensor unit.y @unit @y
+sensor unit.controlled @unit @controlled
+jump bind_unit1 notEqual unit.flag 0
+jump bind_unit1 greaterThan unit.controlled 1
+ucontrol flag cookie
+set unit1 @unit
+jump unit1_ok always 0 0
+bind_unit2:
+ubind unitType
+sensor unit.flag @unit @flag
+sensor unit.x @unit @x
+sensor unit.y @unit @y
+sensor unit.controlled @unit @controlled
+jump bind_unit2 notEqual unit.flag 0
+jump bind_unit2 greaterThan unit.controlled 1
+ucontrol flag cookie
+set unit2 @unit
+jump unit2_ok always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

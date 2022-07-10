@@ -1,6 +1,6 @@
 op mul cookie @thisx @maph
 op add cookie @thisy cookie
-set unitType @mega
+set unitType @horizon
 set reconstructor reconstructor1
 sensor reconstructor.x reconstructor @x
 sensor reconstructor.y reconstructor @y

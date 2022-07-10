@@ -1,8 +1,9 @@
 #program_type main
 #require cookie
 
+
 #Config
-set unitType @mega
+set unitType @horizon
 set reconstructor reconstructor1
 #Runtime variables
 sensor reconstructor.x

@@ -9,7 +9,8 @@
 		"prependFileName":true,
 		"checkTypes":true
 	},
-	"compilerVariables":{
-		"message": "[orange]Core T4 Payenter[] by [#3141FF]BalaM314[]"
+	"compilerConstants":{
+		"message": "[orange]Core T4 Payenter[] by [#3141FF]BalaM314[]",
+		"numReconstructors": "6"
 	}
 }
