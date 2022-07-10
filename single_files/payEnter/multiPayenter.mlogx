@@ -21,8 +21,10 @@ restart:
 }
 
 main_loop:
+	jump not_switched_off equal offSwitch null
 	sensor offSwitch.enabled
 	jump main_loop equal offSwitch.enabled false
+	not_switched_off:
 
 	check_units:
 		&for n 1 $numReconstructors {
