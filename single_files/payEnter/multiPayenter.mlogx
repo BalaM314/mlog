@@ -1,10 +1,13 @@
 #For when one reconstructor isn't enough.
-#Dual Payenter by BalaM314
+#Multi Payenter by BalaM314
 #require cookie
 
-
+print "$numReconstructorsx Payenter by BalaM314"
+print "Source code available at $githubUrl"
 #Config
 set unitType @horizon
+set offSwitch switch1
+print "Config options above"
 #Runtime variables
 restart:
 	&for n 1 $numReconstructors {
@@ -18,6 +21,8 @@ restart:
 }
 
 main_loop:
+	sensor offSwitch.enabled
+	jump main_loop equal offSwitch.enabled false
 
 	check_units:
 		&for n 1 $numReconstructors {
