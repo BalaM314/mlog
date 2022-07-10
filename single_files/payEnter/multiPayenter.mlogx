@@ -49,8 +49,6 @@ main_loop:
 		#Bind a unit, but check if it's alive and unflagged.
 		ubind unitType
 		sensor unit.flag
-		sensor unit.x
-		sensor unit.y
 		sensor unit.controlled
 		jump bind_unit$n notEqual unit.flag 0
 		jump bind_unit$n greaterThan unit.controlled 1
