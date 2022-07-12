@@ -6,3 +6,14 @@ print "begin loops"
 	set sussy$n "amogus"
 }
 print "end loops"
+
+print "begin outer loop"
+&for n 1 3 {
+	print "begin inner loop"
+	&for j 4 6 {
+		print "inside inner loop"
+		print "iters are $n and $j"
+	}
+	print "end inner loop"
+}
+print "end outer loop"
