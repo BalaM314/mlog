@@ -1,0 +1,21 @@
+#lots of invalid commands
+
+set hasInvalidCommands true
+pirnt "Initializing..."
+print Doing stuff...
+
+ulocate core true core.x core.y found core
+set 56 "something"
+
+label:
+label:
+op add y thing ""
+
+two_types:
+set unit @poly
+set unit "poly"
+jump twoTypes
+
+set unitName "poly"
+ubind unitName
+
