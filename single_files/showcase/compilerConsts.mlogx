@@ -1,0 +1,8 @@
+#Compiler consts
+print "$name by $authors"
+print "Loading\n$message"
+printflush message1
+read mode cell1 $memcellpos.mode
+print mode
+print "\n$message"
+printflush message1

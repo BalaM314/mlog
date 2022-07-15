@@ -10,6 +10,8 @@
 		"checkTypes": true
 	},
 	"compilerVariables": {
-		"amogus": "SUSSY REPLACED VALUE"
+		"amogus": "SUSSY REPLACED VALUE",
+		"message": "Compiler consts are awesome",
+		"memcellpos.mode": 3
 	}
 }

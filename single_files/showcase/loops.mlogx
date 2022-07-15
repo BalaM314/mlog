@@ -1,0 +1,26 @@
+#Loops showcase
+#require cookie
+
+&for I 1 3 {
+	set unit$I null
+}
+
+main_loop:
+	&for n 1 3 {
+		check_unit$n_ok:
+		sensor unit$n.dead
+		jump bind_unit$n equal unit$n.dead true
+		unit$n_ok:
+	}
+	jump main_loop
+
+	&for n 1 3 {
+		bind_unit$n:
+		ubind unitType
+		sensor unit.flag
+		jump bind_unit$n notEqual unit.flag 0
+		ucontrol flag cookie
+		set unit$n @unit
+		jump unit$n_ok
+	}
+

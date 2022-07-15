@@ -1,0 +1,10 @@
+print " by "
+print "Loading\n$message"
+printflush message1
+read mode cell1 $memcellpos.mode
+print mode
+print "\n$message"
+printflush message1
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

@@ -1,0 +1,8 @@
+radar enemy distance @this 0 unit
+sensor container1.copper
+op abs xDiff
+uradar player distance 0 player
+ulocate ore @copper ore.x ore.y ore.found
+ulocate spawn spawn.x spawn.y spawn.found
+ulocate damaged damaged.x damaged.y damaged.found damaged
+ulocate building core true core.x core.y core.exists core

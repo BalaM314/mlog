@@ -1,0 +1,11 @@
+radar enemy any any distance @this 0 unit
+sensor container1.copper container1 @copper
+op abs xDiff xDiff 0
+uradar player any any distance 0 0 player
+ulocate ore core _ @copper ore.x ore.y ore.found _
+ulocate spawn core _ _ spawn.x spawn.y spawn.found _
+ulocate damaged core _ _ damaged.x damaged.y damaged.found damaged
+ulocate building core true _ core.x core.y core.exists core
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
