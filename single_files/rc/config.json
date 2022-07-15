@@ -9,7 +9,7 @@
 		"prependFileName": true,
 		"checkTypes": true
 	},
-	"compilerVariables": {
+	"compilerConstants": {
 		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/single_files/rc/",
 		"memcellpos.enabled": 0,
 		"memcellpos.loading": 1,

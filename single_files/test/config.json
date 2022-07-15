@@ -9,7 +9,7 @@
 		"prependFileName": true,
 		"checkTypes": true
 	},
-	"compilerVariables": {
+	"compilerConstants": {
 		"amogus": "SUSSY REPLACED VALUE",
 		"message": "Compiler consts are awesome",
 		"memcellpos.mode": 3
