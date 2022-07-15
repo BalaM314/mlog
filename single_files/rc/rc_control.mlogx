@@ -51,7 +51,7 @@ get_settings:
 	sensor healing healingSwitch @enabled
 	sensor overrange overrangeSwitch @enabled
 	sensor bombingItem bombingItemSorter @config
-	op and loading loading bombingItem
+	op and loading bombingItem
 	jump unitId_defined notEqual unitIdOverride 0
 
 	choose_unit:
@@ -127,7 +127,7 @@ quick_loop:
 		write arc.shootY cell $memcellpos.shootY
 	
 	end_quick_loop:
-	op add i i 1
+	op add i 1
 	jump quick_loop lessThan i quickLoops
 	jump main_loop always
 
@@ -152,7 +152,7 @@ longrange_quick_loop:
 			write arc.shootY cell $memcellpos.shootY
 
 	longrange_end_quick_loop:
-	op add i i 1
+	op add i 1
 	jump longrange_quick_loop lessThan i quickLoops
 	jump main_loop always
 

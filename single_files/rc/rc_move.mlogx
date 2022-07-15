@@ -16,9 +16,9 @@ get_wait_time:
 	#Because the same code is in 4 hyper processors, the same units will be bound and commanded in the same order, wasting a ton of instructions.
 	#To fix this, we wait by a different amount of time after binding {quickLoops} units.
 	op add pos @thisx @thisy
-	op mod pos pos 20
+	op mod pos 20
 	op div waitTime pos 800
-	op add waitTime waitTime 0.01
+	op add waitTime 0.01
 
 
 #Null check, doesnt start running until the schem is fully built.
@@ -100,33 +100,33 @@ send_commands_loop:
 			op mul shooting.x shoot.normalized.x unit.range
 			op mul shooting.y shoot.normalized.y unit.range
 			#Move to unit position
-			op add shooting.x shooting.x unit.x
-			op add shooting.y shooting.y unit.y
+			op add shooting.x unit.x
+			op add shooting.y unit.y
 
 			#Fire!
 			ucontrol target shooting.x shooting.y shouldFire
 			#end_send_commands_loop
-			op add i i 1
+			op add i 1
 			jump send_commands_loop lessThan i unitControlLoops
-			op add j j 1
+			op add j 1
 			jump send_commands_loop lessThan j quickLoops
 			jump init_read_cell
 		
 		target_position:
 			ucontrol target shoot.x shoot.y shouldFire
 			#end_send_commands_loop
-			op add i i 1
+			op add i 1
 			jump send_commands_loop lessThan i unitControlLoops
-			op add j j 1
+			op add j 1
 			jump send_commands_loop lessThan j quickLoops
 			jump init_read_cell
 		
 		target_self:
 			ucontrol targetp @unit shouldFire
 			#end_send_commands_loop
-			op add i i 1
+			op add i 1
 			jump send_commands_loop lessThan i unitControlLoops
-			op add j j 1
+			op add j 1
 			jump send_commands_loop lessThan j quickLoops
 			jump init_read_cell
 
@@ -148,9 +148,9 @@ send_commands_loop:
 	item_cleared:
 		ucontrol itemTake core bombingItem 9999
 		#end_send_commands_loop
-		op add i i 1
+		op add i 1
 		jump send_commands_loop lessThan i unitControlLoops
-		op add j j 1
+		op add j 1
 		jump send_commands_loop lessThan j quickLoops
 		jump init_read_cell
 
@@ -161,9 +161,9 @@ send_commands_loop:
 		jump healed equal isFound false #remove this check eventually as the rc schem will have repair turret spam
 		ucontrol move healTurret.x healTurret.y
 		#end_send_commands_loop
-		op add i i 1
+		op add i 1
 		jump send_commands_loop lessThan i unitControlLoops
-		op add j j 1
+		op add j 1
 		jump send_commands_loop lessThan j quickLoops
 		jump init_read_cell
 	

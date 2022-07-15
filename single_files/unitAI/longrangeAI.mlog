@@ -25,7 +25,7 @@ jump fire always 0 0
 turret_in_range:
 sensor turret.range turret @range
 op add approachDist turret.range 1
-op min approachDist unit.range
+op min approachDist approachDist unit.range
 jump fire always 0 0
 fire:
 ucontrol approach turret.x turret.y approachDist

@@ -71,8 +71,8 @@ sensor unit.y @unit @y
 op sub difference.x shoot.x unit.x
 op sub difference.y shoot.y unit.y
 op angle shoot.angle difference.x difference.y
-op cos shoot.normalized.x shoot.angle
-op sin shoot.normalized.y shoot.angle
+op cos shoot.normalized.x shoot.angle 0
+op sin shoot.normalized.y shoot.angle 0
 op mul shooting.x shoot.normalized.x unit.range
 op mul shooting.y shoot.normalized.y unit.range
 op add shooting.x shooting.x unit.x
