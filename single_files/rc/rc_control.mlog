@@ -29,7 +29,6 @@ set bombingItemSorter sorter2
 set cell cell1
 set arc arc1
 main_loop:
-get_settings:
 sensor isActive arc @controlled
 sensor enabled enabledSwitch @enabled
 sensor loading loadingSwitch @enabled
@@ -39,7 +38,6 @@ sensor overrange overrangeSwitch @enabled
 sensor bombingItem bombingItemSorter @config
 op and loading loading bombingItem
 jump unitId_defined notEqual unitIdOverride 0
-choose_unit:
 sensor sorter.item unitSorter @config
 jump quad equal sorter.item @titanium
 jump zenith equal sorter.item @metaglass
@@ -47,7 +45,6 @@ jump horizon equal sorter.item @lead
 jump antumbra equal sorter.item @plastanium
 jump eclipse equal sorter.item @surge-alloy
 jump flare equal sorter.item @scrap
-no_unit:
 set enabled false
 jump write_values always
 quad:
@@ -72,7 +69,6 @@ unitId_defined:
 set unitId unitIdOverride
 write_values:
 jump idle equal isActive false
-write_slow_values:
 write unitId cell 2
 write unitId cell 9
 write enabled cell 0
@@ -83,7 +79,6 @@ write true cell 7
 write overrange cell 11
 jump longrange_quick_loop equal longrange true
 jump approach_far equal arc.shooting true
-approach_close:
 write 1 cell 8
 jump approach_chosen always 0 0
 approach_far:
@@ -91,27 +86,21 @@ write 15 cell 8
 approach_chosen:
 set i 0
 quick_loop:
-get_variables:
 sensor arc.shootX arc @shootX
 sensor arc.shootY arc @shootY
-write:
 write arc.shootX cell 3
 write arc.shootY cell 4
 write arc.shootX cell 5
 write arc.shootY cell 6
-end_quick_loop:
 op add i i 1
 jump quick_loop lessThan i quickLoops
 jump main_loop always
 longrange_quick_loop:
 write 1 cell 8
-longrange_get_variables:
 sensor arc.shootX arc @shootX
 sensor arc.shootY arc @shootY
 sensor arc.shooting arc @shooting
 jump write_target equal arc.shooting false
-longrange_write:
-write_dest:
 write arc.shootX cell 3
 write arc.shootY cell 4
 jump longrange_end_quick_loop always 0 0

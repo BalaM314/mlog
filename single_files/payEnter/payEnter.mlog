@@ -26,7 +26,6 @@ sensor unit.dead @unit @dead
 sensor unit.controlled @unit @controlled
 jump unit_unbound equal unit.dead true
 jump unit_unbound greaterThan unit.controlled 1
-print_data:
 sensor unit.x @unit @x
 sensor unit.y @unit @y
 print "Moving unit to reconstructor. ("

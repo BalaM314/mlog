@@ -3,7 +3,6 @@ sensor dome1.silicon dome1 @silicon
 sensor dome1.phase-fabric dome1 @phase-fabric
 jump sili_low lessThan dome1.silicon 5
 jump phase_low lessThan dome1.phase-fabric 5
-dome_good:
 control enabled junction1 false
 jump main_loop always 0 0
 sili_low:

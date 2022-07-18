@@ -7,7 +7,6 @@ print "Rest of settings in micro proc"
 set quickLoops 5
 set unitControlLoops 10
 set logicItemTakeRadius 5
-get_wait_time:
 op add pos @thisx @thisy
 op mod pos pos 20
 op div waitTime pos 800
@@ -31,7 +30,6 @@ read approachDistance cell 8
 read healing cell 10
 read overrange cell 11
 jump init_read_cell equal enabled false
-get_static_vars:
 sensor bombingItem bombingItemSorter @config
 lookup unit unitType unit.id
 jump no_unit_override equal unitOverride null
@@ -49,7 +47,6 @@ sensor unit.itemCapacity @unit @itemCapacity
 sensor unit.maxHealth @unit @maxHealth
 op mul minHealth unit.maxHealth minHealthFrac
 set j 0
-quick_loop:
 set i 0
 send_commands_loop:
 bind_unit:
@@ -60,12 +57,10 @@ jump load equal loading true
 loaded:
 jump heal equal healing true
 healed:
-send_commands:
 ucontrol approach dest.x dest.y approachDistance
 ucontrol within shoot.x shoot.y unit.range unit.targetInRange
 jump target_position equal unit.targetInRange true
 jump target_self equal overrange false
-target_overrange:
 sensor unit.x @unit @x
 sensor unit.y @unit @y
 op sub difference.x shoot.x unit.x
@@ -103,11 +98,9 @@ sensor unit.totalItems @unit @totalItems
 jump handle_take_item notEqual unit.firstItem bombingItem
 jump loaded equal unit.totalItems unit.itemCapacity
 handle_take_item:
-move_to_core:
 ulocate building core false _ core.x core.y core.exists core
 ucontrol move core.x core.y
 jump item_cleared equal unit.firstItem null
-drop_item:
 ucontrol itemDrop core 9999
 item_cleared:
 ucontrol itemTake core bombingItem 9999

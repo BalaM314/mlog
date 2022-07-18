@@ -24,6 +24,9 @@ print "because windows sucks"
 print eeee
 print "recursive compiler!"
 
+set thing "e"
+print thing
+
 set x 10
 
 namespace amogus {
