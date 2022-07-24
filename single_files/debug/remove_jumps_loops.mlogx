@@ -1,0 +1,9 @@
+
+#For debugging
+
+restart:
+	&for n 1 1 {
+		jump restart equal reconstructor$n null
+		sensor reconstructor$n.x
+		sensor reconstructor$n.y
+	}

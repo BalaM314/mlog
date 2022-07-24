@@ -1,0 +1,7 @@
+restart:
+jump restart equal reconstructor1 null
+sensor reconstructor1.x reconstructor1 @x
+sensor reconstructor1.y reconstructor1 @y
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
