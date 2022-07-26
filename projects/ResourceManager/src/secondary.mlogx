@@ -1,0 +1,33 @@
+#$name by $authors
+#program_type never
+#Secondary module
+
+print "$name by $authors"
+print "Source code available at $githubUrl"
+print "Secondary module:"
+print "Bind to all managed buildings and to cell."
+
+set cell cell1
+
+main_loop:
+
+	read:
+		read shouldRun cell 0
+	
+	write:
+		set i 0
+		write_loop:
+			getlink linkedBuilding i
+			op add i i 1
+			sensor linkedBuilding.type
+			jump next equal linkedBuilding.type @switch
+			jump next equal linkedBuilding.type @battery
+			jump next equal linkedBuilding.type @large-battery
+			jump next equal linkedBuilding.type @processor
+			#TODO add more buildings that should not be disabled
+			control enabled linkedBuilding shouldRun
+
+			next:
+			jump write_loop lessThan i @links
+
+	jump main_loop

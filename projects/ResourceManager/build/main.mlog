@@ -20,6 +20,7 @@ set managePower true
 set offSwitch switch1
 set onSwitch switch2
 set powerBuilding node1
+set cell cell1
 set maxCoreCap 69420
 set minInputPerc 10
 set minOutputPerc 2
@@ -163,6 +164,7 @@ jump write always 0 0
 print_true:
 print "Status: [green]Enabled[].\n"
 write:
+write shouldRun cell 0
 set i 0
 write_loop:
 getlink linkedBuilding i
