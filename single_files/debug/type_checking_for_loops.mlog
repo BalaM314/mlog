@@ -1,0 +1,11 @@
+set thing_0 null
+set thing_1 null
+set thing_2 null
+set var_thing 2
+print var_thing
+print thing_1
+print thing_2
+print thing_3
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

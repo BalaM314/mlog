@@ -1,0 +1,17 @@
+{
+	"name": "showcase",
+	"authors": [
+		"BalaM314"
+	],
+	"compilerOptions": {
+		"include": [],
+		"removeComments": true,
+		"compileWithErrors": true,
+		"mode": "single",
+		"prependFileName": true,
+		"checkTypes": true
+	},
+	"compilerConstants": {
+		"memcellpos.mode": "3"
+	}
+}

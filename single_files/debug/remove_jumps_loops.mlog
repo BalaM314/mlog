@@ -1,7 +1,26 @@
+used_jump:
+jump used_jump equal 2 4
+set x 5
 restart:
 jump restart equal reconstructor1 null
 sensor reconstructor1.x reconstructor1 @x
 sensor reconstructor1.y reconstructor1 @y
+used_jump_1:
+jump used_jump_1 equal 2 3
+sorta_used_jump_1:
+jump sorta_used_jump_1 equal 2 3
+jump restart equal reconstructor2 null
+sensor reconstructor2.x reconstructor2 @x
+sensor reconstructor2.y reconstructor2 @y
+used_jump_2:
+jump used_jump_2 equal 2 3
+jump sorta_used_jump_1 equal 2 3
+jump restart equal reconstructor3 null
+sensor reconstructor3.x reconstructor3 @x
+sensor reconstructor3.y reconstructor3 @y
+used_jump_3:
+jump used_jump_3 equal 2 3
+jump sorta_used_jump_1 equal 2 3
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

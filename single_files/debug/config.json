@@ -23,6 +23,7 @@
 		"memcellpos.approachDistance": 8,
 		"memcellpos.secondaryUnitId": 9,
 		"memcellpos.healing": 10,
-		"memcellpos.overrange": 11
+		"memcellpos.overrange": 11,
+		"x": "thing"
 	}
 }

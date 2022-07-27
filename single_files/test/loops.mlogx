@@ -1,16 +1,21 @@
 #loop
 print "begin loops"
-&for n 0 5 {
+&for n in 0 5 {
 	check_$n:
 	print "n: $n"
 	set sussy$n "amogus"
 }
 print "end loops"
 
+&for building of mender1 mender2 projector1 projector2 spectre1 driver1 {
+	sensor $building.name
+	control enabled $building false
+}
+
 print "begin outer loop"
-&for n 1 3 {
+&for n in 1 3 {
 	print "begin inner loop"
-	&for j 4 6 {
+	&for j in 4 6 {
 		print "inside inner loop"
 		print "iters are $n and $j"
 	}

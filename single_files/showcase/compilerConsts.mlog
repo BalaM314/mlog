@@ -1,7 +1,7 @@
-print " by "
+print "showcase by BalaM314"
 print "Loading\n$message"
 printflush message1
-read mode cell1 $memcellpos.mode
+read mode cell1 3
 print mode
 print "\n$message"
 printflush message1

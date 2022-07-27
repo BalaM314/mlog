@@ -22,6 +22,7 @@ print _amogus_x
 ulocate building core true _ _amogus_outX _amogus_outY _amogus_found _amogus_core
 sensor _amogus_core.health _amogus_core @health
 jump lebal always 0 0
+_amogus_lebal:
 jump amogus_sus equal _amogus_x 5
 jump amogus_sus always 0 0
 print x

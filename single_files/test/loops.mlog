@@ -1,17 +1,35 @@
 print "begin loops"
+check_0:
 print "n: 0"
 set sussy0 "amogus"
+check_1:
 print "n: 1"
 set sussy1 "amogus"
+check_2:
 print "n: 2"
 set sussy2 "amogus"
+check_3:
 print "n: 3"
 set sussy3 "amogus"
+check_4:
 print "n: 4"
 set sussy4 "amogus"
+check_5:
 print "n: 5"
 set sussy5 "amogus"
 print "end loops"
+sensor mender1.name mender1 @name
+control enabled mender1 false
+sensor mender2.name mender2 @name
+control enabled mender2 false
+sensor projector1.name projector1 @name
+control enabled projector1 false
+sensor projector2.name projector2 @name
+control enabled projector2 false
+sensor spectre1.name spectre1 @name
+control enabled spectre1 false
+sensor driver1.name driver1 @name
+control enabled driver1 false
 print "begin outer loop"
 print "begin inner loop"
 print "inside inner loop"

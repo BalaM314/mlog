@@ -1,9 +1,19 @@
-
 #For debugging
 
+used_jump:
+jump used_jump equal 2 4
+unused_jump:
+set x 5
+
+
 restart:
-	&for n 1 1 {
+	&for n 1 3 {
 		jump restart equal reconstructor$n null
 		sensor reconstructor$n.x
 		sensor reconstructor$n.y
+		used_jump_$n:
+		jump used_jump_$n equal 2 3
+		sorta_used_jump_$n:
+		jump sorta_used_jump_1 equal 2 3
+		unused_jump_$n:
 	}
