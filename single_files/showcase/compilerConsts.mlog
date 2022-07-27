@@ -5,6 +5,7 @@ read mode cell1 3
 print mode
 print "\n$message"
 printflush message1
+print "a b c"
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

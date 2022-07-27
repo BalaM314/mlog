@@ -12,6 +12,7 @@
 		"checkTypes": true
 	},
 	"compilerConstants": {
-		"memcellpos.mode": "3"
+		"memcellpos.mode": "3",
+		"array": ["a", "b", "c"]
 	}
 }
