@@ -1,5 +1,5 @@
 
-&for i 0 2 {
+&for i in 0 2 {
 	set thing_$i :unit null
 }
 

@@ -2,12 +2,12 @@
 #require cookie
 set unitType @mega
 
-&for I 1 3 {
+&for I in 1 3 {
 	set unit$I null
 }
 
 main_loop:
-	&for n 1 3 {
+	&for n in 1 3 {
 		check_unit$n_ok:
 		sensor unit$n.dead
 		jump bind_unit$n equal unit$n.dead true
@@ -15,7 +15,7 @@ main_loop:
 	}
 	jump main_loop
 
-	&for n 1 3 {
+	&for n in 1 3 {
 		bind_unit$n:
 		ubind unitType
 		sensor unit.flag
