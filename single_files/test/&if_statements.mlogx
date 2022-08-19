@@ -1,0 +1,9 @@
+set test true
+
+&if true {
+	set trueIsTrue true
+}
+
+&if false {
+	set trueIsFalse false
+}

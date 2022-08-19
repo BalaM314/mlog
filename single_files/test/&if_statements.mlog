@@ -1,0 +1,5 @@
+set test true
+set trueIsTrue true
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
