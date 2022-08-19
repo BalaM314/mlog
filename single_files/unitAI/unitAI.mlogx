@@ -17,7 +17,7 @@ bind_new_unit:
 	sensor unit.dead @unit @dead
 	jump bind_new_unit equal unit.dead true
 	sensor unit.controller @unit @controller
-	jump bind_new_unit greaterThan 0 #@ctrlPlayer and @ctrlFormation are 2 and 3, so this saves a line.
+	jump bind_new_unit greaterThan 1 #@ctrlPlayer and @ctrlFormation are 2 and 3, so this saves a line.
 
 
 check_health:

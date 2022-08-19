@@ -12,7 +12,7 @@ jump bind_new_unit notEqual unit.flag 0
 sensor unit.dead @unit @dead
 jump bind_new_unit equal unit.dead true
 sensor unit.controller @unit @controller
-jump bind_new_unit greaterThan 0
+jump bind_new_unit greaterThan 1
 check_health:
 sensor unit.health @unit @health
 sensor unit.maxHealth @unit @maxHealth

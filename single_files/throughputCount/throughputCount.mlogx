@@ -1,6 +1,12 @@
 #Item ThroughputCounter by BalaM314
-set stdout message1
-set container vault1
+
+init:
+	print "Initializing...\nItem Throughput Counter by [#3141FF]BalaM314[]"
+
+	getlink_loop:
+	op add i i 1
+
+
 sensor container.maxItems container @itemCapacity
 
 no_items:
@@ -28,5 +34,14 @@ calculate_time:
 	printflush stdout
 wait_for_reset:
 	sensor container.items container @totalItems
-	jump wait_for_reset notEqual items 0
+	jump reset equal container null
+	jump wait_for_reset
+	reset:
+	print "Reset."
+	printflush message1
 end
+
+set running false
+main_loop:
+	sensor container.items
+	jump not_running equal running false

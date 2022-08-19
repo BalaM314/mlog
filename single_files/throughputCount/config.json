@@ -1,0 +1,15 @@
+{
+	"name": "ThroughputCount",
+	"authors": [
+		"BalaM314"
+	],
+	"compilerOptions": {
+		"include": [],
+		"removeComments": true,
+		"compileWithErrors": true,
+		"mode": "project",
+		"prependFileName": true,
+		"checkTypes": true
+	},
+	"compilerConstants": {}
+}

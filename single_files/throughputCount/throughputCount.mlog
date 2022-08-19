@@ -1,5 +1,7 @@
-set stdout message1
-set container vault1
+init:
+print "Initializing...\nItem Throughput Counter by [#3141FF]BalaM314[]"
+getlink_loop:
+op add i i 1
 sensor container.maxItems container @itemCapacity
 no_items:
 print "Item throughput counter"
@@ -8,6 +10,7 @@ print "[red]Waiting for items..."
 printflush message1
 sensor container.items container @totalItems
 jump no_items equal container.items 0
+start_timer:
 set timer @time
 count_items:
 sensor items container @totalItems
@@ -15,6 +18,7 @@ print "[blue]Items received:"
 print items
 printflush stdout
 jump count_items notEqual items container.maxItems
+calculate_time:
 op sub timePassed @time timer
 op div timePassed timePassed 1000
 op div fillSpeed container.maxItems timePassed
@@ -24,8 +28,16 @@ print " items/second\nWaiting for reset:"
 printflush stdout
 wait_for_reset:
 sensor container.items container @totalItems
-jump wait_for_reset notEqual items 0
+jump reset equal container null
+jump wait_for_reset always 0 0
+reset:
+print "Reset."
+printflush message1
 end
+set running false
+main_loop:
+sensor container.items container @items
+jump not_running equal running false
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

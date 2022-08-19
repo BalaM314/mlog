@@ -12,10 +12,10 @@ print "\n\nResource Manager"
 printflush stdout
 print "Edit variables below."
 set input1 @sand
-set input2 @thorium
+set input2 @coal
 set input3 null
 set input4 null
-set output @phase-fabric
+set output @silicon
 set managePower true
 set offSwitch switch1
 set onSwitch switch2
@@ -23,9 +23,9 @@ set powerBuilding node1
 set cell cell1
 set maxCoreCap 69420
 set minInputPerc 10
-set minOutputPerc 0.5
+set minOutputPerc 2
 set maxOutputPerc 98
-set minPowerPerc 20
+set minPowerPerc 30
 print "Do not edit below this line."
 printflush stdout
 printflush stdout
@@ -212,6 +212,3 @@ jump core_found always 0 0
 end
 
 #stdlib functions
-
-print "Made with mlogx"
-print "github.com/BalaM314/mlogx/"
