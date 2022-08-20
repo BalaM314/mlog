@@ -13,6 +13,7 @@
 	"compilerConstants": {
 		"amogus": "SUSSY REPLACED VALUE",
 		"message": "Compiler consts are awesome",
-		"memcellpos.mode": 3
+		"memcellpos.mode": 3,
+		"isEnabled": false
 	}
 }

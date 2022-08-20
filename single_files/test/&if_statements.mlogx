@@ -4,6 +4,14 @@ set test true
 	set trueIsTrue true
 }
 
-&if false {
+&if $isEnabled {
 	set trueIsFalse false
 }
+
+&if true {
+	print "Outer"
+	&if false {
+		print "Inner"
+	}
+}
+
