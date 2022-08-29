@@ -46,25 +46,25 @@ jump antumbra equal sorter.item @plastanium
 jump eclipse equal sorter.item @surge-alloy
 jump flare equal sorter.item @scrap
 set enabled false
-jump write_values always
+jump write_values always 0 0
 quad:
 set unitId 23
-jump write_values always
+jump write_values always 0 0
 zenith:
 set unitId 17
-jump write_values always
+jump write_values always 0 0
 horizon:
 set unitId 16
-jump write_values always
+jump write_values always 0 0
 antumbra:
 set unitId 18
-jump write_values always
+jump write_values always 0 0
 eclipse:
 set unitId 19
-jump write_values always
+jump write_values always 0 0
 flare:
 set unitId 15
-jump write_values always
+jump write_values always 0 0
 unitId_defined:
 set unitId unitIdOverride
 write_values:
@@ -94,7 +94,7 @@ write arc.shootX cell 5
 write arc.shootY cell 6
 op add i i 1
 jump quick_loop lessThan i quickLoops
-jump main_loop always
+jump main_loop always 0 0
 longrange_quick_loop:
 write 1 cell 8
 sensor arc.shootX arc @shootX
@@ -110,7 +110,7 @@ write arc.shootY cell 6
 longrange_end_quick_loop:
 op add i i 1
 jump longrange_quick_loop lessThan i quickLoops
-jump main_loop always
+jump main_loop always 0 0
 idle:
 write idle.x cell 3
 write idle.y cell 4
@@ -126,7 +126,7 @@ op mod frames @time idleFireInterval
 op lessThan shouldFire frames 500
 write shouldFire cell 7
 jump quick_loop lessThan i quickLoops
-jump main_loop always
+jump main_loop always 0 0
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"
