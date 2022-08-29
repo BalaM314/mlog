@@ -16,3 +16,7 @@ ulocate building generator false _ outX outY found building
 ulocate ore core _ @copper outX outY found _
 ulocate damaged core _ _ outX outY found building
 ulocate spawn core _ _ outX outY found _
+draw clear 255 255 255
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
