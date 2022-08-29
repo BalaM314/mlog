@@ -1,0 +1,5 @@
+
+
+set x 5 + 5
+set y 23 ** 2
+set reactorSafe reactor1.heat <= 0.1

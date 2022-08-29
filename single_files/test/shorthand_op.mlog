@@ -1,0 +1,6 @@
+op add x 5 5
+op pow y 23 2
+op lessThanEq reactorSafe reactor1.heat 0.1
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

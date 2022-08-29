@@ -1,0 +1,19 @@
+radar enemy maxHealth foreshadow1 1 target
+radar enemy distance foreshadow1 0 target
+uradar enemy maxHealth 1 target
+uradar enemy distance 0 target
+sensor amogus nucleus1 @copper
+sensor nucleus1.copper
+op add x 2 3
+op add x 2
+op cos y 2
+op abs z
+op abs z
+jump label lessThanEq z 5
+jump label
+jump label
+ulocate building generator false outX outY found building
+ulocate ore @copper outX outY found
+ulocate damaged outX outY found building
+ulocate spawn outX outY found
+draw clear 255 255 255

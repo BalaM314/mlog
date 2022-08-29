@@ -1,6 +1,6 @@
 
 
-
+draw clear 10 10 10 0 0
 
 sensor unit.maxHealth
 
