@@ -1,7 +1,8 @@
 #For when one reconstructor isn't enough.
 #Multi Payenter by BalaM314
-#require cookie
+#change a single number in ./config.json to change the number of reconstructors this supports. mlogx goes brrrrrrr.
 
+#require cookie
 print "$(numRecons)x Payenter by BalaM314"
 print "Source code available at $githubUrl"
 #Config
@@ -23,45 +24,45 @@ restart:
 }
 
 main_loop:
-	jump not_switched_off equal offSwitch null #If there is no off switch, 
+	jump not_switched_off equal offSwitch null #If there is no off switch, continue
 	sensor offSwitch.enabled
 	jump main_loop equal offSwitch.enabled false
 	not_switched_off:
 
-	check_units:
+	check_units: #Check if a unit is dead or controlled by a player, if it is bind a new one.
 		&for n in 1 $numRecons {
-			check_unit$n_ok:
-			sensor unit$n.dead
-			sensor unit$n.controlled
-			jump bind_unit$n equal unit$n.dead true
-			jump bind_unit$n greaterThan unit$n.controlled 1
-			unit$n_ok:
+			check_unit$(n)_ok:
+			sensor unit$(n).dead
+			sensor unit$(n).controlled
+			jump bind_unit$(n) equal unit$(n).dead true
+			jump bind_unit$(n) greaterThan unit$(n).controlled 1
+			unit$(n)_ok:
 		}
 
-	move_units:
+	move_units: #Move each unit to its destination.
 		&for n in 1 $numRecons {
-			move_unit$n:
-			ubind unit$n
-			ucontrol move reconstructor$n.x reconstructor$n.y
-			ucontrol within reconstructor$n.x reconstructor$n.y 3 unit$n.reached
-			jump unit$n_moved equal unit$n.reached false
+			move_unit$(n):
+			ubind unit$(n)
+			ucontrol move reconstructor$(n).x reconstructor$(n).y
+			ucontrol within reconstructor$(n).x reconstructor$(n).y 3 unit$(n).reached
+			jump unit$(n)_moved equal unit$(n).reached false
 			#unit reached destination, payenter
 			ucontrol payEnter
-			unit$n_moved:
+			unit$(n)_moved:
 		}
 		
 		jump main_loop
 
 		
 	&for n in 1 $numRecons {
-		bind_unit$n:
+		bind_unit$(n):
 		#Bind a unit, but check if it's alive and unflagged.
 		ubind unitType
 		sensor unit.flag
 		sensor unit.controlled
-		jump bind_unit$n notEqual unit.flag 0
-		jump bind_unit$n greaterThan unit.controlled 1
+		jump bind_unit$(n) notEqual unit.flag 0
+		jump bind_unit$(n) greaterThan unit.controlled 1
 		ucontrol flag cookie
-		set unit$n @unit
-		jump unit$n_ok
+		set unit$(n) @unit
+		jump unit$(n)_ok
 	}
