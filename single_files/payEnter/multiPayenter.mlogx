@@ -2,7 +2,7 @@
 #Multi Payenter by BalaM314
 #require cookie
 
-print "$numReconstructorsx Payenter by BalaM314"
+print "$(numRecons)x Payenter by BalaM314"
 print "Source code available at $githubUrl"
 #Config
 set unitType @horizon
@@ -10,24 +10,26 @@ set offSwitch switch1
 print "Config options above"
 #Runtime variables
 restart:
-	&for n in 1 $numReconstructors {
-		jump restart equal reconstructor$n null
-		sensor reconstructor$n.x
-		sensor reconstructor$n.y
+	&for n in 1 $numRecons {
+		jump restart equal reconstructor$(n) null
+		#if the reconstructor isn't bound, the schem is still being built, so restart
+		sensor reconstructor$(n).x
+		sensor reconstructor$(n).y
+		#get the x and y position
 	}
 
-&for n in 1 $numReconstructors {
-	set unit$n :unit null
+&for n in 1 $numRecons {
+	set unit$(n) :unit null
 }
 
 main_loop:
-	jump not_switched_off equal offSwitch null
+	jump not_switched_off equal offSwitch null #If there is no off switch, 
 	sensor offSwitch.enabled
 	jump main_loop equal offSwitch.enabled false
 	not_switched_off:
 
 	check_units:
-		&for n in 1 $numReconstructors {
+		&for n in 1 $numRecons {
 			check_unit$n_ok:
 			sensor unit$n.dead
 			sensor unit$n.controlled
@@ -37,7 +39,7 @@ main_loop:
 		}
 
 	move_units:
-		&for n in 1 $numReconstructors {
+		&for n in 1 $numRecons {
 			move_unit$n:
 			ubind unit$n
 			ucontrol move reconstructor$n.x reconstructor$n.y
@@ -51,7 +53,7 @@ main_loop:
 		jump main_loop
 
 		
-	&for n in 1 $numReconstructors {
+	&for n in 1 $numRecons {
 		bind_unit$n:
 		#Bind a unit, but check if it's alive and unflagged.
 		ubind unitType
