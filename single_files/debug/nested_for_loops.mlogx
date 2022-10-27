@@ -1,0 +1,15 @@
+print "nested for loops"
+
+
+# &if true {
+# 	print "sussy"
+# 	&if false {
+# 		print "amogus"
+# 	}
+# }
+
+&for x of a b {
+	&for y of c d {
+		print "$x_$y"
+	}
+}

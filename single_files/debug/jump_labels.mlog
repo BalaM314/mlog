@@ -1,0 +1,6 @@
+#jump label sus
+set x 5
+jump 3 always
+set x 2
+jump 2 notEqual x 2
+print "amogus"

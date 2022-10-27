@@ -1,6 +1,7 @@
+print "hello"
 
 &for i in 0 2 {
-	set thing_$i :unit null
+	set thing_$i null
 }
 
 set var_$x 2
