@@ -2,46 +2,38 @@
 
 init:
 	print "Initializing...\nItem Throughput Counter by [#3141FF]BalaM314[]"
-
-	getlink_loop:
-	op add i i 1
-
-
-sensor container.maxItems container @itemCapacity
+	sensor container1.maxItems container1 @itemCapacity
+	set stdout message1
 
 no_items:
 	print "Item throughput counter"
 	print " by [#3141FF]BalaM314[white]\n"
 	print "[red]Waiting for items..."
 	printflush message1
-	sensor container.items container @totalItems
-	jump no_items equal container.items 0
+	sensor container1.totalItems
+	jump no_items equal container1.totalItems 0
 start_timer:
 	set timer @time
 count_items:
-	sensor items container @totalItems
+	sensor container1.totalItems
 	print "[blue]Items received:"
-	print items
+	print container1.totalItems
 	printflush stdout
-	jump count_items notEqual items container.maxItems
+	jump reset equal container1 null
+	jump count_items notEqual container1.totalItems container1.maxItems
 calculate_time:
 	op sub timePassed @time timer
 	op div timePassed timePassed 1000
-	op div fillSpeed container.maxItems timePassed
+	op div fillSpeed container1.maxItems timePassed
 	print "[green]"
 	print fillSpeed
 	print " items/second\nWaiting for reset:"
 	printflush stdout
 wait_for_reset:
-	sensor container.items container @totalItems
-	jump reset equal container null
+	jump reset equal container1 null
 	jump wait_for_reset
 	reset:
 	print "Reset."
 	printflush message1
-end
-
-set running false
-main_loop:
-	sensor container.items
-	jump not_running equal running false
+	wait 1
+	jump no_items
