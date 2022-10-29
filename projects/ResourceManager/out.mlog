@@ -21,6 +21,7 @@ set offSwitch switch1
 set onSwitch switch2
 set powerBuilding node1
 set cell cell1
+set core null
 set maxCoreCap 69420
 set minInputPerc 10
 set minOutputPerc 2
@@ -151,11 +152,11 @@ jump print_status always 0 0
 override_off:
 print "[red]Manually switched off.[]\n"
 set shouldRun false
-jump print_status always
+jump print_status always 0 0
 override_on:
 print "[red]Manually forced on.[]\n"
 set shouldRun true
-jump print_status always
+jump print_status always 0 0
 print_status:
 jump print_true equal shouldRun true
 print_false:
@@ -172,8 +173,7 @@ op add i i 1
 sensor linkedBuilding.type linkedBuilding @type
 jump next equal linkedBuilding.type @switch
 jump next equal linkedBuilding.type @battery
-jump next equal linkedBuilding.type @large-battery
-jump next equal linkedBuilding.type @processor
+jump next equal linkedBuilding.type @battery-large
 control enabled linkedBuilding shouldRun
 next:
 jump write_loop lessThan i @links

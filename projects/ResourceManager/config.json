@@ -9,7 +9,8 @@
 		"compileWithErrors": true,
 		"mode": "project",
 		"prependFileName": true,
-		"checkTypes": true
+		"checkTypes": true,
+		"removeUnusedJumpLabels": false
 	},
 	"compilerConstants": {
 		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/"

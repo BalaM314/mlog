@@ -14,8 +14,7 @@ op add i i 1
 sensor linkedBuilding.type linkedBuilding @type
 jump next equal linkedBuilding.type @switch
 jump next equal linkedBuilding.type @battery
-jump next equal linkedBuilding.type @large-battery
-jump next equal linkedBuilding.type @processor
+jump next equal linkedBuilding.type @battery-large
 control enabled linkedBuilding shouldRun
 next:
 jump write_loop lessThan i @links

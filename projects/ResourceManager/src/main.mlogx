@@ -24,6 +24,7 @@ set offSwitch switch1
 set onSwitch switch2
 set powerBuilding node1
 set cell cell1
+set core null
 
 set maxCoreCap 69420
 set minInputPerc 10 #Will shut off if input perc goes below this.
@@ -193,8 +194,7 @@ main_loop:
 			sensor linkedBuilding.type
 			jump next equal linkedBuilding.type @switch
 			jump next equal linkedBuilding.type @battery
-			jump next equal linkedBuilding.type @large-battery
-			jump next equal linkedBuilding.type @processor
+			jump next equal linkedBuilding.type @battery-large
 			#TODO add more buildings that should not be disabled
 			control enabled linkedBuilding shouldRun
 
