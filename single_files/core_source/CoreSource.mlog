@@ -1,0 +1,30 @@
+print "Core Source by BalaM314"
+set core vault1
+main_loop:
+set i 0
+set lowestItem @silicon
+set lowestAmount 694200
+get_item_loop:
+lookup item item i
+sensor core.item core item
+jump next_loop greaterThan core.item lowestAmount
+set lowestItem item
+set lowestAmount core.item
+next_loop:
+op add i i 1
+jump get_item_loop lessThan i @itemCount
+set i 0
+control config source1 lowestItem
+control config source2 lowestItem
+control config source3 lowestItem
+control config source4 lowestItem
+control config source5 lowestItem
+control config source6 lowestItem
+control config source7 lowestItem
+control config source8 lowestItem
+control config source9 lowestItem
+control config source10 lowestItem
+jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
