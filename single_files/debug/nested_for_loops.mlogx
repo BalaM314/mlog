@@ -8,8 +8,11 @@ print "nested for loops"
 # 	}
 # }
 
-&for x of a b {
-	&for y of c d {
-		print "$x_$y"
+&for X in 1 1 {
+	print "inner loop"
+	&for Y in 3 4 {
+		print "$X_$Y"
+		print "amogus"
 	}
+	print "end inner loop"
 }

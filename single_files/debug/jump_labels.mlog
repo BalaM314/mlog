@@ -1,6 +1,9 @@
-#jump label sus
 set x 5
-jump 3 always
+jump 3 always 0 0
+jump_1_:
 set x 2
-jump 2 notEqual x 2
+jump jump_1_ notEqual x 2
 print "amogus"
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

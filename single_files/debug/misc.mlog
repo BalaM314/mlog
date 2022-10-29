@@ -1,1 +1,7 @@
-print "misc debug"
+label1:
+set x 5
+jump label1 greaterThanEq x 4
+lookup item lookupedItem 5
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
