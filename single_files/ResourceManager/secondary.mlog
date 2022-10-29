@@ -1,0 +1,24 @@
+print "Resource Manager by BalaM314"
+print "Source code available at https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/"
+print "Secondary module:"
+print "Bind to all managed buildings and to cell."
+set cell cell1
+main_loop:
+read:
+read shouldRun cell 0
+write:
+set i 0
+write_loop:
+getlink linkedBuilding i
+op add i i 1
+sensor linkedBuilding.type linkedBuilding @type
+jump next equal linkedBuilding.type @switch
+jump next equal linkedBuilding.type @battery
+jump next equal linkedBuilding.type @battery-large
+control enabled linkedBuilding shouldRun
+next:
+jump write_loop lessThan i @links
+jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

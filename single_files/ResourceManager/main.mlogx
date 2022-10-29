@@ -24,7 +24,6 @@ set offSwitch switch1
 set onSwitch switch2
 set powerBuilding node1
 set cell cell1
-set core null
 
 set maxCoreCap 69420
 set minInputPerc 10 #Will shut off if input perc goes below this.
@@ -37,7 +36,29 @@ printflush stdout
 
 set shouldRun true
 
-jump get_core
+get_core:
+	set core shard1
+	jump core_found notEqual core null
+	set core foundation1
+	jump core_found notEqual core null
+	set core nucleus1
+	jump core_found notEqual core null
+	ubind @flare
+	sensor unit.dead @unit @dead
+	jump locate_core notEqual unit.dead true
+	ubind @mono
+	sensor unit.dead @unit @dead
+	jump locate_core notEqual unit.dead true
+	set core vault1
+	jump core_found notEqual core null
+
+	cant_find_core:
+		set err "Can't find the core. Please link the core or make a mono/flare."
+		jump err
+
+	locate_core:
+		ulocate building core false coreX coreY _ core
+		ubind null
 core_found:
 
 main_loop:
