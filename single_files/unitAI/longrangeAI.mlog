@@ -8,17 +8,12 @@ sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
 sensor unit.controlled @unit @controlled
 jump bind_unit greaterThan unit.controlled 1
-check_health:
 sensor unit.health @unit @health
 op div health unit.health unit.maxHealth
 jump heal lessThan health minHealth
-get_turret:
-find_turret:
 ulocate building turret true _ turret.x turret.y turret.found _
-getblock_turret:
 ucontrol getBlock turret.x turret.y turret.type turret
 jump turret_in_range notEqual turret null
-turret_out_of_range:
 ucontrol approach turret.x turret.y unit.range
 set approachDist unit.range
 jump fire always 0 0

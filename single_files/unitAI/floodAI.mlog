@@ -2,7 +2,6 @@ print "Unit AI by BalaM314"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/unitAI/"
 set unitType @flare
 set minHealth 0.6
-get_static_vars:
 ubind unitType
 sensor unit.maxHealth @unit @maxHealth
 sensor unit.range @unit @range
@@ -11,19 +10,17 @@ bind_unit:
 ubind unitType
 sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
-check_health:
 sensor unit.health @unit @health
 op div health unit.health unit.maxHealth
 jump heal lessThan health minHealth
-attack:
 ulocate building generator true _ outx outy found building
 ucontrol approach outx outy unit.range
 ucontrol target outx outy true
-jump bind_unit always
+jump bind_unit always 0 0
 heal:
 ulocate building repair false _ outx outy found building
 ucontrol approach outx outy 5
-jump bind_unit always
+jump bind_unit always 0 0
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

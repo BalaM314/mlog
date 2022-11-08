@@ -12,17 +12,14 @@ jump bind_new_unit notEqual unit.flag 0
 sensor unit.dead @unit @dead
 jump bind_new_unit equal unit.dead true
 sensor unit.controller @unit @controller
-jump bind_new_unit greaterThan 1
-check_health:
 sensor unit.health @unit @health
 sensor unit.maxHealth @unit @maxHealth
 op mul minHealth unit.maxHealth minHealthPercent
 jump low_health lessThan unit.health minHealth
-jump find_turret always
+jump find_turret always 0 0
 low_health:
 ulocate building repair false _ repair.x repair.y repair.exists repair
 jump approach_repair equal found false
-use_core:
 ulocate building core false _ repair.x repair.y repair.exists repair
 approach_repair:
 ucontrol approach repair.x repair.y 5
@@ -32,8 +29,6 @@ ulocate building turret true _ enemyTurret.x enemyTurret.y found _
 jump next equal found true
 ulocate building core true _ enemyTurret.x enemyTurret.y found _
 jump end equal found false
-get_turret_range:
-get_variables:
 sensor unit.range @unit @range
 ucontrol getBlock enemyTurret.x enemyTurret.y enemyTurret.type enemyTurret
 jump turret_out_of_range equal enemyTurret null
@@ -41,19 +36,16 @@ sensor enemyTurret.range enemyTurret @range
 sensor enemyTurret.shootX enemyTurret @shootX
 sensor enemyTurret.shootY enemyTurret @shootY
 ucontrol within enemyTurret.shootX enemyTurret.shootY enemyTurret.damageRadius unit.isBeingFiredAt
-jump choose_ai_type always
+jump choose_ai_type always 0 0
 turret_out_of_range:
-jump end always
+jump end always 0 0
 choose_ai_type:
-jump bulky always
-insane:
-jump end always
-strafe:
-jump end always
+jump bulky always 0 0
+jump end always 0 0
+jump end always 0 0
 bulky:
-jump end always
-sniper:
-jump end always
+jump end always 0 0
+jump end always 0 0
 end:
 end
 end
