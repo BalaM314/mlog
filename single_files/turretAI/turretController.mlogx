@@ -1,0 +1,22 @@
+#Turret Controller by BalaM314
+print "Turret Controller by BalaM314"
+print "Bind to turrets to control them with a player unit"
+main_loop:
+	get_player:
+		radar player distance 0 @this player
+	
+	read_player:
+		sensor player.shootX
+		sensor player.shootY
+		sensor player.shooting
+	
+	control_turrets:
+		set i 0
+		write_loop:
+			getlink linkedBuilding i
+			op add i i 1
+			control shoot linkedBuilding player.shootX player.shootY player.shooting
+
+			jump write_loop lessThan i @links
+		
+jump main_loop

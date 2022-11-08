@@ -1,0 +1,14 @@
+print "Turret Controller by BalaM314"
+print "Bind to turrets to control them with a player unit"
+main_loop:
+radar player any any distance @this 0 player
+sensor player.shootX player @shootX
+sensor player.shootY player @shootY
+sensor player.shooting player @shooting
+set i 0
+write_loop:
+getlink linkedBuilding i
+op add i i 1
+control shoot linkedBuilding player.shootX player.shootY player.shooting
+jump write_loop lessThan i @links
+jump main_loop always 0 0
