@@ -1,0 +1,105 @@
+print "Keter-class Containment Cell\n"
+print "Status: Starting...\n"
+print "\nby [#3141FF]BalaM314[]"
+printflush message1
+control enabled scorch1 false
+control enabled scorch2 false
+control enabled scorch3 false
+control enabled scorch4 false
+control enabled scorch5 false
+control enabled scorch6 false
+control enabled scorch7 false
+control enabled scorch8 false
+control enabled scorch9 false
+control enabled scorch10 false
+control enabled scorch11 false
+control enabled scorch12 false
+control enabled scorch13 false
+control enabled scorch14 false
+control enabled scorch15 false
+control enabled scorch16 false
+control enabled scorch17 false
+control enabled scorch18 false
+control enabled scorch19 false
+control enabled scorch20 false
+control enabled scorch21 false
+control enabled scorch22 false
+control enabled scorch23 false
+control enabled scorch24 false
+print "Keter-class Containment Cell\n"
+print "Status: Identifying contained entity...\n"
+print "\nby [#3141FF]BalaM314[]"
+printflush message1
+radar enemy any any distance @this 1 keter
+sensor keter.x keter @x
+sensor keter.y keter @y
+sensor keter.maxHealth keter @maxHealth
+bind_unit:
+print "Keter-class Containment Cell\n"
+print "Status: Binding unit...\n"
+print "Contained entity: "
+print keter
+print "\nby [#3141FF]BalaM314[]"
+printflush message1
+ubind @flare
+sensor unit.flag @unit @flag
+jump bind_unit notEqual unit.flag 0
+main_loop:
+print "Keter-class Containment Cell\n"
+sensor keter.shooting keter @shooting
+sensor keter.rotation keter @rotation
+sensor keter.health keter @health
+sensor keter.dead keter @dead
+radar player any any distance @this 1 player
+sensor terminate switch1 @enabled
+control enabled scorch1 terminate
+control enabled scorch2 terminate
+control enabled scorch3 terminate
+control enabled scorch4 terminate
+control enabled scorch5 terminate
+control enabled scorch6 terminate
+control enabled scorch7 terminate
+control enabled scorch8 terminate
+control enabled scorch9 terminate
+control enabled scorch10 terminate
+control enabled scorch11 terminate
+control enabled scorch12 terminate
+control enabled scorch13 terminate
+control enabled scorch14 terminate
+control enabled scorch15 terminate
+control enabled scorch16 terminate
+control enabled scorch17 terminate
+control enabled scorch18 terminate
+control enabled scorch19 terminate
+control enabled scorch20 terminate
+control enabled scorch21 terminate
+control enabled scorch22 terminate
+control enabled scorch23 terminate
+control enabled scorch24 terminate
+jump not_dead equal keter.dead false
+print "[red]Entity terminated![]\n"
+jump end_main_loop always 0 0
+not_dead:
+jump not_terminating equal terminate false
+print "[red]Terminating entity...[]\n"
+print "Termination device enabled. Termination imminent.\n"
+jump end_main_loop always 0 0
+not_terminating:
+jump health_ok equal keter.health keter.maxHealth
+print "[yellow][[WARN] Entity is damaged.[]\n"
+health_ok:
+jump no_player_nearby equal player null
+print "[yellow][[WARN] Player nearby. This may cause issues with the anti-target system. Please move away from the containment cell.[]\n"
+no_player_nearby:
+jump get_target equal tooClose false
+jump end_main_loop always 0 0
+get_target:
+op sub theta keter.rotation 90
+op mul relX relX 10
+op mul relY relY 10
+op add target.x relX keter.x
+op add target.y relY keter.y
+end_main_loop:
+print "\nby [#3141FF]BalaM314[]"
+printflush message1
+jump main_loop always 0 0

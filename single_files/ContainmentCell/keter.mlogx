@@ -4,8 +4,9 @@ print "Keter-class Containment Cell\n"
 print "Status: Starting...\n"
 print "\nby [#3141FF]BalaM314[]"
 printflush message1
-control enabled scorch1 false
-control enabled scorch2 false
+&for i in 1 24 {
+	control enabled scorch$(i) false
+}
 
 
 get_enemy:
@@ -41,30 +42,9 @@ main_loop:
 		radar player any any distance @this 1 player
 		sensor terminate switch1 @enabled
 	kill_if_enabled:
-		control enabled scorch1 terminate
-		control enabled scorch2 terminate
-		control enabled scorch3 terminate
-		control enabled scorch4 terminate
-		control enabled scorch5 terminate
-		control enabled scorch6 terminate
-		control enabled scorch7 terminate
-		control enabled scorch8 terminate
-		control enabled scorch9 terminate
-		control enabled scorch10 terminate
-		control enabled scorch11 terminate
-		control enabled scorch12 terminate
-		control enabled scorch13 terminate
-		control enabled scorch14 terminate
-		control enabled scorch15 terminate
-		control enabled scorch16 terminate
-		control enabled scorch17 terminate
-		control enabled scorch18 terminate
-		control enabled scorch19 terminate
-		control enabled scorch20 terminate
-		control enabled scorch21 terminate
-		control enabled scorch22 terminate
-		control enabled scorch23 terminate
-		control enabled scorch24 terminate
+		&for i in 1 24 {
+			control enabled scorch$(i) terminate
+		}
 
 	print_data:
 		jump not_dead equal keter.dead false
