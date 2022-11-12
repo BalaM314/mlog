@@ -5,15 +5,12 @@ set unit1 null
 set unit2 null
 set unit3 null
 main_loop:
-check_unit1_ok:
 sensor unit1.dead unit1 @dead
 jump bind_unit1 equal unit1.dead true
 unit1_ok:
-check_unit2_ok:
 sensor unit2.dead unit2 @dead
 jump bind_unit2 equal unit2.dead true
 unit2_ok:
-check_unit3_ok:
 sensor unit3.dead unit3 @dead
 jump bind_unit3 equal unit3.dead true
 unit3_ok:

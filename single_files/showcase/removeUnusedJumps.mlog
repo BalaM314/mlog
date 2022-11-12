@@ -1,6 +1,5 @@
 used_jump:
 jump used_jump notEqual 2 2
-unused_jump:
 set x 5
 end
 print "Made with mlogx"
