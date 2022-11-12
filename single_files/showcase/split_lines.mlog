@@ -1,0 +1,11 @@
+print "amogus"
+draw clear 0 0 0
+set x 5
+set x 6
+set x 7
+set x 8
+set x 9
+set x 10
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
