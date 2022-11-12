@@ -1,0 +1,10 @@
+set timer 60
+main_loop:
+read waveLevel cell1 0
+op add timer timer -1
+jump main_loop greaterThan timer 0
+set timer 60
+jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

@@ -1,0 +1,22 @@
+#Wave sender module
+#Memory cell layout: [wave difficulty]
+
+init:
+	setrate 1
+	set timer 60
+
+main_loop:
+
+	read_data:
+		read waveLevel cell1 0
+	
+	check_timer:
+		op add timer -1
+		jump main_loop timer > 0
+
+	send_wave:
+		setrule wave waveLevel
+		spawnwave 200 200 false
+
+	set timer 60
+	jump main_loop always

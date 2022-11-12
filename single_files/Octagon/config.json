@@ -1,0 +1,20 @@
+{
+	"compilerConstants": {
+		"waveSpacing": 4800
+	},
+	"compilerOptions": {
+		"removeCompilerMark": false,
+		"removeUnusedJumpLabels": true,
+		"checkTypes": true,
+		"prependFileName": true,
+		"mode": "single",
+		"compileWithErrors": true,
+		"removeComments": true,
+		"verbose": false,
+		"include": []
+	},
+	"authors": [
+		"BalaM314"
+	],
+	"name": "Octagon"
+}

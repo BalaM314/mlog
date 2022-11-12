@@ -1,0 +1,16 @@
+
+main_loop:
+	fetch coreCount sharded.cores @sharded
+	jump no_core sharded.cores = 0
+	jump one_core sharded.cores = 1
+	jump two_cores sharded.cores = 2
+	
+	one_core:
+		setrule wave 1
+		jump main_loop
+	two_cores:
+		setrule wave 2
+		jump main_loop
+	no_cores:
+		setblock block @power-void 200 137 @malis 0
+		fetch coreCount malis.cores @malis
