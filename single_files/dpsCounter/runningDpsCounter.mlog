@@ -1,0 +1,43 @@
+print "DPS Counter by [#3141FF]BalaM314[]"
+set stdout message1
+set switch switch1
+printflush null
+jump get_unit always 0 0
+no_unit:
+print "[scarlet]No enemy unit found. An enemy unit is required to measure DPS.[]"
+print "\nDPS Counter by [#3141FF]BalaM314[]"
+printflush stdout
+get_unit:
+radar enemy any any distance @this 1 enemy
+jump no_unit strictEqual enemy null
+print "[green]Found enemy unit "
+print enemy
+print ".\nDPS Counter by [#3141FF]BalaM314[]"
+printflush stdout
+reset:
+sensor enemy.firstHealth enemy @health
+control enabled switch1 false
+set startTick @tick
+main_loop:
+sensor switch1.enabled switch1 @enabled
+jump reset equal switch1.enabled true
+sensor enemy.dead enemy @dead
+jump enemy_died strictEqual enemy.dead true
+sensor enemy.health enemy @health
+sensor enemy.dead enemy @dead
+op sub damage enemy.firstHealth enemy.health
+op sub ticks @tick startTick
+op div dpt damage ticks
+op mul dps dpt 60
+print "DPS is [yellow]"
+print dps
+print "[].\nDPS Counter by [#3141FF]BalaM314[]."
+printflush stdout
+jump main_loop always 0 0
+enemy_died:
+print "[scarlet]Enemy unit died!\nDPS Counter by [#3141FF]BalaM314[]"
+printflush message1
+wait 1
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

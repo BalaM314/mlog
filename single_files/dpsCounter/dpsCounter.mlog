@@ -1,0 +1,42 @@
+print "DPS Counter by [#3141FF]BalaM314[]"
+set stdout message1
+set tickStep 30
+print "timeStep specifies the time in ticks between dps measurements."
+print "Low timeStep will allow more frequent but less accurate readings."
+printflush null
+jump get_unit always 0 0
+no_unit:
+print "[scarlet]No enemy unit found. An enemy unit is required to measure DPS.[]"
+print "\nDPS Counter by [#3141FF]BalaM314[]"
+printflush stdout
+get_unit:
+radar enemy any any distance @this 1 enemy
+jump no_unit strictEqual enemy null
+print "[green]Found enemy unit "
+print enemy
+print ".\nDPS Counter by [#3141FF]BalaM314[]"
+printflush stdout
+main_loop:
+sensor enemy.firstHealth enemy @health
+sensor enemy.dead enemy @dead
+op add targetTick @tick tickStep
+wait_for_tick:
+jump wait_for_tick lessThan @tick targetTick
+sensor enemy.health enemy @health
+sensor enemy.dead enemy @dead
+jump enemy_died strictEqual enemy.dead true
+op sub damage enemy.firstHealth enemy.health
+op div dpt damage tickStep
+op mul dps dpt 60
+print "DPS is [yellow]"
+print dps
+print "[].\nDPS Counter by [#3141FF]BalaM314[]."
+printflush stdout
+jump main_loop always 0 0
+enemy_died:
+print "[scarlet]Enemy unit died!\nDPS Counter by [#3141FF]BalaM314[]"
+printflush message1
+wait 1
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

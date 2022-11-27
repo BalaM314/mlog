@@ -1,0 +1,46 @@
+print "$name by $authors"
+set stdout message1
+set switch switch1
+printflush null
+jump get_unit
+
+no_unit:
+	print "[scarlet]No enemy unit found. An enemy unit is required to measure DPS.[]"
+	print "\n$name by $authors"
+	printflush stdout
+get_unit:
+	radar enemy distance 1 @this enemy
+	jump no_unit enemy == null
+	print "[green]Found enemy unit "
+	print enemy
+	print ".\n$name by $authors"
+	printflush stdout
+	found_unit:
+
+reset:
+	sensor enemy.firstHealth enemy @health
+	control enabled switch1 false
+	set startTick @tick
+
+main_loop:
+	sensor switch1.enabled
+	jump reset equal switch1.enabled true
+	sensor enemy.dead
+	jump enemy_died enemy.dead == true
+	calc_dps:
+		sensor enemy.health
+		sensor enemy.dead
+		set damage enemy.firstHealth - enemy.health
+		set ticks @tick - startTick
+		set dpt damage / ticks
+		set dps dpt * 60
+	print_dps:
+		print "DPS is [yellow]"
+		print dps
+		print "[].\n$name by $authors."
+		printflush stdout
+	jump main_loop
+	enemy_died:
+		print "[scarlet]Enemy unit died!\n$name by $authors"
+		printflush message1
+		wait 1

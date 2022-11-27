@@ -1,0 +1,19 @@
+{
+	"compilerConstants": {},
+	"compilerOptions": {
+		"removeCompilerMark": false,
+		"removeUnusedJumpLabels": true,
+		"checkTypes": true,
+		"prependFileName": true,
+		"mode": "single",
+		"compileWithErrors": true,
+		"removeComments": true,
+		"verbose": false,
+		"include": []
+	},
+	"filename": "unknown.mlogx",
+	"authors": [
+		"[#3141FF]BalaM314[]"
+	],
+	"name": "DPS Counter"
+}
