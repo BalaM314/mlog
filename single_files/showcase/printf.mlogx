@@ -1,0 +1,8 @@
+#printf showcase
+set node node1
+sensor node.powerNetIn
+sensor node.powerNetOut
+set powerUsagePerc node.powerNetOut / node.powerNetIn
+print "Hypothetical project:"
+printf "Power usage: [yellow]{node.powerNetIn}[]/[yellow]{node.powerNetOut}[] ({powerUsagePerc}%)"
+printflush message1

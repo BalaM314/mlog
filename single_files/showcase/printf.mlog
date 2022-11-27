@@ -1,0 +1,16 @@
+set node node1
+sensor node.powerNetIn node @powerNetIn
+sensor node.powerNetOut node @powerNetOut
+op div powerUsagePerc node.powerNetOut node.powerNetIn
+print "Hypothetical project:"
+print "Power usage: [yellow]"
+print node.powerNetIn
+print "[]/[yellow]"
+print node.powerNetOut
+print "[] ("
+print powerUsagePerc
+print "%)"
+printflush message1
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

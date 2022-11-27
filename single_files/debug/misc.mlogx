@@ -2,3 +2,4 @@ label1:
 set x 5
 jump label1 x >= 4
 lookup item lookupedItem 5
+printf "The amogus's \{color is {color} and the sus level is {susLevel}."
