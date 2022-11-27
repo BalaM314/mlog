@@ -1,8 +1,7 @@
 #printf showcase
-set node node1
-sensor node.powerNetIn
-sensor node.powerNetOut
-set powerUsagePerc node.powerNetOut / node.powerNetIn
+sensor powerGen node1 @powerNetIn
+sensor powerUse node1 @powerNetOut
+set powerPerc powerUse / powerGen
 print "Hypothetical project:"
-printf "Power usage: [yellow]{node.powerNetIn}[]/[yellow]{node.powerNetOut}[] ({powerUsagePerc}%)"
+printf "Power usage: [yellow]{powerUse}[]/[yellow]{powerGen}[] ({powerPerc}%)"
 printflush message1

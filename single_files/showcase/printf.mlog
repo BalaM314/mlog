@@ -1,14 +1,13 @@
-set node node1
-sensor node.powerNetIn node @powerNetIn
-sensor node.powerNetOut node @powerNetOut
-op div powerUsagePerc node.powerNetOut node.powerNetIn
+sensor powerGen node1 @powerNetIn
+sensor powerUse node1 @powerNetOut
+op div powerPerc powerUse powerGen
 print "Hypothetical project:"
 print "Power usage: [yellow]"
-print node.powerNetIn
+print powerUse
 print "[]/[yellow]"
-print node.powerNetOut
+print powerGen
 print "[] ("
-print powerUsagePerc
+print powerPerc
 print "%)"
 printflush message1
 end
