@@ -4,9 +4,7 @@ print "Secondary module:"
 print "Bind to all managed buildings and to cell."
 set cell cell1
 main_loop:
-read:
 read shouldRun cell 0
-write:
 set i 0
 write_loop:
 getlink linkedBuilding i

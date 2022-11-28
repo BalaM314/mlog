@@ -29,7 +29,6 @@ set minPowerPerc 30
 print "Do not edit below this line."
 printflush null
 set shouldRun true
-get_core:
 set core nucleus1
 jump core_found notEqual core null
 set core foundation1
@@ -64,7 +63,6 @@ jump locate_core notEqual unit.dead true
 ubind @mega
 sensor unit.dead @unit @dead
 jump locate_core notEqual unit.dead true
-cant_find_core:
 set err "Can't find the core. Please link the core or make a mono/flare."
 jump err always 0 0
 locate_core:
@@ -72,9 +70,7 @@ ulocate building core false _ coreX coreY _ core
 ubind null
 core_found:
 main_loop:
-check_links:
 jump restart notEqual @links startingLinks
-get_data:
 sensor core.itemCapacity core @itemCapacity
 op min inputCoreCap core.itemCapacity maxCoreCap
 sensor powerBuilding.powerNetStored powerBuilding @powerNetStored
@@ -200,7 +196,6 @@ set shouldRun true
 jump print_status always 0 0
 print_status:
 jump print_true equal shouldRun true
-print_false:
 print "Status: [red]Disabled[].\n"
 jump write always 0 0
 print_true:
