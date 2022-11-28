@@ -13,6 +13,7 @@
 		"removeUnusedJumpLabels": false
 	},
 	"compilerConstants": {
-		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/"
+		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/",
+		"numInputs": 4
 	}
 }

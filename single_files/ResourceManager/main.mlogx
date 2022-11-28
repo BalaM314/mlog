@@ -14,10 +14,9 @@ print "\n\n$name"
 printflush stdout
 
 print "Edit variables below."
-set input1 @sand
-set input2 @coal
-set input3 null
-set input4 null
+&for i in 1 $numInputs {
+	set input$i null
+}
 set output @silicon
 set managePower true
 set offSwitch switch1
@@ -31,26 +30,20 @@ set minOutputPerc 2 #Will run anyway if output perc goes below this.
 set maxOutputPerc 98 #Will shut off if output perc goes above this.
 set minPowerPerc 30 #Will shut off it power perc goes below this.
 print "Do not edit below this line."
-printflush stdout
-printflush stdout
+printflush null
 
 set shouldRun true
 
 get_core:
-	set core shard1
-	jump core_found notEqual core null
-	set core foundation1
-	jump core_found notEqual core null
-	set core nucleus1
-	jump core_found notEqual core null
-	ubind @flare
-	sensor unit.dead @unit @dead
-	jump locate_core notEqual unit.dead true
-	ubind @mono
-	sensor unit.dead @unit @dead
-	jump locate_core notEqual unit.dead true
-	set core vault1
-	jump core_found notEqual core null
+	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 shard2 vault2 {
+		set core $build
+		jump core_found notEqual core null
+	}
+	&for unit of mono flare poly mega {
+		ubind @$unit
+		sensor unit.dead @unit @dead
+		jump locate_core notEqual unit.dead true
+	}
 
 	cant_find_core:
 		set err "Can't find the core. Please link the core or make a mono/flare."
@@ -74,25 +67,14 @@ main_loop:
 		op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
 		op idiv powerPerc powerPerc 0.001
 		op div powerPerc powerPerc 10
-		jump no_inputs equal input1 null
-		sensor core.input1 core input1
-		op div inputPerc1 core.input1 inputCoreCap
-		op idiv inputPerc1 inputPerc1 0.001
-		op div inputPerc1 inputPerc1 10
-		sensor core.input2 core input2
-		op div inputPerc2 core.input2 inputCoreCap
-		op idiv inputPerc2 inputPerc2 0.001
-		op div inputPerc2 inputPerc2 10
-		jump no_inputs equal input3 null
-		sensor core.input3 core input3
-		op div inputPerc3 core.input3 inputCoreCap
-		op idiv inputPerc3 inputPerc3 0.001
-		op div inputPerc3 inputPerc3 10
-		sensor core.input4 core input4
-		op div inputPerc4 core.input4 inputCoreCap
-		op idiv inputPerc4 inputPerc4 0.001
-		op div inputPerc4 inputPerc4 10
-		no_inputs:
+		&for i in 1 $numInputs {
+			jump inputs_done equal input$i null
+			sensor core.input$i core input$i
+			op div inputPerc$i core.input$i inputCoreCap
+			op idiv inputPerc$i inputPerc$i 0.001
+			op div inputPerc$i inputPerc$i 10
+		}
+		inputs_done:
 		sensor core.output core output
 		op div outputPerc core.output core.itemCapacity
 		op idiv outputPerc outputPerc 0.001
@@ -117,53 +99,14 @@ main_loop:
 		set shouldRun false
 		power_ok:
 
-		jump input1_ok equal input1 null
-		jump input1_ok greaterThan inputPerc1 minInputPerc
-		print "[yellow]⚠ Low "
-		print input1
-		print "[]. ("
-		print inputPerc1
-		print "% < "
-		print minInputPerc
-		print "%)\n"
-		set shouldRun false
-		input1_ok:
-
-		jump input2_ok equal input2 null
-		jump input2_ok greaterThanEq inputPerc2 minInputPerc
-		print "[yellow]⚠ Low "
-		print input2
-		print "[]. ("
-		print inputPerc2
-		print "% < "
-		print minInputPerc
-		print "%)\n"
-		set shouldRun false
-		input2_ok:
-
-		jump input3_ok equal input4 null
-		jump input3_ok greaterThanEq inputPerc3 minInputPerc
-		print "[yellow]⚠ Low "
-		print input3
-		print "[]. ("
-		print inputPerc3
-		print "% < "
-		print minInputPerc
-		print "%)\n"
-		set shouldRun false
-		input3_ok:
-
-		jump input4_ok equal input4 null
-		jump input4_ok greaterThanEq inputPerc4 minInputPerc
-		print "[yellow]⚠ Low "
-		print input4
-		print "[]. ("
-		print inputPerc4
-		print "% < "
-		print minInputPerc
-		print "%)\n"
-		set shouldRun false
-		input4_ok:
+		&for i in 1 $numInputs {
+			jump all_inputs_ok equal input$i null
+			jump input$i_ok greaterThan inputPerc$i minInputPerc
+			printf "[yellow]⚠ Low {input$i}[]. ({inputPerc$i}% < {minInputPerc}%)\n"
+			set shouldRun false
+			input$i_ok:
+		}
+		all_inputs_ok:
 
 		jump output_not_low equal output null
 		jump output_not_low greaterThanEq outputPerc minOutputPerc
