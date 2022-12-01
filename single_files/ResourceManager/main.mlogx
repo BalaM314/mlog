@@ -23,9 +23,9 @@ set onSwitch switch2
 set powerBuilding null
 set cell cell1 #For splitbrain.
 
-set maxCoreCap 69420
-set minInputPerc 10 #Will shut off if input perc goes below this.
-set minOutputPerc 2 #Will run anyway if output perc goes below this.
+set maxCoreCap 30000
+set minInputPerc 8 #Will shut off if input perc goes below this.
+set minOutputPerc 0.5 #Will run anyway if output perc goes below this.
 set maxOutputPerc 98 #Will shut off if output perc goes above this.
 set minPowerPerc 30 #Will shut off it power perc goes below this.
 print "Do not edit below this line."
