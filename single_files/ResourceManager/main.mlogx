@@ -17,7 +17,7 @@ print "Edit variables below."
 &for i in 1 $numInputs {
 	set input$i null
 }
-set output @silicon
+set output null
 set managePower true
 set offSwitch switch1
 set onSwitch switch2
