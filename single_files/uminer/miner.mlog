@@ -1,0 +1,48 @@
+set unitType @mono
+set oreToMine @copper
+set minHealthFrac 0.7
+set approachDistance 8
+set repairApproachDistance 5
+set minPower 60
+get_static_data:
+ubind unitType
+jump get_static_data strictEqual @unit null
+sensor @unit.maxHealth @unit @maxHealth
+sensor @unit.itemCapacity @unit @itemCapacity
+op sub @unit.itemCapacity @unit.itemCapacity 1
+op mul minHealth @unit.maxHealth minHealthFrac
+main_loop:
+bind_new_unit:
+ubind unitType
+sensor @unit.flag @unit @flag
+jump bind_new_unit notEqual @unit.flag 0
+ucontrol boost true
+sensor @unit.health @unit @health
+jump health_low lessThan @unit.health minHealth
+sensor @unit.totalItems @unit @totalItems
+jump go_to_core greaterThanEq @unit.totalItems @unit.itemCapacity
+sensor @unit.mining @unit @mining
+jump mining equal @unit.mining true
+sensor @unit.firstItem @unit @firstItem
+jump go_to_core notEqual @unit.firstItem oreToMine
+ulocate ore core _ oreToMine ore.x ore.y ore.found _
+ucontrol approach ore.x ore.y approachDistance
+ucontrol mine ore.x ore.y
+jump main_loop always 0 0
+mining:
+jump main_loop always 0 0
+go_to_core:
+ulocate building core false core.x core.y core.found core
+ucontrol move core.x core.y
+ucontrol itemDrop core 1e10
+jump main_loop always 0 0
+health_low:
+ulocate building repair false target.x target.y target.found target
+sensor target.powerNetIn target @powerNetIn
+jump target_ok greaterThan target.powerNetIn minPower
+ulocate building core false target.x target.y target.found target
+target_ok:
+ucontrol approach target.x target.y repairApproachDistance
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

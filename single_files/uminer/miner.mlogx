@@ -1,0 +1,74 @@
+#Miner proc. Tells the units to mine.
+
+set unitType @mono
+set oreToMine @copper
+set minHealthFrac 0.7
+set approachDistance 8
+set repairApproachDistance 5
+set minPower 60 #Minimum power input to a network for units to try to go to connected repair points.
+
+get_static_data:
+	ubind unitType
+	#Flag check is not necessary as this code is only run once and we are only sensoring things.
+	jump get_static_data @unit == null
+	sensor @unit.maxHealth
+	sensor @unit.itemCapacity
+	op sub @unit.itemCapacity 1
+	set minHealth @unit.maxHealth * minHealthFrac
+
+main_loop:
+	bind_new_unit:
+		ubind unitType
+		sensor @unit.flag
+		jump bind_new_unit @unit.flag != 0
+
+	boost:
+		ucontrol boost true
+	
+	check_health:
+		sensor @unit.health
+		jump health_low @unit.health < minHealth
+	
+	check_items:
+		sensor @unit.totalItems
+		jump go_to_core @unit.totalItems >= @unit.itemCapacity
+
+	check_mining:
+		sensor @unit.mining
+		jump mining equal @unit.mining true
+
+	not_mining:
+		check_current_item:
+			sensor @unit.firstItem
+			jump go_to_core @unit.firstItem != oreToMine
+		
+		mine_ore:
+			ulocate ore oreToMine ore.x ore.y ore.found
+			ucontrol approach ore.x ore.y approachDistance
+			ucontrol mine ore.x ore.y
+		
+		jump main_loop
+		
+
+	mining:
+		#TODO maybe remove this
+		#Everything's fine, check the next unit
+		jump main_loop
+
+	go_to_core:
+		#Find the core and go to it
+		ulocate core
+		ucontrol move core.x core.y
+		ucontrol itemDrop core 1e10
+		#No need to check if the items have been dropped, that'll happen the next time this unit is bound
+		jump main_loop
+	
+	health_low:
+		#Go to a repair point
+		ulocate building repair target
+		sensor target.powerNetIn
+		jump target_ok target.powerNetIn > minPower
+		ulocate building core target #If the closest repair turret doesn't have enough power, go to the core instead.
+		target_ok:
+		ucontrol approach target.x target.y repairApproachDistance
+
