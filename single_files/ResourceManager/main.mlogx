@@ -21,7 +21,7 @@ set output null
 set managePower true
 set offSwitch switch1
 set onSwitch switch2
-set powerBuilding node1
+set powerBuilding null
 set cell cell1
 
 set maxCoreCap 69420
@@ -53,6 +53,24 @@ get_core:
 		ulocate building core false coreX coreY _ core
 		ubind null
 core_found:
+
+get_power_building:
+	jump power_building_found notEqual powerBuilding null
+	set i 0
+	get_power_building_loop:
+		getlink powerBuilding i
+		sensor powerBuilding.powerNetIn
+		#this is technically bad, as power networks without any power input will not be detected.
+		#Shouldn't be an issue though, as enabling machines on a totally dead power network probably will have no effect, and this would most likely be because a building was disconnected from power.
+		jump power_building_found powerBuilding.powerNetIn != 0
+
+		op add i 1
+		jump get_power_building_loop lessThan i @links
+	no_power_building:
+	set err "Can't find any power buildings. Please link a power building or disable power management."
+	jump err
+	
+power_building_found:
 
 main_loop:
 
@@ -171,8 +189,6 @@ main_loop:
 
 
 err:
-	print "[red]Error: "
-	print err
-	print "\n\n[white]$name"
+	printf "[red]Error: {err}\n\n[white]$name"
 	printflush stdout
 	wait 5

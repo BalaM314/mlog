@@ -19,7 +19,7 @@ set output null
 set managePower true
 set offSwitch switch1
 set onSwitch switch2
-set powerBuilding node1
+set powerBuilding null
 set cell cell1
 set maxCoreCap 69420
 set minInputPerc 10
@@ -69,6 +69,17 @@ locate_core:
 ulocate building core false _ coreX coreY _ core
 ubind null
 core_found:
+jump power_building_found notEqual powerBuilding null
+set i 0
+get_power_building_loop:
+getlink powerBuilding i
+sensor powerBuilding.powerNetIn powerBuilding @powerNetIn
+jump power_building_found notEqual powerBuilding.powerNetIn 0
+op add i i 1
+jump get_power_building_loop lessThan i @links
+set err "Can't find any power buildings. Please link a power building or disable power management."
+jump err always 0 0
+power_building_found:
 main_loop:
 jump restart notEqual @links startingLinks
 sensor core.itemCapacity core @itemCapacity
