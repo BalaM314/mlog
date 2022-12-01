@@ -1,7 +1,10 @@
 print "hello"
 set thing_0 null
+print thing_0
 set thing_1 null
+print thing_1
 set thing_2 null
+print thing_2
 set var_thing 2
 print var_thing
 print thing_1

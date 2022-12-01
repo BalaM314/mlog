@@ -2,6 +2,7 @@ print "hello"
 
 &for i in 0 2 {
 	set thing_$i null
+	print thing_$i
 }
 
 set var_$x 2
