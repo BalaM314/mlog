@@ -32,15 +32,15 @@ jump main_loop always 0 0
 mining:
 jump main_loop always 0 0
 go_to_core:
-ulocate building core false core.x core.y core.found core
+ulocate building core false _ core.x core.y core.found core
 ucontrol move core.x core.y
 ucontrol itemDrop core 1e10
 jump main_loop always 0 0
 health_low:
-ulocate building repair false target.x target.y target.found target
+ulocate building repair false _ target.x target.y target.found target
 sensor target.powerNetIn target @powerNetIn
 jump target_ok greaterThan target.powerNetIn minPower
-ulocate building core false target.x target.y target.found target
+ulocate building core false _ target.x target.y target.found target
 target_ok:
 ucontrol approach target.x target.y repairApproachDistance
 end
