@@ -1,6 +1,7 @@
 label1:
 set x 5
 jump label1 greaterThanEq x 4
+print "Hi.\n"
 lookup item lookupedItem 5
 print "The amogus's {color is "
 print color
