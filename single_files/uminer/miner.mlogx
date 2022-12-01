@@ -40,7 +40,9 @@ main_loop:
 	not_mining:
 		check_current_item:
 			sensor @unit.firstItem
+			jump no_item @unit.firstItem == null
 			jump go_to_core @unit.firstItem != oreToMine
+			no_item:
 		
 		mine_ore:
 			ulocate ore oreToMine ore.x ore.y ore.found

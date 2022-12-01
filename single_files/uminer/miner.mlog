@@ -24,7 +24,9 @@ jump go_to_core greaterThanEq @unit.totalItems @unit.itemCapacity
 sensor @unit.mining @unit @mining
 jump mining equal @unit.mining true
 sensor @unit.firstItem @unit @firstItem
+jump no_item strictEqual @unit.firstItem null
 jump go_to_core notEqual @unit.firstItem oreToMine
+no_item:
 ulocate ore core _ oreToMine ore.x ore.y ore.found _
 ucontrol approach ore.x ore.y approachDistance
 ucontrol mine ore.x ore.y
