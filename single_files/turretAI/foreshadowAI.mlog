@@ -1,7 +1,5 @@
 set turret foreshadow1
-set switch switch1
 main_loop:
-sensor switch.enabled switch @enabled
 sensor foreshadow1.controlled foreshadow1 @controlled
 jump controlled notEqual foreshadow1.controlled 0
 radar enemy any any maxHealth foreshadow1 0 enemy
@@ -10,6 +8,7 @@ control enabled foreshadow1 false
 jump main_loop always 0 0
 enemy_nearby:
 control shootp foreshadow1 enemy true
+control enabled foreshadow1 true
 jump main_loop always 0 0
 controlled:
 control enabled foreshadow1 true

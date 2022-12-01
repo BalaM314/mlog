@@ -1,11 +1,9 @@
 #Logic for wireless foreshadow by BalaM314.
 
 set turret foreshadow1
-set switch switch1
 
 main_loop:
 	get_data:
-		sensor switch.enabled
 		sensor foreshadow1.controlled
 		jump controlled notEqual foreshadow1.controlled 0
 		radar enemy maxHealth foreshadow1 0 enemy
@@ -17,6 +15,7 @@ main_loop:
 
 	enemy_nearby:
 		control shootp foreshadow1 enemy true
+		control enabled foreshadow1 true
 		jump main_loop
 
 	controlled:
