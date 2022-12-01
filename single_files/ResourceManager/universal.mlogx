@@ -1,4 +1,5 @@
 #$name by $authors
+#Universal Edition: Nothing is hardcoded, can be fully configured in-game.
 jump restart
 print "$name by $authors"
 print "Source code available at $githubUrl"
@@ -13,7 +14,7 @@ print "Starting...\n\n$name"
 printflush stdout
 
 print "Edit variables below."
-&for i in 1 $numInputs {
+&for i in 1 4 {
 	set input$i null
 }
 set output null
@@ -84,7 +85,7 @@ main_loop:
 		op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
 		op idiv powerPerc powerPerc 0.001
 		op div powerPerc powerPerc 10
-		&for i in 1 $numInputs {
+		&for i in 1 4 {
 			jump inputs_done equal input$i null
 			sensor core.input$i core input$i
 			op div inputPerc$i core.input$i inputCoreCap
@@ -112,7 +113,7 @@ main_loop:
 		set shouldRun false
 		power_ok:
 
-		&for i in 1 $numInputs {
+		&for i in 1 4 {
 			jump all_inputs_ok equal input$i null
 			jump input$i_ok greaterThan inputPerc$i minInputPerc
 			printf "[yellow]⚠ Low {input$i}[]. ({inputPerc$i}% < {minInputPerc}%)\n"
