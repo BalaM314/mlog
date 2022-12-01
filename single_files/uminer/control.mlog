@@ -1,3 +1,92 @@
+set criticalAmount 1000
+set lowAmount 5000
+set t1Ore @copper
+set t2Ore @copper
+set t3Ore @copper
+set t1OreCritical false
+set t2OreCritical false
+set t3OreCritical false
+ubind @mono
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @flare
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @poly
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @mega
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+set core nucleus1
+jump core_found notEqual core null
+set core foundation1
+jump core_found notEqual core null
+set core shard1
+jump core_found notEqual core null
+set core vault1
+jump core_found notEqual core null
+set core bastion1
+jump core_found notEqual core null
+set core citadel1
+jump core_found notEqual core null
+set core acropolis1
+jump core_found notEqual core null
+set core nucleus2
+jump core_found notEqual core null
+set core foundation2
+jump core_found notEqual core null
+set core vault2
+jump core_found notEqual core null
+set err "Can't find the core. Please link the core or make a mono/flare."
+jump err always 0 0
+locate_core:
+ulocate building core false _ coreX coreY _ core
+ubind null
+core_found:
+sensor core.copper core @copper
+sensor core.lead core @lead
+sensor core.titanium core @titanium
+sensor core.sand core @sand
+sensor core.coal core @coal
+op lessThan copperCritical core.copper criticalAmount
+op lessThan copperLow core.copper lowAmount
+op lessThan leadCritical core.lead criticalAmount
+op lessThan leadLow core.lead lowAmount
+op lessThan titaniumCritical core.titanium criticalAmount
+op lessThan titaniumLow core.titanium lowAmount
+op or t1CannotMineSand copperLow leadLow
+op or t3CannotMineSand t1CannotMineSand titaniumLow
+jump copper_not_critical strictEqual copperCritical false
+set t1Ore @copper
+set t1OreCritical true
+jump t1_ore_got always 0 0
+copper_not_critical:
+jump lead_not_critical strictEqual leadCritical false
+set t1Ore @lead
+set t1OreCritical true
+jump t1_ore_got always 0 0
+lead_not_critical:
+jump sand_>_copper strictEqual t1CannotMineSand true
+jump sand_>_copper greaterThanEq core.sand core.copper
+jump lead_<_sand lessThan core.lead core.sand
+set t1ore @sand
+jump t1_ore_got always 0 0
+lead_<_sand:
+set t1ore @lead
+jump t1_ore_got always 0 0
+sand_>_copper:
+jump copper_>_lead greaterThan core.copper core.lead
+set t1ore @copper
+jump t1_ore_got always 0 0
+copper_>_lead:
+set t1ore @lead
+t1_ore_got:
+err:
+print "[red]Error: "
+print err
+printflush stdout
+wait 5
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

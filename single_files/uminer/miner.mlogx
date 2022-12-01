@@ -3,7 +3,7 @@
 set unitType @mono
 set oreToMine @copper
 set minHealthFrac 0.7
-set approachDistance 8
+set approachDistance 87
 set repairApproachDistance 5
 set minPower 60 #Minimum power input to a network for units to try to go to connected repair points.
 

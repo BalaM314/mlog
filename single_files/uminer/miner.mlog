@@ -1,7 +1,7 @@
 set unitType @mono
 set oreToMine @copper
 set minHealthFrac 0.7
-set approachDistance 8
+set approachDistance 87
 set repairApproachDistance 5
 set minPower 60
 get_static_data:

@@ -1,1 +1,87 @@
 #Control proc. Chooses what to mine.
+set criticalAmount 1000 #If copper, lead, or ti is less than this amount, all units will mine it, including ones that are currently mining another ore.
+set lowAmount 5000 #Sand and coal will only be mined if copper, lead, and ti are above this amount.
+
+set t1Ore @copper #Can be copper, lead, sand
+set t2Ore @copper #Can be copper, lead, sand, coal
+set t3Ore @copper #Can be copper, lead, sand, coal, titanium
+set t1OreCritical false
+set t2OreCritical false
+set t3OreCritical false #Whether a resource is critical, causes all units to be recalled
+
+init:
+	get_core:
+	&for unit of mono flare poly mega {
+		ubind @$unit
+		sensor unit.dead @unit @dead
+		jump locate_core notEqual unit.dead true
+	}
+	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 vault2 {
+		set core $build
+		jump core_found notEqual core null
+	}
+
+	cant_find_core:
+		set err "Can't find the core. Please link the core or make a mono/flare."
+		jump err
+
+	locate_core:
+		ulocate building core false coreX coreY _ core
+		ubind null
+core_found:
+
+main_loop:
+	get_core_res:
+		sensor core.copper
+		sensor core.lead
+		sensor core.titanium
+		sensor core.sand
+		sensor core.coal
+		#TODO apply priorities
+		&for ore of copper lead titanium {
+			set $(ore)Critical core.$ore < criticalAmount
+			set $(ore)Low core.$ore < lowAmount
+		}
+		set t1CannotMineSand copperLow || leadLow
+		set t3CannotMineSand t1CannotMineSand || titaniumLow
+		
+	
+	get_t1_ore:
+		&for ore of copper lead {
+			jump $ore_not_critical $(ore)Critical == false
+			set t1Ore @$ore
+			set t1OreCritical true
+			jump t1_ore_got
+			$ore_not_critical:
+		}
+		jump sand_>_copper t1CannotMineSand == true
+		jump sand_>_copper core.sand >= core.copper
+		
+		sand_<_copper:
+			jump lead_<_sand core.lead < core.sand
+			lead_>_sand:
+			set t1ore @sand
+			jump t1_ore_got
+			lead_<_sand:
+			set t1ore @lead
+			jump t1_ore_got
+		
+		sand_>_copper:
+			jump copper_>_lead core.copper > core.lead
+			copper_<_lead:
+			set t1ore @copper
+			jump t1_ore_got
+			copper_>_lead:
+			set t1ore @lead
+
+	t1_ore_got:
+
+
+
+	write_ores:
+
+
+err:
+	printf "[red]Error: {err}"
+	printflush stdout
+	wait 5
