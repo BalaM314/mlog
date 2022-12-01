@@ -9,8 +9,7 @@ print "Then change variables below."
 restart:
 set startingLinks @links
 set stdout message1
-print "Starting..."
-print "\n\n$name"
+print "Starting...\n\n$name"
 printflush stdout
 
 print "Edit variables below."
@@ -22,7 +21,7 @@ set managePower true
 set offSwitch switch1
 set onSwitch switch2
 set powerBuilding null
-set cell cell1
+set cell cell1 #For splitbrain.
 
 set maxCoreCap 69420
 set minInputPerc 10 #Will shut off if input perc goes below this.
@@ -35,14 +34,14 @@ printflush null
 set shouldRun true
 
 get_core:
-	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 shard2 vault2 {
-		set core $build
-		jump core_found notEqual core null
-	}
 	&for unit of mono flare poly mega {
 		ubind @$unit
 		sensor unit.dead @unit @dead
 		jump locate_core notEqual unit.dead true
+	}
+	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 vault2 {
+		set core $build
+		jump core_found notEqual core null
 	}
 
 	cant_find_core:
@@ -109,11 +108,7 @@ main_loop:
 		set shouldRun true
 		jump power_ok equal managePower false
 		jump power_ok greaterThan powerPerc minPowerPerc
-		print "[yellow]⚠ Low stored power.[white] ("
-		print powerPerc
-		print "% < "
-		print minPowerPerc
-		print "%)\n"
+		printf "[yellow]⚠ Low stored power.[] ({powerPerc}% < {minPowerPerc}%)\n"
 		set shouldRun false
 		power_ok:
 
@@ -128,20 +123,12 @@ main_loop:
 
 		jump output_not_low equal output null
 		jump output_not_low greaterThanEq outputPerc minOutputPerc
-		print "[yellow]⚠ Low "
-		print output
-		print "[]. ("
-		print outputPerc
-		print "% < "
-		print minOutputPerc
-		print "%)\n"
+		printf "[yellow]⚠ Low {output}[]. ({outputPerc}% < {minOutputPerc}%)\n"
 		set shouldRun true
 		output_not_low:
 
 		jump output_not_high lessThanEq outputPerc maxOutputPerc
-		print "[green]✔Core is full of "
-		print output
-		print "[].\n"
+		printf "[green]✔ Core is full of {output}[].\n"
 		set shouldRun false
 		output_not_high:
 
@@ -150,11 +137,11 @@ main_loop:
 		jump print_status
 
 		override_off:
-			print "[red]Manually switched off.[]\n"
+			print "[red]⚠ Manually switched off.[]\n"
 			set shouldRun false
 			jump print_status always
 		override_on:
-			print "[red]Manually forced on.[]\n"
+			print "[red]⚠ Manually forced on.[]\n"
 			set shouldRun true
 			jump print_status always
 

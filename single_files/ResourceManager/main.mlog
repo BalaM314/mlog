@@ -7,8 +7,7 @@ print "Then change variables below."
 restart:
 set startingLinks @links
 set stdout message1
-print "Starting..."
-print "\n\nResource Manager"
+print "Starting...\n\nResource Manager"
 printflush stdout
 print "Edit variables below."
 set input1 null
@@ -29,6 +28,18 @@ set minPowerPerc 30
 print "Do not edit below this line."
 printflush null
 set shouldRun true
+ubind @mono
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @flare
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @poly
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
+ubind @mega
+sensor unit.dead @unit @dead
+jump locate_core notEqual unit.dead true
 set core nucleus1
 jump core_found notEqual core null
 set core foundation1
@@ -47,22 +58,8 @@ set core nucleus2
 jump core_found notEqual core null
 set core foundation2
 jump core_found notEqual core null
-set core shard2
-jump core_found notEqual core null
 set core vault2
 jump core_found notEqual core null
-ubind @mono
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
-ubind @flare
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
-ubind @poly
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
-ubind @mega
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
 set err "Can't find the core. Please link the core or make a mono/flare."
 jump err always 0 0
 locate_core:
@@ -125,7 +122,7 @@ process:
 set shouldRun true
 jump power_ok equal managePower false
 jump power_ok greaterThan powerPerc minPowerPerc
-print "[yellow]⚠ Low stored power.[white] ("
+print "[yellow]⚠ Low stored power.[] ("
 print powerPerc
 print "% < "
 print minPowerPerc
@@ -189,7 +186,7 @@ print "%)\n"
 set shouldRun true
 output_not_low:
 jump output_not_high lessThanEq outputPerc maxOutputPerc
-print "[green]✔Core is full of "
+print "[green]✔ Core is full of "
 print output
 print "[].\n"
 set shouldRun false
@@ -198,11 +195,11 @@ jump override_off equal offSwitch.enabled true
 jump override_on equal onSwitch.enabled true
 jump print_status always 0 0
 override_off:
-print "[red]Manually switched off.[]\n"
+print "[red]⚠ Manually switched off.[]\n"
 set shouldRun false
 jump print_status always 0 0
 override_on:
-print "[red]Manually forced on.[]\n"
+print "[red]⚠ Manually forced on.[]\n"
 set shouldRun true
 jump print_status always 0 0
 print_status:
