@@ -1,0 +1,30 @@
+print "$name by $authors"
+print "Source code available at $githubUrl"
+
+set unitType @fortress
+set minHealthFrac 0.6
+
+
+
+get_static_vars:
+	ubind unitType
+	sensor @unit.maxHealth
+	set minHealth @unit.maxHealth * minHealthFrac
+	sensor @unit.range
+	op sub @unit.range 3
+bind_unit:
+	ubind unitType
+	sensor unit.flag @unit @flag
+	jump bind_unit notEqual unit.flag 0
+check_health:
+	sensor @unit.health
+	jump heal @unit.health < minHealth
+attack:
+	ulocate building turret target true
+	ucontrol approach target.x target.y @unit.range
+	ucontrol target target.x target.y true
+	jump bind_unit always
+heal:
+	ulocate building repair false outx outy found building
+	ucontrol approach outx outy 5
+	jump bind_unit always

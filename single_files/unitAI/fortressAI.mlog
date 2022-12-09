@@ -1,0 +1,26 @@
+print "Fortress AI by BalaM314"
+print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/unitAI/"
+set unitType @fortress
+set minHealthFrac 0.6
+ubind unitType
+sensor @unit.maxHealth @unit @maxHealth
+op mul minHealth @unit.maxHealth minHealthFrac
+sensor @unit.range @unit @range
+op sub @unit.range @unit.range 3
+bind_unit:
+ubind unitType
+sensor unit.flag @unit @flag
+jump bind_unit notEqual unit.flag 0
+sensor @unit.health @unit @health
+jump heal lessThan @unit.health minHealth
+ulocate building turret true _ target.x target.y target.found target
+ucontrol approach target.x target.y @unit.range
+ucontrol target target.x target.y true
+jump bind_unit always 0 0
+heal:
+ulocate building repair false _ outx outy found building
+ucontrol approach outx outy 5
+jump bind_unit always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
