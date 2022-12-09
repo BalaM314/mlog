@@ -44,13 +44,23 @@ main_loop:
 			move_unit$(n):
 			ubind unit$(n)
 			ucontrol move reconstructor$(n).x reconstructor$(n).y
+			&if $print {
+				sensor @unit.x
+				op floor @unit.x
+				sensor @unit.y
+				op floor @unit.y
+				printf "Unit $(n) is at {@unit.x}, {@unit.y}\n"
+			}
 			ucontrol within reconstructor$(n).x reconstructor$(n).y 3 unit$(n).reached
 			jump unit$(n)_moved equal unit$(n).reached false
 			#unit reached destination, payenter
 			ucontrol payEnter
 			unit$(n)_moved:
 		}
-		
+		&if $print {
+			print "Open the adjacent proc to change unit type"
+			printflush message1
+		}
 		jump main_loop
 
 		
@@ -64,5 +74,8 @@ main_loop:
 		jump bind_unit$(n) greaterThan unit.controlled 1
 		ucontrol flag cookie
 		set unit$(n) @unit
+		&if $print {
+		println "Bound unit $(n)"
+		}
 		jump unit$(n)_ok
 	}
