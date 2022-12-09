@@ -1,6 +1,6 @@
 label1:
 set x 5
 jump label1 x >= 4
-println "Hi."
-lookup item lookupedItem 5
-printf "The amogus's \{color is {color} and the sus level is {susLevel}."
+print "thing $x"
+print "array $array"
+set x 6

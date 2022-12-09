@@ -24,6 +24,7 @@
 		"memcellpos.secondaryUnitId": 9,
 		"memcellpos.healing": 10,
 		"memcellpos.overrange": 11,
-		"x": "thing"
+		"x": "thing",
+		"array": [ "e", "EEE" ]
 	}
 }

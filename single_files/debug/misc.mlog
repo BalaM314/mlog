@@ -1,13 +1,9 @@
 label1:
 set x 5
 jump label1 greaterThanEq x 4
-print "Hi.\n"
-lookup item lookupedItem 5
-print "The amogus's {color is "
-print color
-print " and the sus level is "
-print susLevel
-print "."
+print "thing thing"
+print "array e EEE"
+set x 6
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"
