@@ -26,7 +26,7 @@ init:
 		jump err
 
 	locate_core:
-		ulocate building core false coreX coreY _ core
+		ulocate core
 		ubind null
 core_found:
 

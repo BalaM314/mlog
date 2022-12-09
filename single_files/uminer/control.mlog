@@ -41,7 +41,7 @@ jump core_found notEqual core null
 set err "Can't find the core. Please link the core or make a mono/flare."
 jump err always 0 0
 locate_core:
-ulocate building core false _ coreX coreY _ core
+ulocate building core false _ core.x core.y core.found core
 ubind null
 core_found:
 sensor core.copper core @copper
