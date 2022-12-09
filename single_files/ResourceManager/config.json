@@ -14,6 +14,10 @@
 	},
 	"compilerConstants": {
 		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/",
-		"numInputs": 4
+		"hardcoded": {
+			"inputs": ["sand", "coal"],
+			"output": "silicon",
+			"managePower": true
+		}
 	}
 }

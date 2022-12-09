@@ -1,0 +1,174 @@
+#$name by $authors
+#Hardcoded Edition: Nothing is hardcoded, can be fully configured in-game.
+jump restart
+print "$name by $authors"
+print "Source code available at $githubUrl"
+print "Hardcoded edition: Limited configuration options."
+print "Intended for use in specific schematics."
+
+restart:
+set startingLinks @links
+set stdout message1
+print "Starting...\n\n$name"
+printflush stdout
+
+set offSwitch switch1
+set onSwitch switch2
+set powerBuilding null
+set cell cell1 #For splitbrain.
+
+set maxCoreCap 30000
+set minInputPerc 8 #Will shut off if input perc goes below this.
+set minOutputPerc 0.5 #Will run anyway if output perc goes below this.
+set maxOutputPerc 98 #Will shut off if output perc goes above this.
+set minPowerPerc 30 #Will shut off it power perc goes below this.
+print "Do not edit below this line."
+printflush null
+
+set shouldRun true
+
+get_core:
+	&for unit of mono flare poly mega {
+		ubind @$unit
+		sensor unit.dead @unit @dead
+		jump locate_core notEqual unit.dead true
+	}
+	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 vault2 {
+		set core $build
+		jump core_found notEqual core null
+	}
+
+	cant_find_core:
+		set err "Can't find the core. Please link the core or make a mono/flare."
+		jump err
+
+	locate_core:
+		ulocate building core false coreX coreY _ core
+		ubind null
+core_found:
+
+get_power_building:
+	jump power_building_found notEqual powerBuilding null
+	set i 0
+	get_power_building_loop:
+		getlink powerBuilding i
+		sensor powerBuilding.powerNetIn
+		#this is technically bad, as power networks without any power input will not be detected.
+		#Shouldn't be an issue though, as enabling machines on a totally dead power network probably will have no effect, and this would most likely be because a building was disconnected from power.
+		jump power_building_found powerBuilding.powerNetIn != 0
+
+		op add i 1
+		jump get_power_building_loop lessThan i @links
+	no_power_building:
+	set err "Can't find any power buildings. Please link a power building or disable power management."
+	jump err
+	
+power_building_found:
+
+main_loop:
+
+	check_links:
+		jump restart notEqual @links startingLinks
+
+	get_data:
+		sensor core.itemCapacity
+		op min inputCoreCap core.itemCapacity maxCoreCap
+		sensor powerBuilding.powerNetStored
+		sensor powerBuilding.powerNetCapacity
+		op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
+		op idiv powerPerc powerPerc 0.001
+		op div powerPerc powerPerc 10
+		&for i in 1 $hardcoded.inputs.length {
+			sensor core.$hardcoded.inputs[$i] core @$hardcoded.inputs[$i]
+			op div inputPerc$i core.input$i inputCoreCap
+			op idiv inputPerc$i inputPerc$i 0.001
+			op div inputPerc$i inputPerc$i 10
+		}
+		inputs_done:
+		sensor core.output core output
+		op div outputPerc core.output core.itemCapacity
+		op idiv outputPerc outputPerc 0.001
+		op div outputPerc outputPerc 10
+		jump no_off_switch equal offSwitch null
+		sensor offSwitch.enabled
+		sensor onSwitch.enabled
+		jump process
+		no_off_switch:
+		set offSwitch.enabled false
+		set onSwitch.enabled false
+
+	process:
+		set shouldRun true
+		jump power_ok equal managePower false
+		jump power_ok greaterThan powerPerc minPowerPerc
+		printf "[yellow]⚠ Low stored power.[] ({powerPerc}% < {minPowerPerc}%)\n"
+		set shouldRun false
+		power_ok:
+
+		&for i in 1 $numInputs {
+			jump all_inputs_ok equal input$i null
+			jump input$i_ok greaterThan inputPerc$i minInputPerc
+			printf "[yellow]⚠ Low {input$i}[]. ({inputPerc$i}% < {minInputPerc}%)\n"
+			set shouldRun false
+			input$i_ok:
+		}
+		all_inputs_ok:
+
+		jump output_not_low equal output null
+		jump output_not_low greaterThanEq outputPerc minOutputPerc
+		printf "[yellow]⚠ Low {output}[]. ({outputPerc}% < {minOutputPerc}%)\n"
+		set shouldRun true
+		output_not_low:
+
+		jump output_not_high lessThanEq outputPerc maxOutputPerc
+		printf "[green]✔ Core is full of {output}[].\n"
+		set shouldRun false
+		output_not_high:
+
+		jump override_off equal offSwitch.enabled true
+		jump override_on equal onSwitch.enabled true
+		jump print_status
+
+		override_off:
+			print "[red]⚠ Manually switched off.[]\n"
+			set shouldRun false
+			jump print_status always
+		override_on:
+			print "[red]⚠ Manually forced on.[]\n"
+			set shouldRun true
+			jump print_status always
+
+	
+		print_status:
+			jump print_true equal shouldRun true
+			print_false:
+			print "Status: [red]Disabled[].\n"
+			jump write
+			print_true:
+			print "Status: [green]Enabled[].\n"
+	
+	write:
+		write shouldRun cell 0
+		set i 0
+		write_loop:
+			getlink linkedBuilding i
+			op add i i 1
+			sensor linkedBuilding.type
+			jump next equal linkedBuilding.type @switch
+			jump next equal linkedBuilding.type @battery
+			jump next equal linkedBuilding.type @battery-large
+			#TODO add more buildings that should not be disabled
+			control enabled linkedBuilding shouldRun
+
+			next:
+			jump write_loop lessThan i @links
+
+	print "\n[slate]$name"
+	printflush message1
+	jump main_loop
+
+
+err:
+	printf "[red]Error: {err}\n\n[white]$name"
+	printflush stdout
+	wait 5
