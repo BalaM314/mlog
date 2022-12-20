@@ -1,0 +1,116 @@
+setrate 500
+set range 75
+restart:
+
+count_clicks:
+	sensor switch1.enabled
+	jump restart switch1.enabled != 1
+	control enabled switch1 false
+	op add switch1.clicks 1
+	printf "{switch1.clicks}/20 clicks to confirm disrupt sacrifice"
+	printflush message1
+	jump count_clicks switch1.clicks < 20
+
+sacrifice:
+set switch1.clicks 0
+set blood 0
+sacrifice_next_unit:
+	ubind @disrupt
+	sensor @unit.x
+	sensor @unit.y
+	explosion @derelict @unit.x @unit.y 2 22000 true false false
+	op add blood 3
+	wait 0.05
+	jump sacrifice_next_unit @unit.x != null
+
+jump some_units_sacrificed blood > 5
+no_units_sacrificed:
+	print "There's nothing to sacrifice, dummy"
+	message notify
+	jump restart
+
+some_units_sacrificed:
+	set lives blood / 45
+	op floor lives
+	op rand bloodRequired 100
+	jump sacrifice_successful blood > bloodRequired
+	print "[red]Sacrifice failed. George needs more bloodshed..."
+	message notify
+	jump restart
+
+sacrifice_successful:
+	print "[green]Sacrifice succesful. Enjoy."
+	message notify
+spawn_ranger:
+	spawn @disrupt 58 52 90 @malis ranger
+unit_control_loop:
+
+	get_vars:
+		sensor ranger.shootX
+		sensor ranger.shootY
+		sensor ranger.shooting
+		sensor ranger.x
+		sensor ranger.y
+		sensor ranger.dead
+		read maxX cell2 0
+	
+	jump shoot_handled ranger.shooting == false
+	jump shoot_handled ranger.shootX > maxX
+
+	beam:
+		#Get distance that the unit is trying to shoot
+		set shootDiffX ranger.shootX - ranger.x
+		set shootDiffY ranger.shootY - ranger.y
+		op len shootDistance shootDiffX shootDiffY
+		#Make normShootDistance the range that the unit will be allowed to shoot to
+		op min normShootDistance range
+		#Determine shootDiffX and Y based on how much they will have to be scaled down
+		set adjustmentFactor normShootDistance / shootDistance
+		set adjustedShootDiffX shootDiffX * adjustmentFactor
+		set adjustedShootDiffY shootDiffY * adjustmentFactor
+		#Set the step length
+		set shootStepX adjustedShootDiffX / 50
+		set shootStepY adjustedShootDiffY / 50
+		set beamX ranger.x
+		set beamY ranger.y
+	set i 0
+	beam_loop:
+		op add beamX shootStepX
+		op add beamY shootStepY
+		explosion @malis beamX beamY 3 5 true true false
+		op add i 1
+		jump beam_loop i < 50
+	
+	shoot_handled:
+
+	shield_beam:
+		set angleInterval 15
+		sensor angle ranger @rotation
+		op add angle -100
+		set finalAngle angle + 200
+		shield_beam_loop:
+			op sin shieldBeamX angle
+			op cos shieldBeamY angle
+			op mul shieldBeamX 7
+			op mul shieldBeamY 7
+			op add shieldBeamX ranger.x
+			op add shieldBeamY ranger.y
+			explosion @malis shieldBeamX shieldBeamY 3 20 true true false
+			op add angle angleInterval
+			jump shield_beam_loop angle < finalAngle
+	
+	apply_effects:
+		status false overclock ranger 2147483647
+		status false disarmed ranger 2147483647
+		status false overdrive ranger 2147483647
+		status false boss ranger 2147483647
+	
+	jump unit_control_loop ranger.dead == false
+	jump restart lives <= 0
+	
+	resurrect_unit:
+		spawn @disrupt @thisx @thisy 69 @malis ranger
+		op sub lives 1
+		print "Ranger died, but was resurrected. {lives} lives remaining."
+		message notify
+		jump unit_control_loop
