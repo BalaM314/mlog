@@ -1,5 +1,6 @@
 setrate 500
 set range 75
+set team @malis
 restart:
 
 count_clicks:
@@ -42,7 +43,7 @@ sacrifice_successful:
 	print "[green]Sacrifice succesful. Enjoy."
 	message notify
 spawn_ranger:
-	spawn @disrupt 58 52 90 @malis ranger
+	spawn @disrupt 58 52 90 team ranger
 unit_control_loop:
 
 	get_vars:
@@ -63,7 +64,7 @@ unit_control_loop:
 		set shootDiffY ranger.shootY - ranger.y
 		op len shootDistance shootDiffX shootDiffY
 		#Make normShootDistance the range that the unit will be allowed to shoot to
-		op min normShootDistance range
+		op min normShootDistance shootDistance range
 		#Determine shootDiffX and Y based on how much they will have to be scaled down
 		set adjustmentFactor normShootDistance / shootDistance
 		set adjustedShootDiffX shootDiffX * adjustmentFactor
@@ -77,7 +78,7 @@ unit_control_loop:
 	beam_loop:
 		op add beamX shootStepX
 		op add beamY shootStepY
-		explosion @malis beamX beamY 3 5 true true false
+		explosion team beamX beamY 3 5 true true false
 		op add i 1
 		jump beam_loop i < 50
 	
@@ -89,13 +90,13 @@ unit_control_loop:
 		op add angle -100
 		set finalAngle angle + 200
 		shield_beam_loop:
-			op sin shieldBeamX angle
-			op cos shieldBeamY angle
+			op cos shieldBeamX angle
+			op sin shieldBeamY angle
 			op mul shieldBeamX 7
 			op mul shieldBeamY 7
 			op add shieldBeamX ranger.x
 			op add shieldBeamY ranger.y
-			explosion @malis shieldBeamX shieldBeamY 3 20 true true false
+			explosion team shieldBeamX shieldBeamY 3 20 true true false
 			op add angle angleInterval
 			jump shield_beam_loop angle < finalAngle
 	
@@ -109,8 +110,8 @@ unit_control_loop:
 	jump restart lives <= 0
 	
 	resurrect_unit:
-		spawn @disrupt @thisx @thisy 69 @malis ranger
+		spawn @disrupt @thisx @thisy 69 team ranger
 		op sub lives 1
-		print "Ranger died, but was resurrected. {lives} lives remaining."
+		printf "Ranger died, but was resurrected. {lives} lives remaining."
 		message notify
 		jump unit_control_loop

@@ -1,5 +1,6 @@
 setrate 500
 set range 75
+set team @malis
 restart:
 count_clicks:
 sensor switch1.enabled switch1 @enabled
@@ -35,7 +36,7 @@ jump restart always 0 0
 sacrifice_successful:
 print "[green]Sacrifice succesful. Enjoy."
 message notify
-spawn @disrupt 58 52 90 @malis ranger
+spawn @disrupt 58 52 90 team ranger
 unit_control_loop:
 sensor ranger.shootX ranger @shootX
 sensor ranger.shootY ranger @shootY
@@ -49,7 +50,7 @@ jump shoot_handled greaterThan ranger.shootX maxX
 op sub shootDiffX ranger.shootX ranger.x
 op sub shootDiffY ranger.shootY ranger.y
 op len shootDistance shootDiffX shootDiffY
-op min normShootDistance normShootDistance range
+op min normShootDistance shootDistance range
 op div adjustmentFactor normShootDistance shootDistance
 op mul adjustedShootDiffX shootDiffX adjustmentFactor
 op mul adjustedShootDiffY shootDiffY adjustmentFactor
@@ -61,7 +62,7 @@ set i 0
 beam_loop:
 op add beamX beamX shootStepX
 op add beamY beamY shootStepY
-explosion @malis beamX beamY 3 5 true true false
+explosion team beamX beamY 3 5 true true false
 op add i i 1
 jump beam_loop lessThan i 50
 shoot_handled:
@@ -70,13 +71,13 @@ sensor angle ranger @rotation
 op add angle angle -100
 op add finalAngle angle 200
 shield_beam_loop:
-op sin shieldBeamX angle 0
-op cos shieldBeamY angle 0
+op cos shieldBeamX angle 0
+op sin shieldBeamY angle 0
 op mul shieldBeamX shieldBeamX 7
 op mul shieldBeamY shieldBeamY 7
 op add shieldBeamX shieldBeamX ranger.x
 op add shieldBeamY shieldBeamY ranger.y
-explosion @malis shieldBeamX shieldBeamY 3 20 true true false
+explosion team shieldBeamX shieldBeamY 3 20 true true false
 op add angle angle angleInterval
 jump shield_beam_loop lessThan angle finalAngle
 status false overclock ranger 2147483647
@@ -85,8 +86,10 @@ status false overdrive ranger 2147483647
 status false boss ranger 2147483647
 jump unit_control_loop strictEqual ranger.dead false
 jump restart lessThanEq lives 0
-spawn @disrupt @thisx @thisy 69 @malis ranger
+spawn @disrupt @thisx @thisy 69 team ranger
 op sub lives lives 1
-print "Ranger died, but was resurrected. {lives} lives remaining."
+print "Ranger died, but was resurrected. "
+print lives
+print " lives remaining."
 message notify
 jump unit_control_loop always 0 0
