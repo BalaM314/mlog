@@ -1,84 +1,92 @@
 setrate 500
-sensor s switch1 @enabled
-jump 1 notEqual s 1
-control enabled switch1 0 0 0 0
-op add usurebub usurebub 1
-print usurebub
-print "/20 clicks to confirm disrupt acrifice"
+set range 75
+restart:
+count_clicks:
+sensor switch1.enabled switch1 @enabled
+jump restart notEqual switch1.enabled 1
+control enabled switch1 false
+op add switch1.clicks switch1.clicks 1
+print switch1.clicks
+print "/20 clicks to confirm disrupt sacrifice"
 printflush message1
-jump 1 lessThan usurebub 20
-set usurebub 0
-set BLOOD 0
+jump count_clicks lessThan switch1.clicks 20
+set switch1.clicks 0
+set blood 0
+sacrifice_next_unit:
 ubind @disrupt
-sensor bx @unit @x
-sensor by @unit @y
-explosion @derelict bx by 2 22000 true false false
-op add BLOOD BLOOD 3
+sensor @unit.x @unit @x
+sensor @unit.y @unit @y
+explosion @derelict @unit.x @unit.y 2 22000 true false false
+op add blood blood 3
 wait 0.05
-jump 11 notEqual bx null
-jump 22 greaterThan BLOOD 5
+jump sacrifice_next_unit notEqual @unit.x null
+jump some_units_sacrificed greaterThan blood 5
 print "There's nothing to sacrifice, dummy"
 message notify
-jump 1 always 0 0
-op div lives BLOOD 45
-op rand ss 100 0
-jump 28 lessThan ss BLOOD
-print "[red]Sacrifice failed.George needs more bloodshed..."
-message notify
-jump 1 always 0 0
+jump restart always 0 0
+some_units_sacrificed:
+op div lives blood 45
 op floor lives lives 0
+op rand bloodRequired 100 0
+jump sacrifice_successful greaterThan blood bloodRequired
+print "[red]Sacrifice failed. George needs more bloodshed..."
+message notify
+jump restart always 0 0
+sacrifice_successful:
 print "[green]Sacrifice succesful. Enjoy."
 message notify
-spawn @disrupt 58 52 90 @malis yeet
-sensor sx yeet @shootX
-sensor sy yeet @shootY
-sensor lazor yeet @shooting
-sensor rx yeet @x
-sensor ry yeet @y
-sensor die yeet @shooting
-sensor ded yeet @dead
-read l cell2 0
-jump 59 equal lazor 0
-jump 59 lessThan l sx
-set br 0
-set ber 2
-op sub pdx sx rx
-op abs ox pdx 0
-jump 59 greaterThan ox 60
-op div pdx pdx 50
-op sub pdy sy ry
-op abs oy pdy 0
-jump 59 greaterThan oy 60
-op div pdy pdy 50
-set ex rx
-set ey ry
-op add ex ex pdx
-op add ey ey pdy
-explosion @malis ex ey 3 5 true true false
-jump 54 notEqual ex sx
-jump 54 notEqual ey sy
-set x rx
-set y ry
+spawn @disrupt 58 52 90 @malis ranger
+unit_control_loop:
+sensor ranger.shootX ranger @shootX
+sensor ranger.shootY ranger @shootY
+sensor ranger.shooting ranger @shooting
+sensor ranger.x ranger @x
+sensor ranger.y ranger @y
+sensor ranger.dead ranger @dead
+read maxX cell2 0
+jump shoot_handled strictEqual ranger.shooting false
+jump shoot_handled greaterThan ranger.shootX maxX
+op sub shootDiffX ranger.shootX ranger.x
+op sub shootDiffY ranger.shootY ranger.y
+op len shootDistance shootDiffX shootDiffY
+op min normShootDistance normShootDistance range
+op div adjustmentFactor normShootDistance shootDistance
+op mul adjustedShootDiffX shootDiffX adjustmentFactor
+op mul adjustedShootDiffY shootDiffY adjustmentFactor
+op div shootStepX adjustedShootDiffX 50
+op div shootStepY adjustedShootDiffY 50
+set beamX ranger.x
+set beamY ranger.y
+set i 0
+beam_loop:
+op add beamX beamX shootStepX
+op add beamY beamY shootStepY
+explosion @malis beamX beamY 3 5 true true false
+op add i i 1
+jump beam_loop lessThan i 50
+shoot_handled:
 set angleInterval 15
-set r 1
-sensor a yeet @rotation
-op not a a
-op add se a 190
-op sin xx a
-op cos yy a
-op mul xx xx 7
-op mul yy yy 7
-op add xx xx x
-op add yy yy y
-explosion @malis xx yy 3 20 true true false
-op add a a angleInterval
-jump 66 lessThan a se
-status false overclock yeet 2147483647
-status false disarmed yeet 2147483647
-status false overdrive yeet 2147483647
-status false boss yeet 2147483647
-jump 32 equal ded 0
-jump 1 equal lives 0
-spawn @disrupt rx ry 69 @malis yeet
+sensor angle ranger @rotation
+op add angle angle -100
+op add finalAngle angle 200
+shield_beam_loop:
+op sin shieldBeamX angle 0
+op cos shieldBeamY angle 0
+op mul shieldBeamX shieldBeamX 7
+op mul shieldBeamY shieldBeamY 7
+op add shieldBeamX shieldBeamX ranger.x
+op add shieldBeamY shieldBeamY ranger.y
+explosion @malis shieldBeamX shieldBeamY 3 20 true true false
+op add angle angle angleInterval
+jump shield_beam_loop lessThan angle finalAngle
+status false overclock ranger 2147483647
+status false disarmed ranger 2147483647
+status false overdrive ranger 2147483647
+status false boss ranger 2147483647
+jump unit_control_loop strictEqual ranger.dead false
+jump restart lessThanEq lives 0
+spawn @disrupt @thisx @thisy 69 @malis ranger
 op sub lives lives 1
-jump 32 always 0 0
+print "Ranger died, but was resurrected. {lives} lives remaining."
+message notify
+jump unit_control_loop always 0 0
