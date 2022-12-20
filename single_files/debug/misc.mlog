@@ -1,9 +1,2 @@
-label1:
-set x 5
-jump label1 greaterThanEq x 4
-print "thing thing"
-print "array e EEE"
-set x 6
-end
-print "Made with mlogx"
-print "github.com/BalaM314/mlogx/"
+control enabled building1 1
+ulocate building core 0 @copper core.x core.y _ core

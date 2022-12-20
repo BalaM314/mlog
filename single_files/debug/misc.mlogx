@@ -1,6 +1,2 @@
-label1:
-set x 5
-jump label1 x >= 4
-print "thing $x"
-print "array $array"
-set x 6
+control enabled building1 1
+ulocate building core 0 @copper core.x core.y _ core
