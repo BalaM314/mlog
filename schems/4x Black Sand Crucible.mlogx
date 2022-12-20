@@ -1,0 +1,82 @@
+op mul flag @thisy @mapw
+op add flag flag @thisx
+
+restart:
+print "[sky]Crucible Black Sand 4x (Stackable)\n[slate]Design by [lightgrey]Community\n\n[white]"
+
+print_info:
+	sensor @this.timescale
+	jump ts_odd greaterThanEq @this.timescale 2.5
+	jump ts_pod greaterThanEq @this.timescale 2.25
+	jump ts_od greaterThanEq @this.timescale 1.5
+	jump ts_none
+	ts_odd_:
+	print "Boost: \n 13.33\n 53.33"
+	jump ts_checked
+	ts_pod:
+	print "Boost: \n 12\n 48"
+	jump ts_checked
+	ts_od:
+	print "Boost: \n   8\n 32"
+	jump ts_checked
+	ts_none:
+	print "Boost: \n   5.33\n 21.33"
+	ts_checked:
+	printflush message1
+
+jump restart equal projector1 null
+jump enable_od notEqual ts 2.5
+jump disable_od equal @links 1
+
+set i 0
+getlink_loop:
+	getlink a i
+	jump getlink_loop_next equal a projector1
+	sensor a.timescale
+	jump enable_od notEqual a.timescale 2.5
+	getlink_loop_next:
+	op add i i 1
+	jump getlink_loop lessThan i @links
+
+disable_od:
+	ucontrol flag 0
+	ubind null
+	control enabled projector1 false
+	jump restart
+enable_od:
+	control enabled projector1 true
+	sensor switched switch1 @enabled
+	jump restart strictEqual switched 0
+
+sensor @unit.health
+jump bind_unit lessThan @unit.health 0
+sensor @unit.flag
+jump flag_ok equal @unit.flag flag
+jump flag_ok strictEqual @unit.flag 0
+
+bind_unit:
+	ubind @flare
+	sensor @unit.flag
+	jump bind_unit notEqual @unit.flag 0
+	flag_ok:
+	ucontrol flag flag
+sensor @unit.firstItem
+ulocate core
+jump move_to_dest equal @unit.firstItem @phase-fabric
+sensor core.phase-fabric
+jump restart lessThan core.phase-fabric 100	
+move_to_core:
+	ucontrol move core.x core.y
+	ucontrol itemDrop core 100
+	jump take_item equal @unit.firstItem null
+	ucontrol itemDrop @air 100
+take_item:
+	ucontrol itemTake core @phase-fabric 100
+	jump restart
+move_to_dest:
+	ucontrol move @thisx @thisy
+	ucontrol itemDrop projector1 100
+
+jump restart
+set SchemAuthor "Community"
+set LogicAuthors "Gewi, BalaM314"

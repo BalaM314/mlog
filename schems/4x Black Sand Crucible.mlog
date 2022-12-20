@@ -1,0 +1,62 @@
+op mul f @thisy @mapw
+op add f f @thisx
+print "[sky]Crucible Black Sand 4x (Stackable)\n[slate]Design by [lightgrey]Community\n\n[white]"
+sensor ts1 @this @timescale
+sensor ts2 @this @timescale
+sensor ts3 @this @timescale
+op max ts ts1 ts2
+op max ts ts ts3
+jump 12 greaterThanEq ts 2.5
+jump 14 greaterThanEq ts 2.25
+jump 16 greaterThanEq ts 1.5
+jump 18 always x false
+print "Boost: \n 13.33\n 53.33"
+jump 19 always x false
+print "Boost: \n 12\n 48"
+jump 19 always x false
+print "Boost: \n   8\n 32"
+jump 19 always x false
+print "Boost: \n   5.33\n 21.33"
+printflush message1
+jump 2 equal projector1 null
+jump 34 notEqual ts 2.5
+jump 30 equal @links 1
+set i 0
+getlink a i
+jump 28 equal a projector1
+sensor ts a @timescale
+jump 34 notEqual ts 2.5
+op add i i 1
+jump 24 lessThan i @links
+ucontrol flag 0
+ubind null
+control enabled projector1 false
+jump 2 always x false
+control enabled projector1 true
+sensor switched switch1 @enabled
+jump 2 strictEqual switched 0
+sensor h @unit @health
+jump 42 lessThan h 0
+sensor tf @unit @flag
+jump 45 equal tf f
+jump 45 strictEqual tf 0
+ubind @flare
+sensor ff @unit @flag
+jump 42 notEqual ff 0
+ucontrol flag f
+sensor fi @unit @firstItem
+jump 57 equal fi @phase-fabric
+ulocate building core 0 @copper cx cy _ b
+sensor amount b @phase-fabric
+jump 2 lessThan amount 100
+ucontrol move cx cy
+ucontrol itemDrop b 100
+jump 55 equal fi null
+ucontrol itemDrop @air 100
+ucontrol itemTake b @phase-fabric 100
+jump 2 always x false
+ucontrol move @thisx @thisy
+ucontrol itemDrop projector1 100
+jump 2 always x false
+set SchemAuthor "Community"
+set LogicAuthor "Gewi"
