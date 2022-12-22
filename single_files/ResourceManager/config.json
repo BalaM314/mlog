@@ -17,7 +17,9 @@
 		"hardcoded": {
 			"inputs": ["sand", "coal"],
 			"output": "silicon",
-			"managePower": true
+			"managePower": true,
+			"autoDetectBuildings": true,
+			"buildings": []
 		}
 	}
 }

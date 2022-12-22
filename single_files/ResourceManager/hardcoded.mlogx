@@ -1,5 +1,5 @@
 #$name by $authors
-#Hardcoded Edition: Nothing is hardcoded, can be fully configured in-game.
+#Hardcoded Edition: Everything is hardcoded, limited in-game configuration.
 jump restart
 print "$name by $authors"
 print "Source code available at $githubUrl"
@@ -9,7 +9,7 @@ print "Intended for use in specific schematics."
 restart:
 set startingLinks @links
 set stdout message1
-print "Starting...\n\n$name"
+print "Starting...\n\n$(hardcoded.name) by $(hardcoded.author)"
 printflush stdout
 
 set offSwitch switch1
@@ -80,6 +80,7 @@ main_loop:
 		op div powerPerc powerPerc 10
 		&for i in 1 $hardcoded.inputs.length {
 			sensor core.$hardcoded.inputs[$i] core @$hardcoded.inputs[$i]
+			#yes, we need to calculate the percentage, because it needs to be printed
 			op div inputPerc$i core.input$i inputCoreCap
 			op idiv inputPerc$i inputPerc$i 0.001
 			op div inputPerc$i inputPerc$i 10
@@ -163,7 +164,7 @@ main_loop:
 			next:
 			jump write_loop lessThan i @links
 
-	print "\n[slate]$name"
+	print "\n[slate]$hardcoded.name"
 	printflush message1
 	jump main_loop
 
@@ -171,4 +172,4 @@ main_loop:
 err:
 	printf "[red]Error: {err}\n\n[white]$name"
 	printflush stdout
-	wait 5
+	wait 3

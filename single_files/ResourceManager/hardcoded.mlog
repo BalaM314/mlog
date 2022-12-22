@@ -6,7 +6,7 @@ print "Intended for use in specific schematics."
 restart:
 set startingLinks @links
 set stdout message1
-print "Starting...\n\nResource Manager"
+print "Starting...\n\n$(hardcoded.name) by $(hardcoded.author)"
 printflush stdout
 set offSwitch switch1
 set onSwitch switch2
@@ -162,7 +162,7 @@ jump next equal linkedBuilding.type @battery-large
 control enabled linkedBuilding shouldRun
 next:
 jump write_loop lessThan i @links
-print "\n[slate]Resource Manager"
+print "\n[slate]$hardcoded.name"
 printflush message1
 jump main_loop always 0 0
 err:
@@ -170,7 +170,7 @@ print "[red]Error: "
 print err
 print "\n\n[white]Resource Manager"
 printflush stdout
-wait 5
+wait 3
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"
