@@ -1,5 +1,6 @@
 setrate 500
 set range 75
+set stepsPerBeam 100
 set team @malis
 restart:
 
@@ -70,8 +71,8 @@ unit_control_loop:
 		set adjustedShootDiffX shootDiffX * adjustmentFactor
 		set adjustedShootDiffY shootDiffY * adjustmentFactor
 		#Set the step length
-		set shootStepX adjustedShootDiffX / 50
-		set shootStepY adjustedShootDiffY / 50
+		set shootStepX adjustedShootDiffX / stepsPerBeam
+		set shootStepY adjustedShootDiffY / stepsPerBeam
 		set beamX ranger.x
 		set beamY ranger.y
 	set i 0
@@ -80,7 +81,8 @@ unit_control_loop:
 		op add beamY shootStepY
 		explosion team beamX beamY 3 5 true true false
 		op add i 1
-		jump beam_loop i < 50
+		
+		jump beam_loop i < stepsPerBeam
 	
 	shoot_handled:
 
