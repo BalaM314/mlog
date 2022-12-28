@@ -46,4 +46,6 @@ namespace amogus {
 
 print x
 
+set x 5; set y 5; print "sussy baka";;;
+
 end

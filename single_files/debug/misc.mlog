@@ -4,3 +4,6 @@ print "thing_a_d"
 print "thing_b"
 print "thing_b_c"
 print "thing_b_d"
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
