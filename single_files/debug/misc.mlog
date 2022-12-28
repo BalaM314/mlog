@@ -1,11 +1,6 @@
-control enabled building1 1
-ulocate building core 0 @copper core.x core.y _ core
-set x "exists"
-print "ee "
-print x
-print " ee "
-print y
-print " ee"
-end
-print "Made with mlogx"
-print "github.com/BalaM314/mlogx/"
+print "thing_a"
+print "thing_a_c"
+print "thing_a_d"
+print "thing_b"
+print "thing_b_c"
+print "thing_b_d"

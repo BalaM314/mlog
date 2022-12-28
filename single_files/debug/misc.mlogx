@@ -1,4 +1,6 @@
-control enabled building1 1
-ulocate building core 0 @copper core.x core.y _ core
-set x "exists"
-printf "ee {x} ee {y} ee"
+&for I of a b {
+	print "thing_$I"
+	&for J of c d {
+		print "thing_$I_$J"
+	}
+}
