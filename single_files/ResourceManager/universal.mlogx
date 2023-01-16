@@ -25,6 +25,7 @@ set powerBuilding null
 set cell cell1 #For splitbrain.
 
 set maxCoreCap 30000
+set maxPowerCap 5000000
 set minInputPerc 8 #Will shut off if input perc goes below this.
 set minOutputPerc 0.5 #Will run anyway if output perc goes below this.
 set maxOutputPerc 98 #Will shut off if output perc goes above this.
@@ -82,7 +83,8 @@ main_loop:
 		op min inputCoreCap core.itemCapacity maxCoreCap
 		sensor powerBuilding.powerNetStored
 		sensor powerBuilding.powerNetCapacity
-		op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
+		op min powerNetCap powerBuilding.powerNetCapacity maxPowerCap
+		op div powerPerc powerBuilding.powerNetStored powerNetCap
 		op idiv powerPerc powerPerc 0.001
 		op div powerPerc powerPerc 10
 		&for i in 1 4 {

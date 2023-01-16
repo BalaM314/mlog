@@ -21,6 +21,7 @@ set onSwitch switch2
 set powerBuilding null
 set cell cell1
 set maxCoreCap 30000
+set maxPowerCap 5000000
 set minInputPerc 8
 set minOutputPerc 0.5
 set maxOutputPerc 98
@@ -83,7 +84,8 @@ sensor core.itemCapacity core @itemCapacity
 op min inputCoreCap core.itemCapacity maxCoreCap
 sensor powerBuilding.powerNetStored powerBuilding @powerNetStored
 sensor powerBuilding.powerNetCapacity powerBuilding @powerNetCapacity
-op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
+op min powerNetCap powerBuilding.powerNetCapacity maxPowerCap
+op div powerPerc powerBuilding.powerNetStored powerNetCap
 op idiv powerPerc powerPerc 0.001
 op div powerPerc powerPerc 10
 jump inputs_done equal input1 null
