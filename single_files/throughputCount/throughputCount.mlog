@@ -1,33 +1,51 @@
-print "Initializing...\nItem Throughput Counter by [#3141FF]BalaM314[]"
-sensor container1.maxItems container1 @itemCapacity
+set storage container1
 set stdout message1
+print "Initializing...\nItem Throughput Counter by [#3141FF]BalaM314[]"
+printflush stdout
+no_storage:
+sensor storage.dead storage @dead
+jump storage_found strictEqual storage.dead false
+print "Identifying storage...\nItem Throughput Counter by [#3141FF]BalaM314[]"
+printflush stdout
+set i 0
+getlink_loop:
+getlink link i
+sensor link.type link @type
+jump storage_found strictEqual link.type @container
+jump storage_found strictEqual link.type @vault
+op add i i 1
+jump getlink_loop lessThan i @links
+jump no_storage always 0 0
+storage_found:
+set storage link
+sensor storage.itemCapacity storage @itemCapacity
 no_items:
-print "Item throughput counter"
-print " by [#3141FF]BalaM314[white]\n"
-print "[red]Waiting for items..."
-printflush message1
-sensor container1.totalItems container1 @totalItems
-jump no_items equal container1.totalItems 0
+print "Item throughput counter by [#3141FF]BalaM314[white]\n[red]Waiting for items..."
+printflush stdout
+sensor storage.totalItems storage @totalItems
+jump no_items strictEqual storage.totalItems 0
 set timer @time
 count_items:
-sensor container1.totalItems container1 @totalItems
-print "[blue]Items received:"
-print container1.totalItems
+sensor storage.totalItems storage @totalItems
+print "[blue]Items received: "
+print storage.totalItems
 printflush stdout
-jump reset equal container1 null
-jump count_items notEqual container1.totalItems container1.maxItems
-op sub timePassed @time timer
-op div timePassed timePassed 1000
-op div fillSpeed container1.maxItems timePassed
+jump reset strictEqual storage null
+jump count_items notEqual storage.totalItems storage.itemCapacity
+op sub timePassedMs @time timer
+op div timePassed timePassedMs 1000
+op div fillSpeed storage.itemCapacity timePassed
 print "[green]"
 print fillSpeed
 print " items/second\nWaiting for reset:"
 printflush stdout
 wait_for_reset:
-jump reset equal container1 null
+sensor storage.dead storage @dead
+jump reset equal storage.dead true
+jump reset equal storage null
 jump wait_for_reset always 0 0
 reset:
-print "Reset."
-printflush message1
-wait 1
-jump no_items always 0 0
+jump no_storage always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

@@ -1,39 +1,54 @@
 #Item ThroughputCounter by BalaM314
 
 init:
-	print "Initializing...\nItem Throughput Counter by [#3141FF]BalaM314[]"
-	sensor container1.maxItems container1 @itemCapacity
+	set storage container1
 	set stdout message1
+	print "Initializing...\nItem Throughput Counter by [#3141FF]BalaM314[]"
+	printflush stdout
+
+no_storage:
+	sensor storage.dead
+	jump storage_found storage.dead == false
+	print "Identifying storage...\nItem Throughput Counter by [#3141FF]BalaM314[]"
+	printflush stdout
+	set i 0
+	getlink_loop:
+		getlink link i
+		sensor link.type
+		jump storage_found link.type == @container
+		jump storage_found link.type == @vault
+		op add i 1
+		jump getlink_loop i < @links
+	jump no_storage
+
+	storage_found:
+		set storage link
+		sensor storage.itemCapacity
+
 
 no_items:
-	print "Item throughput counter"
-	print " by [#3141FF]BalaM314[white]\n"
-	print "[red]Waiting for items..."
-	printflush message1
-	sensor container1.totalItems
-	jump no_items equal container1.totalItems 0
+	print "Item throughput counter by [#3141FF]BalaM314[white]\n[red]Waiting for items..."
+	printflush stdout
+	sensor storage.totalItems
+	jump no_items storage.totalItems == 0
 start_timer:
 	set timer @time
 count_items:
-	sensor container1.totalItems
-	print "[blue]Items received:"
-	print container1.totalItems
+	sensor storage.totalItems
+	printf "[blue]Items received: {storage.totalItems}"
 	printflush stdout
-	jump reset equal container1 null
-	jump count_items notEqual container1.totalItems container1.maxItems
+	jump reset storage == null
+	jump count_items storage.totalItems != storage.itemCapacity
 calculate_time:
-	op sub timePassed @time timer
-	op div timePassed timePassed 1000
-	op div fillSpeed container1.maxItems timePassed
-	print "[green]"
-	print fillSpeed
-	print " items/second\nWaiting for reset:"
+	set timePassedMs @time - timer
+	set timePassed timePassedMs / 1000
+	set fillSpeed storage.itemCapacity / timePassed
+	printf "[green]{fillSpeed} items/second\nWaiting for reset:"
 	printflush stdout
 wait_for_reset:
-	jump reset equal container1 null
+	sensor storage.dead
+	jump reset equal storage.dead true
+	jump reset equal storage null
 	jump wait_for_reset
 	reset:
-	print "Reset."
-	printflush message1
-	wait 1
-	jump no_items
+	jump no_storage
