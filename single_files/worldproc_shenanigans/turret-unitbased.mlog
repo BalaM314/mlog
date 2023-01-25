@@ -1,0 +1,66 @@
+print "Unit-based Worldproc Turret by BalaM314"
+set timeToHit 60
+set maxRange 62.5
+set ipt 10
+set projectileDamage 100
+set projectileRadius 6
+set hitDamage 1000
+set hitRadius 15
+set hitAir true
+set hitGround true
+set cooldown 0.3
+set fireAlways false
+get_unit:
+ubind @precept
+jump get_unit strictEqual @unit null
+set turret @unit
+setrate ipt
+op mul temp0 timeToHit ipt
+op div spd 5 temp0
+jump low_cooldown lessThanEq cooldown 0.2
+set effectWaitTime 0.1
+jump effectWaitTime_calculated always 0 0
+low_cooldown:
+op div effectWaitTime cooldown 2
+effectWaitTime_calculated:
+op mul temp0 effectWaitTime 2
+op sub realCooldown cooldown temp0
+fire:
+wait_for_player:
+sensor turret.controlled turret @controlled
+jump wait_for_player equal turret.controlled 0
+sensor turret.shooting turret @shooting
+op or shoot fireAlways turret.shooting
+jump wait_for_player equal shoot false
+sensor turret.x turret @x
+sensor turret.y turret @y
+set exp.x turret.x
+set exp.y turret.y
+sensor turret.shootX turret @shootX
+sensor turret.shootY turret @shootY
+op sub shootXDiff turret.shootX exp.x
+op sub shootYDiff turret.shootY exp.y
+op len len shootYDiff shootXDiff
+op min realLen len maxRange
+op div lenScl realLen len
+op mul realShootXDiff shootXDiff lenScl
+op mul realShootYDiff shootYDiff lenScl
+op mul vel.x realShootXDiff spd
+op mul vel.y realShootYDiff spd
+set i 0
+fire_loop:
+op add exp.x exp.x vel.x
+op add exp.y exp.y vel.y
+explosion @sharded exp.x exp.y projectileRadius projectileDamage hitAir hitGround false
+op add i i spd
+jump fire_loop lessThanEq i 1
+explosion @sharded exp.x exp.y hitRadius hitDamage hitAir hitGround false
+explosion @sharded exp.x exp.y hitRadius 0 false false true
+wait effectWaitTime
+explosion @sharded exp.x exp.y hitRadius 0 false false true
+wait effectWaitTime
+explosion @sharded exp.x exp.y hitRadius 0 false false true
+wait realCooldown
+sensor @unit.dead @unit @dead
+jump get_unit strictEqual @unit.dead true
+jump fire always 0 0

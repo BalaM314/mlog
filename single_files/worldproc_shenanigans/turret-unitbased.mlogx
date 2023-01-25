@@ -1,0 +1,92 @@
+#Unit-based Worldproc Turret
+#by BalaM314
+print "Unit-based Worldproc Turret by BalaM314"
+#Time in ticks to hit the target
+set timeToHit 60
+set maxRange 62.5
+set ipt 10
+#Damage dealt by the moving projectile. Note that actual damage will be several times higher than this.
+set projectileDamage 100
+set projectileRadius 6
+#Damage dealt by the projectile exploding.
+set hitDamage 1000
+set hitRadius 15
+set hitAir true
+set hitGround true
+#Time between shots
+set cooldown 0.3
+set fireAlways false
+
+get_unit:
+	#Replace this with your own logic to get a unit, this will just bind a random precept
+	ubind @precept
+	jump get_unit @unit == null
+	set turret @unit
+
+get_static_data:
+	setrate ipt
+	set temp0 timeToHit * ipt
+	set spd 5 / temp0
+	jump low_cooldown lessThanEq cooldown 0.2
+	set effectWaitTime 0.1
+	jump effectWaitTime_calculated
+	low_cooldown:
+	set effectWaitTime cooldown / 2
+	effectWaitTime_calculated:
+	set temp0 effectWaitTime * 2
+	set realCooldown cooldown - temp0
+
+fire:
+	wait_for_player:
+		sensor turret.controlled
+		jump wait_for_player equal turret.controlled 0
+		sensor turret.shooting
+		op or shoot fireAlways turret.shooting
+		jump wait_for_player equal shoot false
+		sensor turret.x
+		sensor turret.y
+
+	reset_explosion:
+		set exp.x turret.x
+		set exp.y turret.y
+
+	get_shoot_pos:
+		sensor turret.shootX
+		sensor turret.shootY
+
+	do_math:
+		#Math to limit the range
+		set shootXDiff turret.shootX - exp.x
+		set shootYDiff turret.shootY - exp.y
+		op len len shootYDiff shootXDiff
+		op min realLen len maxRange
+		set lenScl realLen / len
+		set realShootXDiff shootXDiff * lenScl
+		set realShootYDiff shootYDiff * lenScl
+		set vel.x realShootXDiff * spd
+		set vel.y realShootYDiff * spd
+
+	set i 0
+	fire_loop:
+		op add exp.x vel.x
+		op add exp.y vel.y
+		explosion @sharded exp.x exp.y projectileRadius projectileDamage hitAir hitGround false
+		//getblock block block exp.x exp.y
+		//Maybe stop the bullet if it hits a block?
+		op add i spd
+		jump fire_loop lessThanEq i 1
+
+	hit_effect:
+		explosion @sharded exp.x exp.y hitRadius hitDamage hitAir hitGround false
+		#Create a cool effect when the bullet hits
+		explosion @sharded exp.x exp.y hitRadius 0 false false true
+		wait effectWaitTime
+		explosion @sharded exp.x exp.y hitRadius 0 false false true
+		wait effectWaitTime
+		explosion @sharded exp.x exp.y hitRadius 0 false false true
+	
+	wait realCooldown
+	sensor @unit.dead
+	jump get_unit @unit.dead == true
+		
+jump fire
