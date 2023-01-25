@@ -20,6 +20,7 @@ set cooldown 0.3
 #Coordinates at which the explosion starts
 set expStart.x @thisx
 set expStart.y @thisy
+set fireAlways true
 
 get_static_data:
 	sensor turret.x
@@ -40,6 +41,9 @@ fire:
 	wait_for_player:
 		sensor turret.controlled
 		jump wait_for_player equal turret.controlled 0
+		sensor turret.shooting
+		op or shoot fireAlways turret.shooting
+		jump wait_for_player equal shoot false
 
 	reset_explosion:
 		set exp.x expStart.x

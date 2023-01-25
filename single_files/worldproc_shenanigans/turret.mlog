@@ -12,6 +12,7 @@ set hitGround true
 set cooldown 0.3
 set expStart.x @thisx
 set expStart.y @thisy
+set fireAlways true
 sensor turret.x turret @x
 sensor turret.y turret @y
 setrate ipt
@@ -29,6 +30,9 @@ fire:
 wait_for_player:
 sensor turret.controlled turret @controlled
 jump wait_for_player equal turret.controlled 0
+sensor turret.shooting turret @shooting
+op or shoot fireAlways turret.shooting
+jump wait_for_player equal shoot false
 set exp.x expStart.x
 set exp.y expStart.y
 sensor turret.shootX turret @shootX
