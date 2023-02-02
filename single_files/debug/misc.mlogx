@@ -1,6 +1,1 @@
-&for I of a b {
-	print "thing_$I"
-	&for J of c d {
-		print "thing_$I_$J"
-	}
-}
+sensor Solx @disrupt @x
