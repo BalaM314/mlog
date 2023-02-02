@@ -3,22 +3,20 @@
 #The turret that the player will be firing from
 print "Generic Worldproc Turret by BalaM314"
 set turret arc1
-#Time in ticks to hit the target
 set maxRange 62.5
-set shotsPerSecond 10
-#Damage dealt by each explosion per second. Note that actual damage will be several times higher than this.
+#Number of times the laser fires each second
+set shotsPerSecond 50
+#Damage dealt by each explosion per second. Note that actual damage will be several times higher than this if an enemy gets hit by multiple explosions.
 set dps 100
-set projectileRadius 6
-set ipt 500
+set beamWidth 12
+set ipt 250
 #Distance between explosions that make up the laser.
-set blocksPerExplosion 2
+set blocksPerExplosion 1
 #Damage dealt by the projectile at its target per second.
 set hitDps 1000
 set hitRadius 15
 set hitAir true
 set hitGround true
-#Time between shots
-set cooldown 0.3
 #Coordinates at which the explosion starts
 set laserStart.x @thisx
 set laserStart.y @thisy
@@ -31,7 +29,7 @@ get_static_data:
 	set dpe dps / shotsPerSecond
 	set hitDpe hitDps / shotsPerSecond
 	set timePerLaser 1 / shotsPerSecond
-	
+	set beamRadius beamWidth / 2
 
 fire:
 	wait_for_player:
@@ -68,7 +66,7 @@ fire:
 	fire_loop:
 		op add exp.x vel.x
 		op add exp.y vel.y
-		explosion @sharded exp.x exp.y projectileRadius dpe hitAir hitGround false
+		explosion @sharded exp.x exp.y beamRadius dpe hitAir hitGround false
 		//getblock block block exp.x exp.y
 		//Maybe stop the bullet if it hits a block?
 		op add i 1

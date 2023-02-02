@@ -1,22 +1,22 @@
 print "Generic Worldproc Turret by BalaM314"
 set turret arc1
 set maxRange 62.5
-set shotsPerSecond 10
+set shotsPerSecond 50
 set dps 100
-set projectileRadius 6
-set ipt 500
+set beamWidth 12
+set ipt 250
 set explosionsPerLaser 30
 set hitDps 1000
 set hitRadius 15
 set hitAir true
 set hitGround true
-set cooldown 0.3
 set laserStart.x @thisx
 set laserStart.y @thisy
 set fireAlways true
 setrate ipt
 sensor turret.x turret @x
 sensor turret.y turret @y
+op div beamRadius beamWidth 2
 op div dpe dps shotsPerSecond
 op div hitDpe hitDps shotsPerSecond
 op mul instsForLoop 5 explosionsPerLaser
@@ -48,7 +48,7 @@ set i 0
 fire_loop:
 op add exp.x exp.x vel.x
 op add exp.y exp.y vel.y
-explosion @sharded exp.x exp.y projectileRadius dpe hitAir hitGround false
+explosion @sharded exp.x exp.y beamRadius dpe hitAir hitGround false
 op add i i 1
 jump fire_loop lessThan i explosionsPerLaser
 explosion @sharded exp.x exp.y hitRadius hitDpe hitAir hitGround false
