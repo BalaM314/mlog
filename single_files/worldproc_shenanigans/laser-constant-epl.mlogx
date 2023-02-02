@@ -1,0 +1,85 @@
+#Generic Worldproc Laser
+#by BalaM314
+#The turret that the player will be firing from
+print "Generic Worldproc Turret by BalaM314"
+set turret arc1
+#Time in ticks to hit the target
+set maxRange 62.5
+set shotsPerSecond 10
+#Damage dealt by each explosion per second. Note that actual damage will be several times higher than this.
+set dps 100
+set projectileRadius 6
+set ipt 500
+#Number of explosions that make up the laser.
+set explosionsPerLaser 30
+#Damage dealt by the projectile at its target per second.
+set hitDps 1000
+set hitRadius 15
+set hitAir true
+set hitGround true
+#Time between shots
+set cooldown 0.3
+#Coordinates at which the explosion starts
+set laserStart.x @thisx
+set laserStart.y @thisy
+set fireAlways true
+
+get_static_data:
+	setrate ipt
+	sensor turret.x
+	sensor turret.y
+	set dpe dps / shotsPerSecond
+	set hitDpe hitDps / shotsPerSecond
+	set instsForLoop 5 * explosionsPerLaser
+	set ticksForLoop instsForLoop / ipt
+	set secondsForLoop ticksForLoop
+	set timePerLaser 1 / shotsPerSecond
+	set waitTime timePerLaser - secondsForLoop
+	
+
+fire:
+	wait_for_player:
+		sensor turret.controlled
+		jump wait_for_player equal turret.controlled 0
+		sensor turret.shooting
+		op or shoot fireAlways turret.shooting
+		jump wait_for_player equal shoot false
+
+	reset_explosion:
+		set exp.x laserStart.x
+		set exp.y laserStart.y
+
+	get_shoot_pos:
+		sensor turret.shootX
+		sensor turret.shootY
+
+	do_math:
+		#Math to limit the range
+		set shootXDiff turret.shootX - exp.x
+		set shootYDiff turret.shootY - exp.y
+		op len len shootYDiff shootXDiff
+		op min realLen len maxRange
+		set lenScl realLen / len
+		set realShootXDiff shootXDiff * lenScl
+		set realShootYDiff shootYDiff * lenScl
+		set vel.x realShootXDiff / explosionsPerLaser
+		set vel.y realShootYDiff / explosionsPerLaser
+
+	set i 0
+	fire_loop:
+		op add exp.x vel.x
+		op add exp.y vel.y
+		explosion @sharded exp.x exp.y projectileRadius dpe hitAir hitGround false
+		//getblock block block exp.x exp.y
+		//Maybe stop the bullet if it hits a block?
+		op add i 1
+		jump fire_loop lessThan i explosionsPerLaser
+
+	hit_effect:
+		explosion @sharded exp.x exp.y hitRadius hitDpe hitAir hitGround false
+		#Create a cool effect when the bullet hits
+		explosion @sharded exp.x exp.y hitRadius 0 false false true
+	
+	wait waitTime
+		
+jump fire
