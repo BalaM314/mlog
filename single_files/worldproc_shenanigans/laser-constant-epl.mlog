@@ -21,7 +21,7 @@ op div dpe dps shotsPerSecond
 op div hitDpe hitDps shotsPerSecond
 op mul instsForLoop 5 explosionsPerLaser
 op div ticksForLoop instsForLoop ipt
-set secondsForLoop ticksForLoop
+op div secondsForLoop ticksForLoop 60
 op div timePerLaser 1 shotsPerSecond
 op sub waitTime timePerLaser secondsForLoop
 fire:

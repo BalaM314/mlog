@@ -32,7 +32,7 @@ get_static_data:
 	set hitDpe hitDps / shotsPerSecond
 	set instsForLoop 5 * explosionsPerLaser
 	set ticksForLoop instsForLoop / ipt
-	set secondsForLoop ticksForLoop
+	set secondsForLoop ticksForLoop / 60
 	set timePerLaser 1 / shotsPerSecond
 	set waitTime timePerLaser - secondsForLoop
 	
