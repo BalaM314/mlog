@@ -28,7 +28,7 @@ init:
 	locate_core:
 		ulocate core
 		ubind null
-core_found:
+	core_found:
 
 main_loop:
 	get_core_res:

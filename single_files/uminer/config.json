@@ -1,5 +1,7 @@
 {
-	"compilerConstants": {},
+	"compilerConstants": {
+		
+	},
 	"compilerOptions": {
 		"removeCompilerMark": false,
 		"removeUnusedJumpLabels": true,
@@ -8,10 +10,8 @@
 		"mode": "single",
 		"compileWithErrors": true,
 		"removeComments": true,
-		"verbose": false,
 		"include": []
 	},
-	"filename": "unknown.mlogx",
 	"authors": [
 		"BalaM314"
 	],

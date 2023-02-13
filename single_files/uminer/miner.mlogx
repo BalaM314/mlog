@@ -3,7 +3,7 @@
 set unitType @mono
 set oreToMine @copper
 set minHealthFrac 0.7
-set approachDistance 87
+set approachDistance 6
 set repairApproachDistance 5
 set minPower 60 #Minimum power input to a network for units to try to go to connected repair points.
 
@@ -73,4 +73,4 @@ main_loop:
 		ulocate building core target #If the closest repair turret doesn't have enough power, go to the core instead.
 		target_ok:
 		ucontrol approach target.x target.y repairApproachDistance
-
+		jump main_loop

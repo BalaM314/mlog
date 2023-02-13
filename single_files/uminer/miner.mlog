@@ -1,7 +1,7 @@
 set unitType @mono
 set oreToMine @copper
 set minHealthFrac 0.7
-set approachDistance 87
+set approachDistance 6
 set repairApproachDistance 5
 set minPower 60
 get_static_data:
@@ -45,6 +45,7 @@ jump target_ok greaterThan target.powerNetIn minPower
 ulocate building core false _ target.x target.y target.found target
 target_ok:
 ucontrol approach target.x target.y repairApproachDistance
+jump main_loop always 0 0
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"
