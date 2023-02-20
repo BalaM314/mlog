@@ -1,7 +1,7 @@
 setrate 500
-set MAX_CELL 120
+set MAX_CELL 510
 set GROUP_SIZE 5
-set cell cell1
+set cell bank1
 main_loop:
 set i 0
 read_loop:

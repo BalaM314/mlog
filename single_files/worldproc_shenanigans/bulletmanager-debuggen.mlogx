@@ -1,0 +1,22 @@
+#Debug bullet generator
+
+set i 0
+set cell bank1
+set CELLSIZE 510
+wait_for_enable:
+sensor result switch1 @enabled
+jump wait_for_enable equal result false
+control enabled switch1 false
+set iplus1 i + 1
+set iplus2 i + 2
+set iplus3 i + 3
+set iplus4 i + 4
+write @thisx cell i
+write @thisy cell iplus1
+op rand vel.x 1
+op rand vel.y 1
+write vel.x cell iplus2
+write vel.y cell iplus3
+write 90 cell iplus4
+op add i i 5
+jump wait_for_enable lessThan i CELLSIZE
