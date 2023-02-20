@@ -1,0 +1,58 @@
+setrate 500 // USE MAXIMUM POWER!!!
+set PACKING_NUM @mapw * 100 //used to pack vectors into a single number for more efficient storage
+set MAX_CELL 120
+
+main_loop:
+
+	set i 0
+	read_loop:
+
+		get_data:
+		read pos cell1 i
+		jump end_loop equal pos 0 //If cell is blank, jump to end loop
+		set vel_index i + 1
+		read vel cell1 vel_index
+		set lifetime_index i + 2
+		read lifetime cell1 lifetime_index
+
+		process_data:
+		op idiv pos.y pos PACKING_NUM
+		op div pos.y 100
+		op mod pos.x pos PACKING_NUM
+		op div pos.x 100
+		op idiv vel.y vel PACKING_NUM
+		op div vel.y 100
+		op mod vel.x vel PACKING_NUM
+		op div vel.x 100
+
+		# wait 1
+		update:
+		op add pos.x vel.x
+		op add pos.y vel.y
+		op add lifetime -1
+		# wait 1
+		jump not_dead lifetime >= 0
+		dead:
+			write 0 cell1 i
+			write 0 cell1 vel_index
+			write 0 cell1 lifetime_index
+		jump end_loop
+		not_dead:
+
+		explode:
+		explosion @sharded pos.x pos.y 10 1 true true false
+		
+		update_values:
+		op mul pos.x 100
+		op mul pos.y 100
+		set temp PACKING_NUM * pos.y
+		set pos temp + pos.x
+		# wait 1
+		write pos cell1 i
+		write lifetime cell1 lifetime_index
+
+
+		end_loop:
+		op add i 3
+		jump read_loop i < MAX_CELL
+	jump main_loop
