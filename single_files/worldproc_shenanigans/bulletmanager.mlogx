@@ -1,6 +1,7 @@
 setrate 500 // USE MAXIMUM POWER!!!
 set MAX_CELL 120
 set GROUP_SIZE 5
+set cell cell1
 
 main_loop:
 
@@ -8,17 +9,17 @@ main_loop:
 	read_loop:
 
 		get_data:
-		read pos.x cell1 i
+		read pos.x cell i
 		jump end_loop equal pos.x 0 //If cell is blank, jump to end loop
 		//TODO change to -1
 		set iplus1 i + 1
 		set iplus2 i + 2
 		set iplus3 i + 3
 		set iplus4 i + 4
-		read pos.y cell1 iplus1
-		read vel.x cell1 iplus2
-		read vel.y cell1 iplus3
-		read lifetime cell1 iplus4
+		read pos.y cell iplus1
+		read vel.x cell iplus2
+		read vel.y cell iplus3
+		read lifetime cell iplus4
 
 
 		# wait 1
@@ -29,11 +30,11 @@ main_loop:
 		# wait 1
 		jump not_dead lifetime >= 0
 		dead:
-			write 0 cell1 i
-			write 0 cell1 iplus1
-			write 0 cell1 iplus2
-			write 0 cell1 iplus3
-			write 0 cell1 iplus4
+			write 0 cell i
+			write 0 cell iplus1
+			write 0 cell iplus2
+			write 0 cell iplus3
+			write 0 cell iplus4
 		jump end_loop
 		not_dead:
 
@@ -41,9 +42,9 @@ main_loop:
 		explosion @sharded pos.x pos.y 10 1 true true false
 
 		update_values:
-		write pos.x cell1 i
-		write pos.y cell1 iplus1
-		write lifetime cell1 iplus4
+		write pos.x cell i
+		write pos.y cell iplus1
+		write lifetime cell iplus4
 
 
 		end_loop:
