@@ -1,40 +1,35 @@
 setrate 500
-op mul PACKING_NUM @mapw 100
 set MAX_CELL 120
+set GROUP_SIZE 5
 main_loop:
 set i 0
 read_loop:
-read pos cell1 i
-jump end_loop equal pos 0
-op add vel_index i 1
-read vel cell1 vel_index
-op add lifetime_index i 2
-read lifetime cell1 lifetime_index
-op idiv pos.y pos PACKING_NUM
-op div pos.y pos.y 100
-op mod pos.x pos PACKING_NUM
-op div pos.x pos.x 100
-op idiv vel.y vel PACKING_NUM
-op div vel.y vel.y 100
-op mod vel.x vel PACKING_NUM
-op div vel.x vel.x 100
+read pos.x cell1 i
+jump end_loop equal pos.x 0
+op add iplus1 i 1
+op add iplus2 i 2
+op add iplus3 i 3
+op add iplus4 i 4
+read pos.y cell1 iplus1
+read vel.x cell1 iplus2
+read vel.y cell1 iplus3
+read lifetime cell1 iplus4
 op add pos.x pos.x vel.x
 op add pos.y pos.y vel.y
 op add lifetime lifetime -1
 jump not_dead greaterThanEq lifetime 0
 write 0 cell1 i
-write 0 cell1 vel_index
-write 0 cell1 lifetime_index
+write 0 cell1 iplus1
+write 0 cell1 iplus2
+write 0 cell1 iplus3
+write 0 cell1 iplus4
 jump end_loop always 0 0
 not_dead:
 explosion @sharded pos.x pos.y 10 1 true true false
-op mul pos.x pos.x 100
-op mul pos.y pos.y 100
-op mul temp PACKING_NUM pos.y
-op add pos temp pos.x
-write pos cell1 i
-write lifetime cell1 lifetime_index
+write pos.x cell1 i
+write pos.y cell1 iplus1
+write lifetime cell1 iplus4
 end_loop:
-op add i i 3
+op add i i GROUP_SIZE
 jump read_loop lessThan i MAX_CELL
 jump main_loop always 0 0

@@ -1,6 +1,6 @@
 setrate 500 // USE MAXIMUM POWER!!!
-set PACKING_NUM @mapw * 100 //used to pack vectors into a single number for more efficient storage
 set MAX_CELL 120
+set GROUP_SIZE 5
 
 main_loop:
 
@@ -8,22 +8,18 @@ main_loop:
 	read_loop:
 
 		get_data:
-		read pos cell1 i
-		jump end_loop equal pos 0 //If cell is blank, jump to end loop
-		set vel_index i + 1
-		read vel cell1 vel_index
-		set lifetime_index i + 2
-		read lifetime cell1 lifetime_index
+		read pos.x cell1 i
+		jump end_loop equal pos.x 0 //If cell is blank, jump to end loop
+		//TODO change to -1
+		set iplus1 i + 1
+		set iplus2 i + 2
+		set iplus3 i + 3
+		set iplus4 i + 4
+		read pos.y cell1 iplus1
+		read vel.x cell1 iplus2
+		read vel.y cell1 iplus3
+		read lifetime cell1 iplus4
 
-		process_data:
-		op idiv pos.y pos PACKING_NUM
-		op div pos.y 100
-		op mod pos.x pos PACKING_NUM
-		op div pos.x 100
-		op idiv vel.y vel PACKING_NUM
-		op div vel.y 100
-		op mod vel.x vel PACKING_NUM
-		op div vel.x 100
 
 		# wait 1
 		update:
@@ -34,25 +30,23 @@ main_loop:
 		jump not_dead lifetime >= 0
 		dead:
 			write 0 cell1 i
-			write 0 cell1 vel_index
-			write 0 cell1 lifetime_index
+			write 0 cell1 iplus1
+			write 0 cell1 iplus2
+			write 0 cell1 iplus3
+			write 0 cell1 iplus4
 		jump end_loop
 		not_dead:
 
 		explode:
 		explosion @sharded pos.x pos.y 10 1 true true false
-		
+
 		update_values:
-		op mul pos.x 100
-		op mul pos.y 100
-		set temp PACKING_NUM * pos.y
-		set pos temp + pos.x
-		# wait 1
-		write pos cell1 i
-		write lifetime cell1 lifetime_index
+		write pos.x cell1 i
+		write pos.y cell1 iplus1
+		write lifetime cell1 iplus4
 
 
 		end_loop:
-		op add i 3
+		op add i GROUP_SIZE
 		jump read_loop i < MAX_CELL
 	jump main_loop
