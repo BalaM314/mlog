@@ -1,0 +1,47 @@
+print "Bulletmanager Turret by BalaM314"
+set turret arc1
+set cell bank1
+set cellSize 510
+set timeToHit 90
+set maxRange 90
+set ipt 10
+set cooldown 0.3
+set expStart.x @thisx
+set expStart.y @thisy
+set fireAlways false
+set i 0
+setrate ipt
+sensor turret.x turret @x
+sensor turret.y turret @y
+fire:
+wait_for_player:
+sensor turret.controlled turret @controlled
+jump wait_for_player equal turret.controlled 0
+sensor turret.shooting turret @shooting
+op or shoot fireAlways turret.shooting
+jump wait_for_player equal shoot false
+sensor turret.shootX turret @shootX
+sensor turret.shootY turret @shootY
+op sub shootXDiff turret.shootX expStart.x
+op sub shootYDiff turret.shootY expStart.y
+op len len shootYDiff shootXDiff
+op min realLen len maxRange
+op div lenScl realLen len
+op mul realShootXDiff shootXDiff lenScl
+op mul realShootYDiff shootYDiff lenScl
+op div vel.x realShootXDiff timeToHit
+op div vel.y realShootYDiff timeToHit
+op add iplus1 i 1
+op add iplus2 i 2
+op add iplus3 i 3
+op add iplus4 i 4
+write expStart.x cell i
+write expStart.y cell iplus1
+write vel.x cell iplus2
+write vel.y cell iplus3
+write timeToHit cell iplus4
+wait cooldown
+op add i i 5
+jump fire lessThan i cellSize
+set i 0
+jump fire always 0 0
