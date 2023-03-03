@@ -1,0 +1,47 @@
+sensor config sorter1 @config
+jump enableall equal config @surge-alloy
+radar enemy any any maxHealth swarmer1 0 enemy
+radar enemy any any maxHealth swarmer4 0 enemy2
+op or on enemy enemy2
+sensor swarmer1.controlled swarmer1 @controlled
+jump swarmer1_nc equal swarmer1.controlled 0
+control enabled swarmer1 true
+jump swarmer1_handled always 0 0
+swarmer1_nc:
+control enabled swarmer1 on
+swarmer1_handled:
+sensor swarmer2.controlled swarmer2 @controlled
+jump swarmer2_nc equal swarmer2.controlled 0
+control enabled swarmer2 true
+jump swarmer2_handled always 0 0
+swarmer2_nc:
+control enabled swarmer2 on
+swarmer2_handled:
+sensor swarmer3.controlled swarmer3 @controlled
+jump swarmer3_nc equal swarmer3.controlled 0
+control enabled swarmer3 true
+jump swarmer3_handled always 0 0
+swarmer3_nc:
+control enabled swarmer3 on
+swarmer3_handled:
+sensor swarmer4.controlled swarmer4 @controlled
+jump swarmer4_nc equal swarmer4.controlled 0
+control enabled swarmer4 true
+jump swarmer4_handled always 0 0
+swarmer4_nc:
+control enabled swarmer4 on
+swarmer4_handled:
+sensor tsunami1.controlled tsunami1 @controlled
+jump tsunami1_nc equal tsunami1.controlled 0
+control enabled tsunami1 true
+jump tsunami1_handled always 0 0
+tsunami1_nc:
+control enabled tsunami1 on
+tsunami1_handled:
+end
+enableall:
+control enabled swarmer1 true
+control enabled swarmer2 true
+control enabled swarmer3 true
+control enabled swarmer4 true
+control enabled tsunami1 true

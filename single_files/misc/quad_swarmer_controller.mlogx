@@ -1,0 +1,25 @@
+sensor config sorter1 @config
+jump enableall equal config @surge-alloy
+radar enemy any any maxHealth swarmer1 0 enemy
+radar enemy any any maxHealth swarmer4 0 enemy2
+op or on enemy enemy2
+
+&for turret of swarmer1 swarmer2 swarmer3 swarmer4 tsunami1 {
+
+	sensor $turret.controlled
+	jump $turret_nc equal $turret.controlled 0
+	control enabled $turret true
+	jump $turret_handled
+	$turret_nc:
+	control enabled $turret on
+	$turret_handled:
+
+}
+
+end
+enableall:
+control enabled swarmer1 true
+control enabled swarmer2 true
+control enabled swarmer3 true
+control enabled swarmer4 true
+control enabled tsunami1 true
