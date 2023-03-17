@@ -1,0 +1,33 @@
+print "conduit exploder by BalaM314"
+print "Must be linked to every conduit and the reactor in reverse order of the explosion"
+print "(link reactor first)"
+set playerTeam @sharded
+wait 2
+
+init:
+	set startingLinks @links
+
+wait_for_conduit_break:
+	jump wait_for_conduit_break @links == startingLinks
+	//Wait until @links changes (meaning a conduit was broken)
+
+setrate 50
+main_loop:
+	wait 0.05
+	getlink build 0
+	jump stop equal build null
+	sensor build.x
+	sensor build.y
+	sensor build.type
+	jump final_explosion build.type == @neoplasia-reactor
+	//Large explosion for visuals
+	explosion playerTeam build.x build.y 5 0 true true false
+	//Small explosion so only one conduit is blown up
+	explosion playerTeam build.x build.y 1 500 true true false
+	jump main_loop
+
+final_explosion:
+	explosion playerTeam build.x build.y 20 150 true true false
+	explosion playerTeam build.x build.y 20 150 true true true
+stop:
+	stop
