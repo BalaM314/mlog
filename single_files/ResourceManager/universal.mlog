@@ -20,12 +20,12 @@ set offSwitch switch1
 set onSwitch switch2
 set powerBuilding null
 set cell cell1
-set maxCoreCap 30000
+set maxCoreCap 50000
 set maxPowerCap 5000000
-set minInputPerc 8
-set minOutputPerc 0.5
+set minInputPerc 10
+set minOutputPerc 0.2
 set maxOutputPerc 98
-set minPowerPerc 30
+set minPowerPerc 35
 print "Do not edit below this line."
 printflush null
 set shouldRun true

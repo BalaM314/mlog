@@ -1,0 +1,28 @@
+set xmin 56
+set xmax 340
+set ymin 60
+set ymax 309
+set ipt 500
+wait_for_flag:
+	getflag ready "unlockTitanium"
+	jump wait_for_flag notEqual ready true
+
+run:
+	setrate ipt
+	set x xmin
+	set y ymin
+
+	check_tile:
+		getblock floor floor x y
+		jump next notEqual floor @ice
+		setblock ore @ore-titanium x y
+
+		next:
+		op add x 1
+		jump check_tile lessThanEq x xmax
+	
+	set x xmin
+	op add y 1
+	jump check_tile lessThanEq y ymax
+
+stop

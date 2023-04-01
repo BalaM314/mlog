@@ -5,6 +5,7 @@ set playerTeam @sharded
 wait 2
 
 init:
+	jump stop @links == 0
 	set startingLinks @links
 
 wait_for_conduit_break:
