@@ -1,0 +1,19 @@
+{
+	"compilerConstants": {
+		"bonusGridBlocks": ["copper-wall", "duo", "repair-point", "solar-panel"]
+	},
+	"compilerOptions": {
+		"removeCompilerMark": false,
+		"removeUnusedJumpLabels": true,
+		"checkTypes": true,
+		"prependFileName": true,
+		"mode": "single",
+		"compileWithErrors": true,
+		"removeComments": true,
+		"include": []
+	},
+	"authors": [
+		"BalaM314"
+	],
+	"name": "zerofive_map"
+}

@@ -1,0 +1,31 @@
+
+
+
+
+
+count_blocks:
+
+	reset_totals:
+		&for block of $bonusGridBlocks {
+			set count-$block 0
+		}
+	
+	set i 0
+	count_loop:
+		getlink build i
+		sensor build.type
+		&for block of $bonusGridBlocks {
+			jump not_$block build.type != @$(block)
+			op add count-$block 1
+			jump block_counted
+			not_$block:
+		}
+		block_counted:
+		op add i 1
+		jump count_loop i < @links
+
+print_data:
+	&for block of $bonusGridBlocks {
+		printf "$(block): {count-$(block)}\n"
+	}
+	printflush message1

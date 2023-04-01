@@ -1,0 +1,43 @@
+set count-copper-wall 0
+set count-duo 0
+set count-repair-point 0
+set count-solar-panel 0
+set i 0
+count_loop:
+getlink build i
+sensor build.type build @type
+jump not_copper-wall notEqual build.type @copper-wall
+op add count-copper-wall count-copper-wall 1
+jump block_counted always 0 0
+not_copper-wall:
+jump not_duo notEqual build.type @duo
+op add count-duo count-duo 1
+jump block_counted always 0 0
+not_duo:
+jump not_repair-point notEqual build.type @repair-point
+op add count-repair-point count-repair-point 1
+jump block_counted always 0 0
+not_repair-point:
+jump not_solar-panel notEqual build.type @solar-panel
+op add count-solar-panel count-solar-panel 1
+jump block_counted always 0 0
+not_solar-panel:
+block_counted:
+op add i i 1
+jump count_loop lessThan i @links
+print "copper-wall: "
+print count-copper-wall
+print "\n"
+print "duo: "
+print count-duo
+print "\n"
+print "repair-point: "
+print count-repair-point
+print "\n"
+print "solar-panel: "
+print count-solar-panel
+print "\n"
+printflush message1
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
