@@ -1,7 +1,7 @@
 
 
 
-
+set cell cell1
 
 count_blocks:
 
@@ -24,8 +24,9 @@ count_blocks:
 		op add i 1
 		jump count_loop i < @links
 
-print_data:
+write_data:
+	set i 0
 	&for block of $bonusGridBlocks {
-		printf "$(block): {count-$(block)}\n"
+		write count-$block cell i
+		op add i 1
 	}
-	printflush message1

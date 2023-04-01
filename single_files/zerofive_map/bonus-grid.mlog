@@ -1,3 +1,4 @@
+set cell cell1
 set count-copper-wall 0
 set count-duo 0
 set count-repair-point 0
@@ -25,19 +26,15 @@ not_solar-panel:
 block_counted:
 op add i i 1
 jump count_loop lessThan i @links
-print "copper-wall: "
-print count-copper-wall
-print "\n"
-print "duo: "
-print count-duo
-print "\n"
-print "repair-point: "
-print count-repair-point
-print "\n"
-print "solar-panel: "
-print count-solar-panel
-print "\n"
-printflush message1
+set i 0
+write count-copper-wall cell i
+op add i i 1
+write count-duo cell i
+op add i i 1
+write count-repair-point cell i
+op add i i 1
+write count-solar-panel cell i
+op add i i 1
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"
