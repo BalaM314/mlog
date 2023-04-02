@@ -1,0 +1,109 @@
+#program_type main
+#require cookie
+#Taxi Payenter by BalaM314
+
+#Config
+set taxiUnitType @mega
+set targetUnitType @spiroct
+set reconstructor reconstructor1
+#Runtime variables
+sensor reconstructor.x
+sensor reconstructor.y
+jump bind_target
+target_unbound:
+	print "[red]Target unit unbound."
+	printflush message1
+	wait 0.5
+	jump bind_target
+
+payload_fault:
+	print "[scarlet]Payload fault!"
+	printflush message1
+	wait 0.5
+
+bind_target:
+	#Bind a unit, but check if it's alive and unflagged.
+	print "Binding a unit..."
+	printflush message1
+	ubind targetUnitType
+	sensor @unit.flag
+	jump bind_target notEqual @unit.flag 0
+	sensor @unit.controlled
+	jump bind_target greaterThan @unit.controlled 1
+	ucontrol flag cookie
+	set targetUnit @unit
+	sensor taxiUnit.dead
+	jump bind_taxi notEqual taxiUnit.dead false
+	jump move_to_target
+
+taxi_unbound:
+	print "[red]Taxi unit unbound."
+	printflush message1
+	wait 0.5
+
+bind_taxi:
+	#Bind a unit, but check if it's alive and unflagged.
+	print "Binding a taxi unit..."
+	printflush message1
+	ubind taxiUnitType
+	sensor @unit.flag
+	jump bind_taxi notEqual @unit.flag 0
+	sensor @unit.controlled
+	jump bind_taxi greaterThan @unit.controlled 1
+	sensor @unit.payloadCount
+	jump bind_taxi notEqual @unit.payloadCount 0
+	ucontrol flag cookie
+	set taxiUnit @unit
+
+move_to_target:
+	#Constantly tell the taxi unit to move to the target unit's coords.
+	ubind targetUnit
+	ucontrol idle
+	sensor targetUnit.x
+	sensor targetUnit.y
+	sensor targetUnit.controlled
+	ubind taxiUnit
+	sensor taxiUnit.payloadCount
+	jump taxi_has_payload notEqual taxiUnit.payloadCount 0
+	ucontrol move targetUnit.x targetUnit.y
+	sensor taxiUnit.dead
+	sensor taxiUnit.controlled
+	jump taxi_unbound equal taxiUnit.dead true
+	jump taxi_unbound greaterThan taxiUnit.controlled 1
+	jump target_unbound greaterThan targetUnit.controlled 1
+	print_data_1:
+		sensor taxiUnit.x
+		sensor taxiUnit.y
+		printf "Moving taxi unit to target. ({taxiUnit.x}, {taxiUnit.y})"
+		printflush message1
+	ucontrol within targetUnit.x targetUnit.y 2 close
+	jump move_to_target equal close false
+	grab_unit:
+		ucontrol payTake true
+		jump move_to_target
+	taxi_has_payload:
+		sensor taxiUnit.payloadType
+		jump payload_fault notEqual taxiUnit.payloadType targetUnitType
+
+move_to_recon:
+	#Constantly tell the unit to move to the reconstructor's coords and payenter.
+	ucontrol move reconstructor.x reconstructor.y
+	sensor @unit.dead
+	sensor @unit.controlled
+	jump target_unbound equal @unit.dead true
+	jump target_unbound greaterThan @unit.controlled 1
+	print_data_2:
+		sensor @unit.x
+		sensor @unit.y
+		printf "Moving taxi unit to reconstructor. ({@unit.x}, {@unit.y})"
+		printflush message1
+	ucontrol within reconstructor.x reconstructor.y 2 close
+	jump move_to_recon equal close false
+	sensor reconstructor.config
+	jump move_to_recon notEqual reconstructor.config null
+
+paydrop:
+	ucontrol payDrop
+
+jump bind_target
+
