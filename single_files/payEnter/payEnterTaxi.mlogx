@@ -101,6 +101,7 @@ move_to_recon:
 	jump move_to_recon equal close false
 	sensor reconstructor.config
 	jump move_to_recon notEqual reconstructor.config null
+	wait 0.5
 
 paydrop:
 	ucontrol payDrop
