@@ -1,0 +1,16 @@
+setrate 500
+set detector duo1
+set outX 100
+set outY 100
+
+
+main_loop:
+	radar any distance 0 detector unit
+	jump main_loop equal unit null
+
+	teleport:
+		setprop @x unit outX
+		setprop @y unit outY
+
+	jump main_loop
+
