@@ -8,6 +8,7 @@ print "Source code available at $githubUrl"
 #Config
 set unitType @horizon
 set offSwitch switch1
+set maxDist 50
 print "Config options above"
 #Runtime variables
 restart:
@@ -44,6 +45,7 @@ main_loop:
 			move_unit$(n):
 			ubind unit$(n)
 			ucontrol move reconstructor$(n).x reconstructor$(n).y
+			ucontrol boost true
 			&if $print {
 				sensor @unit.x
 				op floor @unit.x
@@ -72,6 +74,8 @@ main_loop:
 		sensor unit.controlled
 		jump bind_unit$(n) notEqual unit.flag 0
 		jump bind_unit$(n) greaterThan unit.controlled 1
+		ucontrol within @thisx @thisy maxDist close
+		jump bind_unit$(n) equal close false
 		ucontrol flag cookie
 		set unit$(n) @unit
 		&if $print {

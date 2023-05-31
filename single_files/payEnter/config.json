@@ -12,7 +12,7 @@
 	},
 	"compilerConstants": {
 		"message": "[orange]Core T4 Payenter[] by [#3141FF]BalaM314[]",
-		"numRecons": "4",
+		"numRecons": "6",
 		"print": true,
 		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/single_files/payEnter/"
 	}
