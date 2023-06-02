@@ -54,3 +54,6 @@ explosion @sharded exp.x exp.y hitRadius hitDpe hitAir hitGround false
 explosion @sharded exp.x exp.y hitRadius 0 false false true
 wait waitTime
 jump fire always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

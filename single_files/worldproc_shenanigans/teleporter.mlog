@@ -1,3 +1,4 @@
+print "Generic Worldproc Teleporter by [#3141FF]BalaM314[]"
 setrate 500
 set detector duo1
 set outX 100

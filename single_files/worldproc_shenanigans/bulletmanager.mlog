@@ -34,3 +34,6 @@ end_loop:
 op add i i GROUP_SIZE
 jump read_loop lessThan i MAX_CELL
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

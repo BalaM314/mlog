@@ -64,3 +64,6 @@ wait realCooldown
 sensor @unit.dead @unit @dead
 jump get_unit strictEqual @unit.dead true
 jump fire always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

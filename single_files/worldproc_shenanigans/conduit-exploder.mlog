@@ -3,6 +3,7 @@ print "Must be linked to every conduit and the reactor in reverse order of the e
 print "(link reactor first)"
 set playerTeam @sharded
 wait 2
+jump stop strictEqual @links 0
 set startingLinks @links
 wait_for_conduit_break:
 jump wait_for_conduit_break strictEqual @links startingLinks
@@ -23,3 +24,6 @@ explosion playerTeam build.x build.y 20 150 true true false
 explosion playerTeam build.x build.y 20 150 true true true
 stop:
 stop
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
