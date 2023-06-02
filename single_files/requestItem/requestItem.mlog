@@ -1,81 +1,74 @@
 op mul cookie @thisx @maph
 op add cookie @thisy cookie
+print "Request Item by [#3141FF]BalaM314"
+print "Settings below"
 set unitType @flare
 set itemDropRadius 2
 set pickupItem @copper
-set maxItemsToTake 100
-get_core:
-ubind @flare
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
-ubind @mono
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
-set err "No units, unable to locate core."
-jump err always
-locate_core:
-ulocate building core false _ coreX coreY _ core
-ubind null
+set maxItemsToTake 31415
+set output null
+print "End of settings"
+restart:
+printflush null
+sensor output.x output @x
+sensor output.y output @y
 main_loop:
-bind_unit:
-sensor unit.dead @unit @dead
-jump check_items notEqual unit.dead true
-bind_new_unit:
-set unit_type unitType
-op add @counter _stack1 1
-jump flag_unit always
-check_items:
-ucontrol idle
-ucontrol flag cookie
-sensor itemsInContainer container1 pickupItem
-sensor itemCapacity container1 @itemCapacity
-jump main_loop equal itemsInContainer itemCapacity
-jump move_unit_to_core always
-move_unit_to_core:
-sensor unit.dead @unit @dead
-sensor unit.controller @unit @controller
-jump bind_new_unit equal unit.dead true
-jump bind_new_unit notEqual unit.controller @this
-ucontrol move coreX coreY
-sensor unit.x @unit @x
-sensor unit.y @unit @y
-op sub xDiff_from_core unit.x coreX
-op sub yDiff_from_core unit.y coreY
-op abs xDiff_from_core xDiff_from_core 0
-op abs yDiff_from_core yDiff_from_core 0
-jump move_unit_to_core greaterThan xDiff_from_core itemDropRadius
-jump move_unit_to_core greaterThan yDiff_from_core itemDropRadius
-drop_current_item:
-sensor currentItem @unit @firstItem
-wait 0.5
-ucontrol itemDrop core 1e10
-pickup_item:
-sensor unit.dead @unit @dead
-sensor unit.controller @unit @controller
-jump bind_new_unit equal unit.dead true
-jump bind_new_unit notEqual unit.controller @this
-wait 0.5
+jump output_got notEqual output null
+set i 0
+get_output_loop:
+getlink outputBuilding i
+sensor outputBuilding.itemCapacity outputBuilding @itemCapacity
+jump output_found notEqual outputBuilding.itemCapacity 0
+op add i i 1
+jump get_output_loop lessThan i @links
+print "[red]Error: no valid linked output buildings.\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
+wait 3
+jump restart always 0 0
+output_found:
+set output outputBuilding
+sensor output.x output @x
+sensor output.y output @y
+output_got:
+jump check_unit always 0 0
+unit_ok:
+sensor @unit.firstItem @unit @firstItem
+jump move_to_core notEqual @unit.firstItem pickupItem
+jump move_to_destination always 0 0
+move_to_core:
+ulocate building core false _ core.x core.y core.found core
+ucontrol move core.x core.y
+ucontrol itemDrop core maxItemsToTake
 ucontrol itemTake core pickupItem maxItemsToTake
-sensor itemsInUnit @unit pickupItem
-jump drop_current_item equal itemsInUnit 0
-move_unit_to_dest:
-sensor unit.dead @unit @dead
-sensor unit.controller @unit @controller
-jump bind_new_unit equal unit.dead true
-jump bind_new_unit notEqual unit.controller @this
-ucontrol move @thisx @thisy
-sensor unit.x @unit @x
-sensor unit.y @unit @y
-op sub xDiff_from_dest unit.x @thisx
-op sub yDiff_from_dest unit.y @thisy
-op abs xDiff_from_dest xDiff_from_dest 0
-op abs yDiff_from_dest yDiff_from_dest 0
-jump move_unit_to_dest greaterThan xDiff_from_dest itemDropRadius
-jump move_unit_to_dest greaterThan yDiff_from_dest itemDropRadius
-drop_item:
-wait 0.5
-ucontrol itemDrop container1 maxItemsToTake
-jump main_loop always
+jump main_loop always 0 0
+move_to_destination:
+ucontrol move output.x output.y
+ucontrol itemDrop output maxItemsToTake
+jump main_loop always 0 0
+check_unit:
+sensor @unit.dead @unit @dead
+jump bind_unit strictEqual @unit null
+jump bind_unit strictEqual @unit.dead true
+sensor @unit.controlled @unit @controlled
+sensor @unit.flag @unit @flag
+jump bind_unit greaterThanEq @unit.controlled @ctrlPlayer
+jump unit_ok strictEqual @unit.flag cookie
+jump unit_ok strictEqual @unit.flag 0
+bind_unit:
+ubind unitType
+sensor @unit.controlled @unit @controlled
+sensor @unit.flag @unit @flag
+jump bind_unit greaterThanEq @unit.controlled @ctrlPlayer
+jump flag_ok strictEqual @unit.flag 0
+jump flag_ok strictEqual @unit.flag cookie
+flag_ok:
+ucontrol flag cookie
+jump unit_ok always 0 0
+print "[red]Error: no units of type "
+print unitType
+print " exist.\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
+wait 3
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

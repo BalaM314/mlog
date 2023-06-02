@@ -1,91 +1,94 @@
 #require cookie
-#author BalaM314
-#Request Item by BalaM314.
+print "Request Item by [#3141FF]BalaM314"
+print "Settings below"
 set unitType @flare
-set itemDropRadius 2#It's actually 5.625
+set itemDropRadius 2 #It's actually 5.625
 set pickupItem @copper
-set maxItemsToTake 100
-
-
-get_core:
-#Don't bother to check the flag, this unit won't be moved.
-ubind @flare
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
-ubind @mono
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
-throw "No units, unable to locate core."
-
-locate_core:
-ulocate building core false coreX coreY _ core
-ubind null
-
+set maxItemsToTake 31415
+set output null #null to auto detect
+print "End of settings"
+restart:
+printflush null
+sensor output.x
+sensor output.y
 
 
 main_loop:
 
-bind_unit:
-	sensor unit.dead @unit @dead
-	jump check_items notEqual unit.dead true
-	bind_new_unit:
-	uflag unitType
+	get_output:
+		jump output_got notEqual output null
+		set i 0
+		get_output_loop:
+			getlink outputBuilding i
+			sensor outputBuilding.itemCapacity
+			jump output_found outputBuilding.itemCapacity != 0
+			op add i 1
+			jump get_output_loop lessThan i @links
 
-check_items:
-	ucontrol idle
-	ucontrol flag cookie
-	sensor itemsInContainer container1 pickupItem
-	sensor itemCapacity container1 @itemCapacity
-	jump main_loop equal itemsInContainer itemCapacity
-	jump move_unit_to_core always
+		no_output_building:
+			print "[red]Error: no valid linked output buildings.\n\n[white]$name by $authors"
+			printflush message1
+			wait 3
+			jump restart
+		output_found:
+		set output outputBuilding
+		sensor output.x
+		sensor output.y
+		
+	output_got:
+	
+	jump check_unit
+	unit_ok:
 
-move_unit_to_core:
-	sensor unit.dead @unit @dead
-	sensor unit.controller @unit @controller
-	jump bind_new_unit equal unit.dead true
-	jump bind_new_unit notEqual unit.controller @this
-	ucontrol move coreX coreY
-	sensor unit.x @unit @x
-	sensor unit.y @unit @y
-	op sub xDiff_from_core unit.x coreX
-	op sub yDiff_from_core unit.y coreY
-	op abs xDiff_from_core
-	op abs yDiff_from_core
-	jump move_unit_to_core greaterThan xDiff_from_core itemDropRadius
-	jump move_unit_to_core greaterThan yDiff_from_core itemDropRadius
+	determine_action:
+		sensor @unit.firstItem
+		jump move_to_core @unit.firstItem != pickupItem
+		#the unit has the correct item, so go to the destination
+		jump move_to_destination
 
-drop_current_item:
-	sensor currentItem @unit @firstItem
-	wait 0.5
-	ucontrol itemDrop core 1e10
+	move_to_core:
+		ulocate core
+		ucontrol move core.x core.y
 
-pickup_item:
-	sensor unit.dead @unit @dead
-	sensor unit.controller @unit @controller
-	jump bind_new_unit equal unit.dead true
-	jump bind_new_unit notEqual unit.controller @this
-	wait 0.5
-	ucontrol itemTake core pickupItem maxItemsToTake
-	sensor itemsInUnit @unit pickupItem
-	jump drop_current_item equal itemsInUnit 0
+	drop_item:
+		ucontrol itemDrop core maxItemsToTake
 
-move_unit_to_dest:
-	sensor unit.dead @unit @dead
-	sensor unit.controller @unit @controller
-	jump bind_new_unit equal unit.dead true
-	jump bind_new_unit notEqual unit.controller @this
-	ucontrol move @thisx @thisy
-	sensor unit.x @unit @x
-	sensor unit.y @unit @y
-	op sub xDiff_from_dest unit.x @thisx
-	op sub yDiff_from_dest unit.y @thisy
-	op abs xDiff_from_dest
-	op abs yDiff_from_dest
-	jump move_unit_to_dest greaterThan xDiff_from_dest itemDropRadius
-	jump move_unit_to_dest greaterThan yDiff_from_dest itemDropRadius
+	grab_item_from_core:
+		ucontrol itemTake core pickupItem maxItemsToTake
+		jump main_loop
 
-drop_item:
-	wait 0.5
-	ucontrol itemDrop container1 maxItemsToTake
+	move_to_destination:
+		ucontrol move output.x output.y
 
-jump main_loop always
+	drop_item_to_destination:
+		ucontrol itemDrop output maxItemsToTake
+	
+
+	jump main_loop
+
+	check_unit:
+		sensor @unit.dead
+		jump bind_unit @unit == null
+		jump bind_unit @unit.dead == true
+		sensor @unit.controlled
+		sensor @unit.flag
+		jump bind_unit @unit.controlled >= @ctrlPlayer
+		jump unit_ok @unit.flag == cookie
+		jump unit_ok @unit.flag == 0
+
+	bind_unit:
+		ubind unitType
+		//jump no_units @unit == null
+		sensor @unit.controlled
+		sensor @unit.flag
+		jump bind_unit @unit.controlled >= @ctrlPlayer
+		jump flag_ok @unit.flag == 0
+		jump flag_ok @unit.flag == cookie
+		flag_ok:
+		ucontrol flag cookie
+		jump unit_ok
+	
+	no_units:
+		printf "[red]Error: no units of type {unitType} exist.\n\n[white]$name by $authors"
+		printflush message1
+		wait 3
