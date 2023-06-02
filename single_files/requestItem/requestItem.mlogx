@@ -40,6 +40,12 @@ main_loop:
 		sensor output.y
 		
 	output_got:
+
+	get_item:
+		sensor sorterConfig sorter1 @config
+		jump item_got equal sorterConfig null
+		set pickupItem sorterConfig
+	item_got:
 	
 	jump check_unit
 	unit_ok:

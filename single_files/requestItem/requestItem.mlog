@@ -34,6 +34,10 @@ set output outputBuilding
 sensor output.x output @x
 sensor output.y output @y
 output_got:
+sensor sorterConfig sorter1 @config
+jump item_got equal sorterConfig null
+set pickupItem sorterConfig
+item_got:
 jump check_unit always 0 0
 unit_ok:
 sensor @unit.firstItem @unit @firstItem
