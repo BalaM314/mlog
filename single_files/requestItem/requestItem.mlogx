@@ -9,6 +9,8 @@ set output null #null to auto detect
 print "End of settings"
 restart:
 printflush null
+print "Starting...\n\n[white]$name by $authors"
+printflush message1
 sensor output.x
 sensor output.y
 
@@ -17,6 +19,8 @@ main_loop:
 
 	get_output:
 		jump output_got notEqual output null
+		print "Determining output building...\n\n[white]$name by $authors"
+		printflush message1
 		set i 0
 		get_output_loop:
 			getlink outputBuilding i
@@ -47,6 +51,8 @@ main_loop:
 		jump move_to_destination
 
 	move_to_core:
+		print "Moving unit to core\n\n[white]$name by $authors"
+		printflush message1
 		ulocate core
 		ucontrol move core.x core.y
 
@@ -58,6 +64,8 @@ main_loop:
 		jump main_loop
 
 	move_to_destination:
+		print "Moving unit to destination\n\n[white]$name by $authors"
+		printflush message1
 		ucontrol move output.x output.y
 
 	drop_item_to_destination:
@@ -69,16 +77,29 @@ main_loop:
 	check_unit:
 		sensor @unit.dead
 		jump bind_unit @unit == null
-		jump bind_unit @unit.dead == true
+		jump unit_died @unit.dead == true
 		sensor @unit.controlled
 		sensor @unit.flag
-		jump bind_unit @unit.controlled >= @ctrlPlayer
+		jump unit_controlled @unit.controlled >= @ctrlPlayer
 		jump unit_ok @unit.flag == cookie
 		jump unit_ok @unit.flag == 0
+	
+	unit_flagged:
+	print "[scarlet]Error: unit flag changed.\n\n[white]$name by $authors"
+	printflush message1
+	jump bind_unit
+	unit_died:
+	print "[scarlet]Error: unit died.\n\n[white]$name by $authors"
+	printflush message1
+	jump bind_unit
+	unit_controlled:
+	print "[scarlet]Error: unit was controlled.\n\n[white]$name by $authors"
+	printflush message1
+	jump bind_unit
 
 	bind_unit:
 		ubind unitType
-		//jump no_units @unit == null
+		jump no_units @unit == null
 		sensor @unit.controlled
 		sensor @unit.flag
 		jump bind_unit @unit.controlled >= @ctrlPlayer

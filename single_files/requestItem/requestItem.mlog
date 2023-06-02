@@ -10,10 +10,14 @@ set output null
 print "End of settings"
 restart:
 printflush null
+print "Starting...\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
 sensor output.x output @x
 sensor output.y output @y
 main_loop:
 jump output_got notEqual output null
+print "Determining output building...\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
 set i 0
 get_output_loop:
 getlink outputBuilding i
@@ -36,26 +40,42 @@ sensor @unit.firstItem @unit @firstItem
 jump move_to_core notEqual @unit.firstItem pickupItem
 jump move_to_destination always 0 0
 move_to_core:
+print "Moving unit to core\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
 ulocate building core false _ core.x core.y core.found core
 ucontrol move core.x core.y
 ucontrol itemDrop core maxItemsToTake
 ucontrol itemTake core pickupItem maxItemsToTake
 jump main_loop always 0 0
 move_to_destination:
+print "Moving unit to destination\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
 ucontrol move output.x output.y
 ucontrol itemDrop output maxItemsToTake
 jump main_loop always 0 0
 check_unit:
 sensor @unit.dead @unit @dead
 jump bind_unit strictEqual @unit null
-jump bind_unit strictEqual @unit.dead true
+jump unit_died strictEqual @unit.dead true
 sensor @unit.controlled @unit @controlled
 sensor @unit.flag @unit @flag
-jump bind_unit greaterThanEq @unit.controlled @ctrlPlayer
+jump unit_controlled greaterThanEq @unit.controlled @ctrlPlayer
 jump unit_ok strictEqual @unit.flag cookie
 jump unit_ok strictEqual @unit.flag 0
+print "[scarlet]Error: unit flag changed.\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
+jump bind_unit always 0 0
+unit_died:
+print "[scarlet]Error: unit died.\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
+jump bind_unit always 0 0
+unit_controlled:
+print "[scarlet]Error: unit was controlled.\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
+jump bind_unit always 0 0
 bind_unit:
 ubind unitType
+jump no_units strictEqual @unit null
 sensor @unit.controlled @unit @controlled
 sensor @unit.flag @unit @flag
 jump bind_unit greaterThanEq @unit.controlled @ctrlPlayer
@@ -64,6 +84,7 @@ jump flag_ok strictEqual @unit.flag cookie
 flag_ok:
 ucontrol flag cookie
 jump unit_ok always 0 0
+no_units:
 print "[red]Error: no units of type "
 print unitType
 print " exist.\n\n[white]Request Item by [#3141FF]BalaM314[]"
