@@ -41,15 +41,23 @@ item_got:
 jump check_unit always 0 0
 unit_ok:
 sensor @unit.firstItem @unit @firstItem
-jump move_to_core notEqual @unit.firstItem pickupItem
-jump move_to_destination always 0 0
+jump move_to_destination strictEqual @unit.firstItem pickupItem
+ulocate building core false _ core.x core.y core.found core
+jump move_to_core strictEqual @unit.firstItem null
+ucontrol within core.x core.y itemDropRadius close
+jump move_to_core_drop equal close true
 move_to_core:
 print "Moving unit to core\n\n[white]Request Item by [#3141FF]BalaM314[]"
 printflush message1
-ulocate building core false _ core.x core.y core.found core
+ucontrol move core.x core.y
+ucontrol itemTake core pickupItem maxItemsToTake
+jump main_loop always 0 0
+move_to_core_drop:
+print "Moving unit to core\n\n[white]Request Item by [#3141FF]BalaM314[]"
+printflush message1
 ucontrol move core.x core.y
 ucontrol itemDrop core maxItemsToTake
-ucontrol itemTake core pickupItem maxItemsToTake
+ucontrol itemDrop @air maxItemsToTake
 jump main_loop always 0 0
 move_to_destination:
 print "Moving unit to destination\n\n[white]Request Item by [#3141FF]BalaM314[]"

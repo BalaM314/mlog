@@ -52,21 +52,27 @@ main_loop:
 
 	determine_action:
 		sensor @unit.firstItem
-		jump move_to_core @unit.firstItem != pickupItem
-		#the unit has the correct item, so go to the destination
-		jump move_to_destination
+		jump move_to_destination @unit.firstItem == pickupItem
+		ulocate core
+		jump move_to_core @unit.firstItem == null
+		//Only try to drop the item if the core is near, otherwise it will drop to air
+		ucontrol within core.x core.y itemDropRadius close
+		jump move_to_core_drop equal close true
+		
 
 	move_to_core:
 		print "Moving unit to core\n\n[white]$name by $authors"
 		printflush message1
-		ulocate core
 		ucontrol move core.x core.y
-
-	drop_item:
-		ucontrol itemDrop core maxItemsToTake
-
-	grab_item_from_core:
 		ucontrol itemTake core pickupItem maxItemsToTake
+		jump main_loop
+	
+	move_to_core_drop:
+		print "Moving unit to core\n\n[white]$name by $authors"
+		printflush message1
+		ucontrol move core.x core.y
+		ucontrol itemDrop core maxItemsToTake
+		ucontrol itemDrop @air maxItemsToTake
 		jump main_loop
 
 	move_to_destination:
