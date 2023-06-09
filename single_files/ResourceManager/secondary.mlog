@@ -10,12 +10,9 @@ write_loop:
 getlink linkedBuilding i
 op add i i 1
 sensor linkedBuilding.type linkedBuilding @type
-jump next equal linkedBuilding.type @switch
-jump next equal linkedBuilding.type @battery
-jump next equal linkedBuilding.type @battery-large
 control enabled linkedBuilding shouldRun
-next:
 jump write_loop lessThan i @links
+write shouldRun cell2 0
 jump main_loop always 0 0
 end
 print "Made with mlogx"
