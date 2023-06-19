@@ -1,0 +1,18 @@
+#Generic Worldproc Effect Applier by BalaM314
+print "Generic Worldproc Effect Applier"
+print "by [#3141FF]BalaM314[]"
+
+set i 0
+fetch unitCount unitCount @sharded
+
+fetch_loop:
+	fetch unit unit @sharded i
+	sensor unit.type unit @type
+	&for allowUnit of alpha beta gamma {
+		jump next_loop equal unit.type @$(allowUnit)
+	}
+	status apply corroded unit 99999999
+
+	next_loop:
+	op add i i 1
+	jump fetch_loop lessThanEq i unitCount

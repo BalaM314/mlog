@@ -1,0 +1,17 @@
+print "Generic Worldproc Effect Applier"
+print "by [#3141FF]BalaM314[]"
+set i 0
+fetch unitCount unitCount @sharded
+fetch_loop:
+fetch unit unit @sharded i
+sensor unit.type unit @type
+jump next_loop equal unit.type @alpha
+jump next_loop equal unit.type @beta
+jump next_loop equal unit.type @gamma
+status false corroded unit 99999999
+next_loop:
+op add i i 1
+jump fetch_loop lessThanEq i unitCount
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
