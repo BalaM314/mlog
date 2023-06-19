@@ -18,3 +18,6 @@ write vel.y cell iplus3
 write 90 cell iplus4
 op add i i 5
 jump wait_for_enable lessThan i CELLSIZE
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

@@ -1,0 +1,17 @@
+{
+	"name": "Worldproc Shenanigans",
+	"authors": ["BalaM314"],
+	"compilerOptions": {
+		"include": [],
+		"removeComments": true,
+		"compileWithErrors": true,
+		"mode": "single",
+		"prependFileName": true,
+		"checkTypes": true,
+		"removeUnusedJumpLabels": true
+	},
+	"compilerConstants": {
+		"githubUrl": "https://github.com/BalaM314/mlog/tree/main/single_files/worldproc_shenanigans/",
+		"items": ["copper", "lead", "metaglass", "graphite", "sand", "coal", "titanium", "thorium", "scrap", "silicon", "plastanium", "phase-fabric", "surge-alloy", "spore-pod", "blast-compound", "pyratite", "beryllium", "fissile-matter", "dormant-cyst", "tungsten", "carbide", "oxide"]
+	}
+}
