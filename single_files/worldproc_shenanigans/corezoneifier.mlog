@@ -1,0 +1,81 @@
+print "Corezonifier by BalaM314"
+print "Logic for Uelibloom"
+setrate 10
+set tile @core-zone
+main_loop:
+fetch coreCount coreCount @sharded
+set i 0
+each_core_loop_sharded:
+fetch core core @sharded i
+sensor core.x core @x
+sensor core.y core @y
+sensor core.size core @size
+op div temp core.size 2
+op sub temp temp 0.5
+op sub bottomLeft.x core.x temp
+op sub bottomLeft.y core.y temp
+set x bottomLeft.x
+op add xMaxPlus1 bottomLeft.x core.size
+op add yMaxPlus1 bottomLeft.y core.size
+x_loop_sharded:
+set y bottomLeft.y
+y_loop_sharded:
+setblock floor tile x y @derelict 0
+op add y y 1
+jump y_loop_sharded lessThan y yMaxPlus1
+op add x x 1
+jump x_loop_sharded lessThan x xMaxPlus1
+op add i i 1
+jump each_core_loop_sharded lessThan i coreCount
+fetch coreCount coreCount @crux
+set i 0
+each_core_loop_crux:
+fetch core core @crux i
+sensor core.x core @x
+sensor core.y core @y
+sensor core.size core @size
+op div temp core.size 2
+op sub temp temp 0.5
+op sub bottomLeft.x core.x temp
+op sub bottomLeft.y core.y temp
+set x bottomLeft.x
+op add xMaxPlus1 bottomLeft.x core.size
+op add yMaxPlus1 bottomLeft.y core.size
+x_loop_crux:
+set y bottomLeft.y
+y_loop_crux:
+setblock floor tile x y @derelict 0
+op add y y 1
+jump y_loop_crux lessThan y yMaxPlus1
+op add x x 1
+jump x_loop_crux lessThan x xMaxPlus1
+op add i i 1
+jump each_core_loop_crux lessThan i coreCount
+fetch coreCount coreCount @blue
+set i 0
+each_core_loop_blue:
+fetch core core @blue i
+sensor core.x core @x
+sensor core.y core @y
+sensor core.size core @size
+op div temp core.size 2
+op sub temp temp 0.5
+op sub bottomLeft.x core.x temp
+op sub bottomLeft.y core.y temp
+set x bottomLeft.x
+op add xMaxPlus1 bottomLeft.x core.size
+op add yMaxPlus1 bottomLeft.y core.size
+x_loop_blue:
+set y bottomLeft.y
+y_loop_blue:
+setblock floor tile x y @derelict 0
+op add y y 1
+jump y_loop_blue lessThan y yMaxPlus1
+op add x x 1
+jump x_loop_blue lessThan x xMaxPlus1
+op add i i 1
+jump each_core_loop_blue lessThan i coreCount
+jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

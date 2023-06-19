@@ -1,0 +1,47 @@
+#Corezoneifier by BalaM314
+print "Corezonifier by BalaM314"
+print "Logic for Uelibloom"
+setrate 10 //10 ipt is enough
+set tile @core-zone
+
+main_loop:
+	&for team of sharded crux blue {
+		fetch coreCount coreCount @$team
+		set i 0
+		each_core_loop_$team:
+
+			get_core_$team:
+				fetch core core @$team i
+				sensor core.x
+				sensor core.y
+			
+			get_bottom_left_$team:
+				sensor core.size
+				set temp core.size / 2
+				op sub temp 0.5
+				set bottomLeft.x core.x - temp
+				set bottomLeft.y core.y - temp
+			
+			set_tiles_$team:
+				set x bottomLeft.x
+				set xMaxPlus1 bottomLeft.x + core.size
+				set yMaxPlus1 bottomLeft.y + core.size
+				x_loop_$team:
+					
+					set y bottomLeft.y
+					y_loop_$team:
+						set_tile_$team:
+						setblock floor tile x y
+
+					op add y 1
+					jump y_loop_$team y < yMaxPlus1
+				
+				op add x 1
+				jump x_loop_$team x < xMaxPlus1
+
+			
+			op add i 1
+			jump each_core_loop_$team i < coreCount
+		//Next team!
+	}
+	jump main_loop
