@@ -1,7 +1,7 @@
 #$name by $authors
 #Universal Edition: Nothing is hardcoded, can be fully configured in-game.
 jump restart
-print "$name by $authors"
+print "Resource Manager by $authors"
 print "Source code available at $githubUrl"
 print "Usage instructions:"
 print "Bind to core, power node, switches, and all buildings that should be managed."
@@ -10,7 +10,7 @@ print "Then change variables below."
 restart:
 set startingLinks @links
 set stdout message1
-print "Starting...\n\n$name"
+print "Starting...\n\n[slate]$text"
 printflush stdout
 
 print "Edit variables below."
@@ -165,8 +165,8 @@ main_loop:
 			op add i i 1
 			sensor linkedBuilding.type
 			jump next equal linkedBuilding.type @switch
-			jump next equal linkedBuilding.type @battery
-			jump next equal linkedBuilding.type @battery-large
+			# jump next equal linkedBuilding.type @battery
+			# jump next equal linkedBuilding.type @battery-large
 			#TODO add more buildings that should not be disabled
 			control enabled linkedBuilding shouldRun
 
@@ -179,6 +179,6 @@ main_loop:
 
 
 err:
-	printf "[red]Error: {err}\n\n[white]$name"
+	printf "[red]Error: {err}\n\n[slate]$text"
 	printflush stdout
 	wait 5
