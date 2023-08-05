@@ -2,8 +2,18 @@ print "Resource Manager by BalaM314"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/projects/ResourceManager/"
 print "Secondary module:"
 print "Bind to all managed buildings and to cell."
-set cell cell1
+get_cell:
+set i 0
+get_cell_loop:
+getlink cell i
+sensor cell.type cell @type
+jump main_loop strictEqual cell.type @memory-cell
+op add i i 1
+jump get_cell_loop lessThan i @links
+jump get_cell always 0 0
 main_loop:
+sensor cell.dead cell @dead
+jump get_cell strictEqual cell.dead true
 read shouldRun cell 0
 set i 0
 write_loop:

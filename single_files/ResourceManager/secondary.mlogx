@@ -1,5 +1,4 @@
 #$name by $authors
-#program_type never
 #Secondary module
 
 print "$name by $authors"
@@ -7,13 +6,23 @@ print "Source code available at $githubUrl"
 print "Secondary module:"
 print "Bind to all managed buildings and to cell."
 
-set cell cell1
+get_cell:
+set i 0
+get_cell_loop:
+	getlink cell i
+	sensor cell.type
+	jump main_loop cell.type == @memory-cell
+	op add i i 1
+	jump get_cell_loop lessThan i @links
+	jump get_cell
 
 main_loop:
 
 	read:
+		sensor cell.dead
+		jump get_cell cell.dead == true
 		read shouldRun cell 0
-	
+
 	write:
 		set i 0
 		write_loop:
