@@ -1,0 +1,30 @@
+set partID 1
+set waveX 0
+set waveY 0
+set waveSpacing 3600
+set initialWaveSpacing 3600
+set blockDestroyThreshold 2
+set alert 1
+set nextWaveTick initialWaveSpacing
+setrate 10
+op mul partID partID 10
+op sub triggerLinks @links blockDestroyThreshold
+main_loop:
+jump scan_done notEqual alert 1
+jump scan_done greaterThan @links triggerLinks
+set alert 2
+scan_done:
+jump no_wave lessThan @tick nextWaveTick
+op add wave alert partID
+setrule wave wave
+spawnwave waveX waveY false
+op add nextWaveTick @tick waveSpacing
+jump alert_not_2 notEqual alert 2
+set alert 3
+alert_not_2:
+no_wave:
+wait 0.1
+jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

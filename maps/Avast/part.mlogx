@@ -1,0 +1,42 @@
+
+set partID 1
+set waveX 0
+set waveY 0
+set waveSpacing 3600
+set initialWaveSpacing 3600
+set blockDestroyThreshold 2 // will trigger if this many blocks are destroyed
+
+set alert 1 //1 is normal (1x) , 2 is alerted (5x), 3 is after alerted (3x)
+set nextWaveTick initialWaveSpacing
+
+init:
+	setrate 10
+	op mul partID 10
+	set triggerLinks @links - blockDestroyThreshold
+
+
+main_loop:
+	scan:
+		jump scan_done alert != 1
+		jump scan_done @links > triggerLinks
+		alert:
+			set alert 2
+			//effect maybe?
+		scan_done:
+	
+	check_spawn_wave:
+		jump no_wave @tick < nextWaveTick
+		spawn_wave:
+			set wave alert + partID
+			setrule wave wave
+			spawnwave waveX waveY
+			set nextWaveTick @tick + waveSpacing
+		update_alert:
+			jump alert_not_2 alert != 2
+			set alert 3
+			alert_not_2:
+	no_wave:
+
+	
+	wait 0.1
+	jump main_loop

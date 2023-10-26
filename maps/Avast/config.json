@@ -1,0 +1,19 @@
+{
+	"compilerConstants": {
+
+	},
+	"compilerOptions": {
+		"removeCompilerMark": false,
+		"removeUnusedJumpLabels": true,
+		"checkTypes": true,
+		"prependFileName": true,
+		"mode": "single",
+		"compileWithErrors": false,
+		"removeComments": true,
+		"include": []
+	},
+	"authors": [
+		"BalaM314"
+	],
+	"name": "."
+}
