@@ -4,17 +4,43 @@ set waveY 0
 set waveSpacing 3600
 set initialWaveSpacing 3600
 set blockDestroyThreshold 2
-set alert 1
+print "Set alert to 1 on parts that are initially connected to the player."
+set alert 0
 set nextWaveTick initialWaveSpacing
 setrate 10
 op mul partID partID 10
 op sub triggerLinks @links blockDestroyThreshold
 main_loop:
+read should_alert cell1 0
+jump no_alert strictEqual should_alert false
+jump no_alert notEqual alert 0
+set alert 1
+no_alert:
+set cores 0
+set i 0
+getlink_loop:
+getlink outputBuilding i
+sensor outputBuilding.itemCapacity outputBuilding @itemCapacity
+jump next_loop lessThanEq outputBuilding.itemCapacity 1000
+op add cores cores 1
+next_loop:
+op add i i 1
+jump getlink_loop lessThan i @links
+op strictEqual no_cores cores 0
+jump cores strictEqual no_cores false
+set alert -1
+cores:
 jump scan_done notEqual alert 1
 jump scan_done greaterThan @links triggerLinks
 set alert 2
 scan_done:
+write no_cores cell1 0
+write no_cores cell2 0
+write no_cores cell3 0
+write no_cores cell4 0
+write no_cores cell5 0
 jump no_wave lessThan @tick nextWaveTick
+jump no_wave lessThanEq alert 0
 op add wave alert partID
 setrule wave wave
 spawnwave waveX waveY false
