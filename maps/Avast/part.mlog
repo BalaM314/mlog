@@ -1,21 +1,11 @@
-set partID 1
-set waveX 0
-set waveY 0
-set waveSpacing 3600
-set initialWaveSpacing 3600
+set partID 0
 set blockDestroyThreshold 2
-print "Set alert to 1 on parts that are initially connected to the player."
-set alert 0
-set nextWaveTick initialWaveSpacing
+set cell cell1
+set status 10
 setrate 10
-op mul partID partID 10
 op sub triggerLinks @links blockDestroyThreshold
+write partID cell 1
 main_loop:
-read should_alert cell1 0
-jump no_alert strictEqual should_alert false
-jump no_alert notEqual alert 0
-set alert 1
-no_alert:
 set cores 0
 set i 0
 getlink_loop:
@@ -26,30 +16,15 @@ op add cores cores 1
 next_loop:
 op add i i 1
 jump getlink_loop lessThan i @links
-op strictEqual no_cores cores 0
-jump cores strictEqual no_cores false
-set alert -1
+jump cores greaterThan cores 0
+write 12 cell 0
+stop
 cores:
-jump scan_done notEqual alert 1
-jump scan_done greaterThan @links triggerLinks
-set alert 2
-scan_done:
-write no_cores cell1 0
-write no_cores cell2 0
-write no_cores cell3 0
-write no_cores cell4 0
-write no_cores cell5 0
-jump no_wave lessThan @tick nextWaveTick
-jump no_wave lessThanEq alert 0
-op add wave alert partID
-setrule wave wave
-spawnwave waveX waveY false
-op add nextWaveTick @tick waveSpacing
-jump alert_not_2 notEqual alert 2
-set alert 3
-alert_not_2:
-no_wave:
-wait 0.1
+jump blocks_fine greaterThan @links triggerLinks
+write 11 cell 0
+jump main_loop always 0 0
+blocks_fine:
+write 10 cell 0
 jump main_loop always 0 0
 end
 print "Made with mlogx"

@@ -1,70 +1,36 @@
 
-set partID 1
-set waveX 0
-set waveY 0
-set waveSpacing 3600
-set initialWaveSpacing 3600
+set partID 0
 set blockDestroyThreshold 2 // will trigger if this many blocks are destroyed
-print "Set alert to 1 on parts that are initially connected to the player."
-set alert 0 //1 is normal (1x) , 2 is alerted (5x), 3 is after alerted (3x)
-set nextWaveTick initialWaveSpacing
+set cell cell1
+set status 10 //10 is no blocks destroyed, 11 is blocks destroyed, 12 is core destroyed
 
 init:
 	setrate 10
-	op mul partID 10
 	set triggerLinks @links - blockDestroyThreshold
+	write partID cell 1
 
 
 main_loop:
-	read_data:
-		read should_alert cell1 0
-		jump no_alert should_alert == false
-		jump no_alert alert != 0
-		set alert 1
-		no_alert:
-	scan:
-		set cores 0
-		set i 0
-		getlink_loop:
-			getlink outputBuilding i
-			sensor outputBuilding.itemCapacity
-			jump next_loop outputBuilding.itemCapacity <= 1000
-			//very cursed heuristic, assume it's a core if the item cap is more than 1000
-			//it should work though, all cores have at least 2k item cap
-			op add cores 1
-			next_loop:
-			op add i 1
-			jump getlink_loop lessThan i @links
-		set no_cores cores == 0
-		jump cores no_cores == false
-		set alert -1
-		cores:
-		jump scan_done alert != 1
-		jump scan_done @links > triggerLinks
-		alert:
-			set alert 2
-			//effect maybe?
-		scan_done:
-	write_data:
-		&for i in 1 5 {
-			//this will write to the input cell, but that doesn't matter
-			write no_cores cell$(i) 0
-		}
+	set cores 0
+	set i 0
+	getlink_loop:
+		getlink outputBuilding i
+		sensor outputBuilding.itemCapacity
+		jump next_loop outputBuilding.itemCapacity <= 1000
+		//very cursed heuristic, assume it's a core if the item cap is more than 1000
+		//it should work though, all cores have at least 2k item cap
+		op add cores 1
+		next_loop:
+		op add i 1
+		jump getlink_loop lessThan i @links
 
-	check_spawn_wave:
-		jump no_wave @tick < nextWaveTick
-		jump no_wave alert <= 0
-		spawn_wave:
-			set wave alert + partID
-			setrule wave wave
-			spawnwave waveX waveY
-			set nextWaveTick @tick + waveSpacing
-		update_alert:
-			jump alert_not_2 alert != 2
-			set alert 3
-			alert_not_2:
-	no_wave:
-
-	
-	wait 0.1
+	jump cores cores > 0
+		write 12 cell 0
+		stop
+	cores:
+	jump blocks_fine @links > triggerLinks
+		write 11 cell 0
+		jump main_loop
+	blocks_fine:
+	write 10 cell 0
 	jump main_loop

@@ -1,0 +1,57 @@
+
+set waveX 0
+set waveY 0
+set waveSpacing 3600
+set initialWaveSpacing 3600
+set cellFrom cell1
+set cellTo cell2
+set alert 0 //0 is off, 1 is normal (1x), 2 is alerted (5x), 3 is after alerted (3x), 4 is captured
+set nextWaveTick initialWaveSpacing
+
+init:
+	wait 0.5
+	setrate 10
+	read partID cellFrom 1
+	op mul partID 10
+
+
+main_loop:
+	determine_alert:
+		read fromStatus cellFrom 0
+		read toStatus cellTo 0
+		jump to_not_captured toStatus != 12
+		jump from_captured fromStatus == 12
+		jump from_unharmed fromStatus == 10
+		jump alert_determined alert == 3 //don't set it to 2 if it's already been set to 3
+		from_damaged:
+		set alert 2
+		jump alert_determined
+		to_not_captured:
+		set alert 0
+		jump alert_determined
+		from_unharmed:
+		set alert 1
+		jump alert_determined
+		from_captured:
+		set alert 4
+		jump alert_determined
+	alert_determined:
+	
+	check_spawn_wave:
+		jump no_wave @tick < nextWaveTick
+		jump no_wave alert == 0
+		jump no_wave alert == 4
+		spawn_wave:
+			set wave alert + partID
+			setrule wave wave
+			spawnwave waveX waveY
+			set nextWaveTick @tick + waveSpacing
+		update_alert:
+			jump alert_not_2 alert != 2
+			set alert 3
+			alert_not_2:
+	no_wave:
+
+	
+	wait 0.1
+	jump main_loop

@@ -1,0 +1,47 @@
+set waveX 0
+set waveY 0
+set waveSpacing 3600
+set initialWaveSpacing 3600
+set cellFrom cell1
+set cellTo cell2
+set alert 0
+set nextWaveTick initialWaveSpacing
+wait 0.5
+setrate 10
+read partID cellFrom 1
+op mul partID partID 10
+main_loop:
+read fromStatus cellFrom 0
+read toStatus cellTo 0
+jump to_not_captured notEqual toStatus 12
+jump from_captured strictEqual fromStatus 12
+jump from_unharmed strictEqual fromStatus 10
+jump alert_determined strictEqual alert 3
+set alert 2
+jump alert_determined always 0 0
+to_not_captured:
+set alert 0
+jump alert_determined always 0 0
+from_unharmed:
+set alert 1
+jump alert_determined always 0 0
+from_captured:
+set alert 4
+jump alert_determined always 0 0
+alert_determined:
+jump no_wave lessThan @tick nextWaveTick
+jump no_wave strictEqual alert 0
+jump no_wave strictEqual alert 4
+op add wave alert partID
+setrule wave wave
+spawnwave waveX waveY false
+op add nextWaveTick @tick waveSpacing
+jump alert_not_2 notEqual alert 2
+set alert 3
+alert_not_2:
+no_wave:
+wait 0.1
+jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
