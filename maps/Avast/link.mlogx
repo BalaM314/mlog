@@ -5,12 +5,14 @@ set waveSpacing 3600
 set initialWaveSpacing 3600
 set cellFrom cell1
 set cellTo cell2
+set cellLinkStatus cell3
 set alert 0 //0 is off, 1 is normal (1x), 2 is alerted (5x), 3 is after alerted (3x), 4 is captured
 set nextWaveTick initialWaveSpacing
 
 init:
 	wait 0.5
 	setrate 10
+	set linkCellIndex @thisx % 18
 	read partID cellFrom 1
 	op mul partID 10
 
@@ -36,6 +38,7 @@ main_loop:
 		set alert 4
 		jump alert_determined
 	alert_determined:
+	write alert cellLinkStatus linkCellIndex
 	
 	check_spawn_wave:
 		jump no_wave @tick < nextWaveTick

@@ -3,6 +3,7 @@ set partID 0
 set blockDestroyThreshold 2 // will trigger if this many blocks are destroyed
 set cell cell1
 set status 10 //10 is no blocks destroyed, 11 is blocks destroyed, 12 is core destroyed
+set waveTeam 232
 
 init:
 	setrate 10
@@ -16,9 +17,12 @@ main_loop:
 	getlink_loop:
 		getlink outputBuilding i
 		sensor outputBuilding.itemCapacity
-		jump next_loop outputBuilding.itemCapacity <= 1000
 		//very cursed heuristic, assume it's a core if the item cap is more than 1000
 		//it should work though, all cores have at least 2k item cap
+		jump next_loop outputBuilding.itemCapacity <= 1000
+		//dont count player team cores though
+		sensor outputBuilding.team
+		jump next_loop outputBuilding.team != waveTeam
 		op add cores 1
 		next_loop:
 		op add i 1

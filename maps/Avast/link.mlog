@@ -4,6 +4,7 @@ set waveSpacing 3600
 set initialWaveSpacing 3600
 set cellFrom cell1
 set cellTo cell2
+set cellLinkStatus cell3
 set alert 0
 set nextWaveTick initialWaveSpacing
 wait 0.5
@@ -29,6 +30,7 @@ from_captured:
 set alert 4
 jump alert_determined always 0 0
 alert_determined:
+write alert cellLinkStatus linkCellIndex
 jump no_wave lessThan @tick nextWaveTick
 jump no_wave strictEqual alert 0
 jump no_wave strictEqual alert 4
