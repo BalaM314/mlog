@@ -18,15 +18,15 @@ jump overange_movement ---
 end
 
 bombing_movement:
-    ucontrol move arc.shootX arc.shootY
-    jump shooting always
+	ucontrol move arc.shootX arc.shootY
+	jump shooting always
 end
 
 overange_movement:
-    ulocate building turret true @copper ox oy isFound enemyTurret
-    #keepdistance based on value, using approach
-    ucontrol approach ox oy proximity
-    jump shooting always
+	ulocate building turret true @copper ox oy isFound enemyTurret
+	#keepdistance based on value, using approach
+	ucontrol approach ox oy proximity
+	jump shooting always
 end
 
 shooting: #finally shooting
@@ -37,6 +37,6 @@ set shoot arc.shooting
 end
 
 overange_target:
-    #missing
+	#missing
 end
 

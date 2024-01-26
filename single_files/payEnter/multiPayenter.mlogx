@@ -25,9 +25,9 @@ restart:
 }
 
 main_loop:
-	jump not_switched_off equal offSwitch null #If there is no off switch, continue
+	jump not_switched_off offSwitch ~= null #If there is no off switch, continue
 	sensor offSwitch.enabled
-	jump main_loop equal offSwitch.enabled false
+	jump main_loop offSwitch.enabled ~= false
 	not_switched_off:
 
 	check_units: #Check if a unit is dead or controlled by a player, if it is bind a new one.
@@ -35,8 +35,8 @@ main_loop:
 			check_unit$(n)_ok:
 			sensor unit$(n).dead
 			sensor unit$(n).controlled
-			jump bind_unit$(n) equal unit$(n).dead true
-			jump bind_unit$(n) greaterThan unit$(n).controlled 1
+			jump bind_unit$(n) unit$(n).dead ~= true
+			jump bind_unit$(n) unit$(n).controlled > 1
 			unit$(n)_ok:
 		}
 
@@ -54,7 +54,7 @@ main_loop:
 				printf "Unit $(n) is at {@unit.x}, {@unit.y}\n"
 			}
 			ucontrol within reconstructor$(n).x reconstructor$(n).y 3 unit$(n).reached
-			jump unit$(n)_moved equal unit$(n).reached false
+			jump unit$(n)_moved unit$(n).reached == false
 			#unit reached destination, payenter
 			ucontrol payEnter
 			unit$(n)_moved:

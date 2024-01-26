@@ -79,7 +79,7 @@ print ", "
 print @unit.y
 print "\n"
 ucontrol within reconstructor1.x reconstructor1.y 3 unit1.reached
-jump unit1_moved equal unit1.reached false
+jump unit1_moved strictEqual unit1.reached false
 ucontrol payEnter
 unit1_moved:
 ubind unit2
@@ -95,7 +95,7 @@ print ", "
 print @unit.y
 print "\n"
 ucontrol within reconstructor2.x reconstructor2.y 3 unit2.reached
-jump unit2_moved equal unit2.reached false
+jump unit2_moved strictEqual unit2.reached false
 ucontrol payEnter
 unit2_moved:
 ubind unit3
@@ -111,7 +111,7 @@ print ", "
 print @unit.y
 print "\n"
 ucontrol within reconstructor3.x reconstructor3.y 3 unit3.reached
-jump unit3_moved equal unit3.reached false
+jump unit3_moved strictEqual unit3.reached false
 ucontrol payEnter
 unit3_moved:
 ubind unit4
@@ -127,7 +127,7 @@ print ", "
 print @unit.y
 print "\n"
 ucontrol within reconstructor4.x reconstructor4.y 3 unit4.reached
-jump unit4_moved equal unit4.reached false
+jump unit4_moved strictEqual unit4.reached false
 ucontrol payEnter
 unit4_moved:
 ubind unit5
@@ -143,7 +143,7 @@ print ", "
 print @unit.y
 print "\n"
 ucontrol within reconstructor5.x reconstructor5.y 3 unit5.reached
-jump unit5_moved equal unit5.reached false
+jump unit5_moved strictEqual unit5.reached false
 ucontrol payEnter
 unit5_moved:
 ubind unit6
@@ -159,7 +159,7 @@ print ", "
 print @unit.y
 print "\n"
 ucontrol within reconstructor6.x reconstructor6.y 3 unit6.reached
-jump unit6_moved equal unit6.reached false
+jump unit6_moved strictEqual unit6.reached false
 ucontrol payEnter
 unit6_moved:
 print "Open the adjacent proc to change unit type"
