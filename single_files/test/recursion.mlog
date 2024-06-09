@@ -1,0 +1,51 @@
+print "Recursive factorial"
+printflush null
+set stack cell1
+set stackptr 1
+loop:
+set arg1 6
+op add returnAddress @counter 2
+write returnAddress stack stackptr
+jump factorial always 0 0
+print "[green]Factorial is "
+print out
+printflush message1
+wait 1
+jump loop always 0 0
+factorial:
+print "Calculating factorial("
+print arg1
+print ")"
+printflush message1
+wait 0.5
+op add stackptr stackptr 1
+write arg1 stack stackptr
+op add stackptr stackptr 1
+jump base_case lessThanEq arg1 1
+general_case:
+op sub arg1 arg1 1
+op add returnAddress @counter 2
+write returnAddress stack stackptr
+jump factorial always 0 0
+op sub stackptr stackptr 1
+read arg1 stack stackptr
+op mul out out arg1
+op sub stackptr stackptr 1
+print "Returning "
+print out
+print " from general case"
+printflush message1
+wait 0.5
+read @counter stack stackptr
+base_case:
+set out arg1
+print "Returning "
+print out
+print " from base case"
+printflush message1
+wait 0.5
+op sub stackptr stackptr 2
+read @counter stack stackptr
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
