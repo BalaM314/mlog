@@ -11,7 +11,7 @@ main_loop:
 
 	set xdiff @unit.x - center.x
 	set ydiff @unit.y - center.y
-	op angle theta ydiff xdiff
+	op angle theta xdiff ydiff
 
 	set theta2 theta + dtheta
 	op cos costheta theta

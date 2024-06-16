@@ -9,7 +9,7 @@ sensor @unit.x @unit @x
 sensor @unit.y @unit @y
 op sub xdiff @unit.x center.x
 op sub ydiff @unit.y center.y
-op angle theta ydiff xdiff
+op angle theta xdiff ydiff
 op add theta2 theta dtheta
 op cos costheta theta 0
 op sin sintheta theta 0
