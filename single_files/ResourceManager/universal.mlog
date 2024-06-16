@@ -7,7 +7,7 @@ print "Then change variables below."
 restart:
 set startingLinks @links
 set stdout message1
-print "Starting...\n\n[slate]10x Flat Core Graph by [#3141FF]BalaM314[]"
+print "Starting...\n\n[slate]Resource Manager by [#3141FF]BalaM314[]"
 printflush stdout
 print "Edit variables below."
 set input1 null
@@ -227,7 +227,7 @@ jump main_loop always 0 0
 err:
 print "[red]Error: "
 print err
-print "\n\n[slate]10x Flat Core Graph by [#3141FF]BalaM314[]"
+print "\n\n[slate]Resource Manager by [#3141FF]BalaM314[]"
 printflush stdout
 wait 5
 end

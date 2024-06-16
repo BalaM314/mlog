@@ -5,10 +5,10 @@ set stack cell1
 set stackptr 1
 
 loop:
-	set arg1 6
+	set arg1 6 //begin function call
 	set returnAddress @counter + 2
 	write returnAddress stack stackptr
-	jump factorial
+	jump factorial //end function call
 	printf "[green]Factorial is {out}"
 	printflush message1
 	wait 1
@@ -21,17 +21,18 @@ factorial:
 	op add stackptr 1 //function handling
 	write arg1 stack stackptr // save the state of arg1 to the stack
 	op add stackptr 1
+
 	jump base_case arg1 <= 1
 	general_case:
-		//function call
-		set arg1 arg1 - 1
+		set arg1 arg1 - 1 //function call
 		set returnAddress @counter + 2
 		write returnAddress stack stackptr
-		jump factorial
-		//end function call
+		jump factorial //end function call
+
+		//retrieve the value of arg1 from the stack
 		op sub stackptr 1
 		read arg1 stack stackptr
-		set out out * arg1
+		set out out * arg1 //calculate
 		op sub stackptr 1
 		printf "Returning {out} from general case"
 		printflush message1
