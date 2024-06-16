@@ -1,0 +1,21 @@
+set unitType @corvus
+set center.x 200
+set center.y 200
+set rad 160
+set dtheta 3
+main_loop:
+ubind unitType
+sensor @unit.x @unit @x
+sensor @unit.y @unit @y
+op sub xdiff @unit.x center.x
+op sub ydiff @unit.y center.y
+op angle theta ydiff xdiff
+op add theta2 theta dtheta
+op cos costheta theta 0
+op sin sintheta theta 0
+op mul xdiff2 costheta rad
+op add x xdiff2 center.x
+op mul ydiff2 sintheta rad
+op add y ydiff2 center.y
+ucontrol move x y
+jump main_loop always 0 0

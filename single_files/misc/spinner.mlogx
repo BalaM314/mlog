@@ -1,0 +1,26 @@
+# Spinner
+set unitType @corvus
+set center.x 200
+set center.y 200
+set rad 160
+set dtheta 3
+main_loop:
+	ubind unitType
+	sensor @unit.x
+	sensor @unit.y
+
+	set xdiff @unit.x - center.x
+	set ydiff @unit.y - center.y
+	op angle theta ydiff xdiff
+
+	set theta2 theta + dtheta
+	op cos costheta theta
+	op sin sintheta theta
+	set xdiff2 costheta * rad
+	set x xdiff2 + center.x
+	set ydiff2 sintheta * rad
+	set y ydiff2 + center.y
+	ucontrol move x y
+
+	jump main_loop
+
