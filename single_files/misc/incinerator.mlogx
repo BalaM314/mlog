@@ -1,0 +1,30 @@
+control enabled unloader1 false
+control enabled unloader2 false
+
+restart:
+set i 0
+set core nucleus1
+sensor core.itemCapacity
+jump restart core.itemCapacity < 1000
+op sub core.itemCapacity 100
+
+loop:
+	lookup item item i
+	sensor core[item]
+	jump fine lessThan core[item] core.itemCapacity
+	
+	control enabled unloader1 true
+	control enabled unloader2 true
+	control config unloader1 item
+	control config unloader2 item
+	jump restart
+
+	fine:
+	op add i 1
+	jump loop i < @itemCount
+
+control enabled unloader1 false
+control enabled unloader2 false
+control config unloader1 null
+control config unloader2 null
+jump restart always
