@@ -46,8 +46,8 @@ set i 0
 fetch unitCount unitCount playerTeam
 unit_loop:
 fetch unit unit playerTeam i
-sensor unit.x @unit @x
-sensor unit.y @unit @y
+sensor unit.x unit @x
+sensor unit.y unit @y
 op sub dx unit.x core.x
 op sub dy unit.y core.y
 op len dist dx dy
