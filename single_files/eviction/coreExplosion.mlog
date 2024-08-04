@@ -1,0 +1,61 @@
+set bank cell1
+set fallen 4
+set playerTeam @sharded
+setrate 50
+wait 1
+set i 0
+fetch coreCount fallen.coreCount fallen
+init_cores_loop:
+fetch core core fallen i
+sensor core.team core @team
+jump init_cores_next notEqual core.team fallen
+sensor core.x core @x
+sensor core.y core @y
+op mul ind i 2
+write core.x bank ind
+op add ind ind 1
+write core.y bank ind
+init_cores_next:
+op add i i 1
+jump init_cores_loop lessThan i fallen.coreCount
+main_loop:
+set i 0
+check_cores_loop:
+op mul ind i 2
+read core.x bank ind
+op add ind ind 1
+read core.y bank ind
+jump check_cores_next strictEqual core.y 0
+getblock building core core.x core.y
+sensor core.team core @team
+jump check_cores_next equal core.team fallen
+write 0 bank ind
+jump do_explosion always 0 0
+check_cores_next:
+op add i i 1
+jump check_cores_loop lessThan i fallen.coreCount
+jump main_loop always 0 0
+do_explosion:
+explosion @derelict core.x core.y 37.5 0 false false false
+explosion @derelict core.x core.y 37.5 0 false false false
+explosion @derelict core.x core.y 37.5 0 false false false
+explosion @derelict core.x core.y 37.5 0 false false false
+explosion @derelict core.x core.y 37.5 0 false false false
+explosion @derelict core.x core.y 37.5 0 false false true
+set i 0
+fetch unitCount unitCount playerTeam
+unit_loop:
+fetch unit unit playerTeam i
+sensor unit.x @unit @x
+sensor unit.y @unit @y
+op sub dx unit.x core.x
+op sub dy unit.y core.y
+op len dist dx dy
+jump unit_loop_next lessThan dist 37.5
+op rand x 1 0
+jump unit_loop_next lessThan x 0.5
+setprop @health unit 0
+unit_loop_next:
+op add i i 1
+jump unit_loop lessThan i unitCount
+jump main_loop always 0 0
