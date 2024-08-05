@@ -51,7 +51,7 @@ sensor unit.y unit @y
 op sub dx unit.x core.x
 op sub dy unit.y core.y
 op len dist dx dy
-jump unit_loop_next lessThan dist 37.5
+jump unit_loop_next greaterThan dist 37.5
 op rand x 1 0
 jump unit_loop_next lessThan x 0.5
 setprop @health unit 0

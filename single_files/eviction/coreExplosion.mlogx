@@ -65,7 +65,7 @@ main_loop:
 			set dx unit.x - core.x
 			set dy unit.y - core.y
 			op len dist dx dy
-			jump unit_loop_next dist < 37.5
+			jump unit_loop_next dist > 37.5
 
 			op rand x 1
 			jump unit_loop_next x < 0.5
