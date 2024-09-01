@@ -41,7 +41,7 @@ explosion @derelict core.x core.y 37.5 0 false false false
 explosion @derelict core.x core.y 37.5 0 false false false
 explosion @derelict core.x core.y 37.5 0 false false false
 explosion @derelict core.x core.y 37.5 0 false false false
-explosion @derelict core.x core.y 37.5 0 false false true
+explosion playerTeam core.x core.y 37.5 1e12 true false true
 set i 0
 fetch unitCount unitCount playerTeam
 unit_loop:
