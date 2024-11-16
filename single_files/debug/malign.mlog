@@ -1,0 +1,178 @@
+init:
+set range 50
+sensor malign1.x malign1 @x
+sensor malign1.y malign1 @y
+sensor malign2.x malign2 @x
+sensor malign2.y malign2 @y
+sensor malign3.x malign3 @x
+sensor malign3.y malign3 @y
+sensor malign4.x malign4 @x
+sensor malign4.y malign4 @y
+sensor malign5.x malign5 @x
+sensor malign5.y malign5 @y
+sensor malign6.x malign6 @x
+sensor malign6.y malign6 @y
+sensor malign7.x malign7 @x
+sensor malign7.y malign7 @y
+sensor malign8.x malign8 @x
+sensor malign8.y malign8 @y
+sensor malign9.x malign9 @x
+sensor malign9.y malign9 @y
+sensor malign10.x malign10 @x
+sensor malign10.y malign10 @y
+sensor malign11.x malign11 @x
+sensor malign11.y malign11 @y
+sensor malign12.x malign12 @x
+sensor malign12.y malign12 @y
+sensor malign13.x malign13 @x
+sensor malign13.y malign13 @y
+sensor malign14.x malign14 @x
+sensor malign14.y malign14 @y
+sensor malign15.x malign15 @x
+sensor malign15.y malign15 @y
+sensor malign16.x malign16 @x
+sensor malign16.y malign16 @y
+sensor malign17.x malign17 @x
+sensor malign17.y malign17 @y
+sensor malign18.x malign18 @x
+sensor malign18.y malign18 @y
+sensor malign19.x malign19 @x
+sensor malign19.y malign19 @y
+sensor malign20.x malign20 @x
+sensor malign20.y malign20 @y
+sensor malign21.x malign21 @x
+sensor malign21.y malign21 @y
+sensor malign22.x malign22 @x
+sensor malign22.y malign22 @y
+sensor malign23.x malign23 @x
+sensor malign23.y malign23 @y
+sensor malign24.x malign24 @x
+sensor malign24.y malign24 @y
+sensor malign25.x malign25 @x
+sensor malign25.y malign25 @y
+sensor malign26.x malign26 @x
+sensor malign26.y malign26 @y
+sensor malign27.x malign27 @x
+sensor malign27.y malign27 @y
+sensor malign28.x malign28 @x
+sensor malign28.y malign28 @y
+sensor malign29.x malign29 @x
+sensor malign29.y malign29 @y
+sensor malign30.x malign30 @x
+sensor malign30.y malign30 @y
+jump init notEqual @links 32
+main_loop:
+sensor switch1.enabled switch1 @enabled
+sensor diode1.rotation diode1 @rotation
+jump up strictEqual diode1.rotation 1
+jump left strictEqual diode1.rotation 2
+jump down strictEqual diode1.rotation 3
+set dir.x range
+set dir.y 0
+jump rotation_found always 0 0
+up:
+set dir.x 0
+set dir.y range
+jump rotation_found always 0 0
+left:
+op mul dir.x -1 range
+set dir.y 0
+jump rotation_found always 0 0
+down:
+set dir.x 0
+op mul dir.y -1 range
+rotation_found:
+op add shoot.x malign1.x dir.x
+op add shoot.y malign1.y dir.y
+control shoot malign1 shoot.x shoot.y switch1.enabled
+op add shoot.x malign2.x dir.x
+op add shoot.y malign2.y dir.y
+control shoot malign2 shoot.x shoot.y switch1.enabled
+op add shoot.x malign3.x dir.x
+op add shoot.y malign3.y dir.y
+control shoot malign3 shoot.x shoot.y switch1.enabled
+op add shoot.x malign4.x dir.x
+op add shoot.y malign4.y dir.y
+control shoot malign4 shoot.x shoot.y switch1.enabled
+op add shoot.x malign5.x dir.x
+op add shoot.y malign5.y dir.y
+control shoot malign5 shoot.x shoot.y switch1.enabled
+op add shoot.x malign6.x dir.x
+op add shoot.y malign6.y dir.y
+control shoot malign6 shoot.x shoot.y switch1.enabled
+op add shoot.x malign7.x dir.x
+op add shoot.y malign7.y dir.y
+control shoot malign7 shoot.x shoot.y switch1.enabled
+op add shoot.x malign8.x dir.x
+op add shoot.y malign8.y dir.y
+control shoot malign8 shoot.x shoot.y switch1.enabled
+op add shoot.x malign9.x dir.x
+op add shoot.y malign9.y dir.y
+control shoot malign9 shoot.x shoot.y switch1.enabled
+op add shoot.x malign10.x dir.x
+op add shoot.y malign10.y dir.y
+control shoot malign10 shoot.x shoot.y switch1.enabled
+op add shoot.x malign11.x dir.x
+op add shoot.y malign11.y dir.y
+control shoot malign11 shoot.x shoot.y switch1.enabled
+op add shoot.x malign12.x dir.x
+op add shoot.y malign12.y dir.y
+control shoot malign12 shoot.x shoot.y switch1.enabled
+op add shoot.x malign13.x dir.x
+op add shoot.y malign13.y dir.y
+control shoot malign13 shoot.x shoot.y switch1.enabled
+op add shoot.x malign14.x dir.x
+op add shoot.y malign14.y dir.y
+control shoot malign14 shoot.x shoot.y switch1.enabled
+op add shoot.x malign15.x dir.x
+op add shoot.y malign15.y dir.y
+control shoot malign15 shoot.x shoot.y switch1.enabled
+op add shoot.x malign16.x dir.x
+op add shoot.y malign16.y dir.y
+control shoot malign16 shoot.x shoot.y switch1.enabled
+op add shoot.x malign17.x dir.x
+op add shoot.y malign17.y dir.y
+control shoot malign17 shoot.x shoot.y switch1.enabled
+op add shoot.x malign18.x dir.x
+op add shoot.y malign18.y dir.y
+control shoot malign18 shoot.x shoot.y switch1.enabled
+op add shoot.x malign19.x dir.x
+op add shoot.y malign19.y dir.y
+control shoot malign19 shoot.x shoot.y switch1.enabled
+op add shoot.x malign20.x dir.x
+op add shoot.y malign20.y dir.y
+control shoot malign20 shoot.x shoot.y switch1.enabled
+op add shoot.x malign21.x dir.x
+op add shoot.y malign21.y dir.y
+control shoot malign21 shoot.x shoot.y switch1.enabled
+op add shoot.x malign22.x dir.x
+op add shoot.y malign22.y dir.y
+control shoot malign22 shoot.x shoot.y switch1.enabled
+op add shoot.x malign23.x dir.x
+op add shoot.y malign23.y dir.y
+control shoot malign23 shoot.x shoot.y switch1.enabled
+op add shoot.x malign24.x dir.x
+op add shoot.y malign24.y dir.y
+control shoot malign24 shoot.x shoot.y switch1.enabled
+op add shoot.x malign25.x dir.x
+op add shoot.y malign25.y dir.y
+control shoot malign25 shoot.x shoot.y switch1.enabled
+op add shoot.x malign26.x dir.x
+op add shoot.y malign26.y dir.y
+control shoot malign26 shoot.x shoot.y switch1.enabled
+op add shoot.x malign27.x dir.x
+op add shoot.y malign27.y dir.y
+control shoot malign27 shoot.x shoot.y switch1.enabled
+op add shoot.x malign28.x dir.x
+op add shoot.y malign28.y dir.y
+control shoot malign28 shoot.x shoot.y switch1.enabled
+op add shoot.x malign29.x dir.x
+op add shoot.y malign29.y dir.y
+control shoot malign29 shoot.x shoot.y switch1.enabled
+op add shoot.x malign30.x dir.x
+op add shoot.y malign30.y dir.y
+control shoot malign30 shoot.x shoot.y switch1.enabled
+jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

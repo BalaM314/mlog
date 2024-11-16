@@ -1,0 +1,45 @@
+
+init:
+set range 50
+&for i in 1 30 {
+  sensor malign$(i).x
+  sensor malign$(i).y
+}
+jump init @links != 32
+
+main_loop:
+
+  get_rotation:
+    sensor switch1.enabled
+    sensor diode1.rotation
+    jump up diode1.rotation == 1
+    jump left diode1.rotation == 2
+    jump down diode1.rotation == 3
+    # jump right diode1.rotation == 0
+
+    right:
+      set dir.x range
+      set dir.y 0
+      jump rotation_found
+    up:
+      set dir.x 0
+      set dir.y range
+      jump rotation_found
+    left:
+      set dir.x -1 * range
+      set dir.y 0
+      jump rotation_found
+    down:
+      set dir.x 0
+      set dir.y -1 * range
+      # jump rotation_found
+  rotation_found:
+
+  fire:
+    &for i in 1 30 {
+      set shoot.x malign$(i).x + dir.x
+      set shoot.y malign$(i).y + dir.y
+      control shoot malign$i shoot.x shoot.y switch1.enabled
+    }
+
+  jump main_loop
