@@ -1,0 +1,19 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "mlogx --watch",
+			"type": "shell",
+			"command": "mlogx --watch",
+			"group": "none",
+			"presentation": {
+				"reveal": "always",
+				"panel": "new",
+				"close": false,
+			},
+			"runOptions": {
+				"runOn": "folderOpen",
+			}
+		}
+	]
+}
