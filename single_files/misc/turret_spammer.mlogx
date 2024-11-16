@@ -1,0 +1,5 @@
+sensor fire router1 @controlled
+
+&for i in 1 192 {
+    control shoot lustre$i @thisx @thisy fire
+}

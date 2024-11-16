@@ -1,0 +1,14 @@
+
+set ok true
+&for i in 1 5 {
+  sensor container$(i).water
+  set highEnough container$(i).water > 200
+  set ok ok && highEnough
+}
+&for i in 1 3 {
+  control enabled conduit$i ok
+}
+&for i in 1 5 {
+  control enabled mixer$i ok
+}
+

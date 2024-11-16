@@ -1,0 +1,24 @@
+set ok true
+sensor container1.water container1 @water
+op greaterThan highEnough container1.water 200
+op land ok ok highEnough
+sensor container2.water container2 @water
+op greaterThan highEnough container2.water 200
+op land ok ok highEnough
+sensor container3.water container3 @water
+op greaterThan highEnough container3.water 200
+op land ok ok highEnough
+sensor container4.water container4 @water
+op greaterThan highEnough container4.water 200
+op land ok ok highEnough
+sensor container5.water container5 @water
+op greaterThan highEnough container5.water 200
+op land ok ok highEnough
+control enabled conduit1 ok
+control enabled conduit2 ok
+control enabled conduit3 ok
+control enabled mixer1 ok
+control enabled mixer2 ok
+control enabled mixer3 ok
+control enabled mixer4 ok
+control enabled mixer5 ok
