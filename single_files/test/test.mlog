@@ -1,4 +1,4 @@
-sensor unit.maxHealth @unit @maxHealth
+sensor @unit.maxHealth @unit @maxHealth
 sensor core.totalItems core @totalItems
 sensor sussy.amogus arc1 @shooting
 sensor @this.x @this @x

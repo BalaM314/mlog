@@ -25,20 +25,20 @@ ubind unitRef3
 jump unitSel_end always 0 0
 ubind unitRef4
 unitSel_end:
-sensor unit.flag @unit @flag
-jump bind notEqual unit.flag flag
-sensor unit.controlled @unit @controlled
-jump bind greaterThanEq unit.controlled 2
-sensor unit.dead @unit @dead
-jump bind_end equal unit.dead 0
+sensor @unit.flag @unit @flag
+jump bind notEqual @unit.flag flag
+sensor @unit.controlled @unit @controlled
+jump bind greaterThanEq @unit.controlled 2
+sensor @unit.dead @unit @dead
+jump bind_end equal @unit.dead 0
 bind:
 op add bindAttempts bindAttempts 1
 jump bind_skip greaterThanEq bindAttempts 16
 ubind @flare
-sensor unit.flag @unit @flag
-jump bind notEqual unit.flag 0
-sensor unit.controlled @unit @controlled
-jump bind greaterThanEq unit.controlled 2
+sensor @unit.flag @unit @flag
+jump bind notEqual @unit.flag 0
+sensor @unit.controlled @unit @controlled
+jump bind greaterThanEq @unit.controlled 2
 ucontrol flag flag
 op add @counter @counter counterJump
 set unitRef1 @unit
@@ -64,27 +64,27 @@ op mul coreWithinRadius 0.375 core.size
 op add coreWithinRadius 5.625 coreWithinRadius
 op sub coreApproachRadius coreWithinRadius 0.5
 coreRadius_end:
-sensor unit.firstItem @unit @firstItem
+sensor @unit.firstItem @unit @firstItem
 sensor conveyor1.titanium conveyor1 @titanium
 sensor projector1.phase-fabric projector1 @phase-fabric
-jump itemdrop_titanium equal unit.firstItem @titanium
-jump itemdrop_phase equal unit.firstItem @phase-fabric
+jump itemdrop_titanium equal @unit.firstItem @titanium
+jump itemdrop_phase equal @unit.firstItem @phase-fabric
 jump itemtake always 0 0
 itemdrop_titanium:
 ucontrol approach conveyor1.x conveyor1.y 5.75
 ucontrol within conveyor1.x conveyor1.y 6.125 projectorIsWithin
 jump nextUnit equal projectorIsWithin 0
 ucontrol itemDrop conveyor1 999
-sensor unit.firstItem @unit @firstItem
-jump nextUnit equal unit.firstItem null
+sensor @unit.firstItem @unit @firstItem
+jump nextUnit equal @unit.firstItem null
 jump nextUnit always 0 0
 itemdrop_phase:
 ucontrol approach projector1.x projector1.y 6.25
 ucontrol within projector1.x projector1.y 6.625 projectorIsWithin
 jump nextUnit equal projectorIsWithin 0
 ucontrol itemDrop projector1 999
-sensor unit.firstItem @unit @firstItem
-jump itemdrop_phase_still notEqual unit.firstItem null
+sensor @unit.firstItem @unit @firstItem
+jump itemdrop_phase_still notEqual @unit.firstItem null
 set takingPhase 0
 ucontrol approach core.x core.y coreApproachRadius
 itemdrop_phase_still:
@@ -95,15 +95,15 @@ ucontrol within core.x core.y coreWithinRadius coreIsWithin
 jump nextUnit equal coreIsWithin 0
 jump itemtake_titanium equal takingPhase 1
 ucontrol itemTake core @phase-fabric 999
-sensor unit.firstItem @unit @firstItem
-jump itemtake_end equal unit.firstItem null
+sensor @unit.firstItem @unit @firstItem
+jump itemtake_end equal @unit.firstItem null
 ucontrol approach projector1.x projector1.y 6.25
 set takingPhase 1
 jump itemtake_end always 0 0
 itemtake_titanium:
 ucontrol itemTake core @titanium 999
-sensor unit.firstItem @unit @firstItem
-jump itemtake_end equal unit.firstItem null
+sensor @unit.firstItem @unit @firstItem
+jump itemtake_end equal @unit.firstItem null
 ucontrol approach conveyor1.x conveyor1.y 5.75
 jump itemtake_end always 0 0
 itemtake_end:

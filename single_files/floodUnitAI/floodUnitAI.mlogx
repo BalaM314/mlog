@@ -4,13 +4,13 @@ jump check_switch equal switch.enabled false
 
 bind_unit:
 ubind @flare
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
 
-sensor unit.maxHealth @unit @maxHealth
-sensor unit.health @unit @health
-op div unit.percentHealth unit.health unit.maxHealth
-jump heal_unit lessThanEq unit.percentHealth 0.3
+sensor @unit.maxHealth @unit @maxHealth
+sensor @unit.health @unit @health
+op div @unit.percentHealth @unit.health @unit.maxHealth
+jump heal_unit lessThanEq @unit.percentHealth 0.3
 ulocate building generator true enemyBuilding.x enemyBuilding.y found enemyBuilding
 ucontrol approach enemyBuilding.x enemyBuilding.y 11
 ucontrol target enemyBuilding.x enemyBuilding.y true

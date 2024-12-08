@@ -13,26 +13,25 @@ bind_unit:
 print "Binding a unit..."
 printflush message1
 ubind unitType
-sensor unit.flag @unit @flag
-sensor unit.x @unit @x
-sensor unit.y @unit @y
-sensor unit.controlled @unit @controlled
-jump bind_unit notEqual unit.flag 0
-jump bind_unit greaterThan unit.controlled 1
+sensor @unit.flag @unit @flag
+sensor @unit.x @unit @x
+sensor @unit.y @unit @y
+sensor @unit.controlled @unit @controlled
+jump bind_unit notEqual @unit.flag 0
+jump bind_unit greaterThan @unit.controlled 1
 ucontrol flag cookie
 ucontrol_loop:
 ucontrol move reconstructor.x reconstructor.y
-sensor unit.dead @unit @dead
-sensor unit.controlled @unit @controlled
-jump unit_unbound equal unit.dead true
-jump unit_unbound greaterThan unit.controlled 1
-sensor unit.x @unit @x
-sensor unit.y @unit @y
-print "Moving unit to reconstructor. ("
-print unit.x
+sensor @unit.dead @unit @dead
+sensor @unit.controlled @unit @controlled
+jump unit_unbound equal @unit.dead true
+jump unit_unbound greaterThan @unit.controlled 1
+sensor @unit.x @unit @x
+sensor @unit.y @unit @y
+print "Moving unit to reconstructor. "
+print @unit.x
 print ", "
-print unit.y
-print ")"
+print @unit.y
 printflush message1
 ucontrol within reconstructor.x reconstructor.y 2 close
 jump ucontrol_loop equal close false

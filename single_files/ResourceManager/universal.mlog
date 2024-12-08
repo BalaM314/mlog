@@ -30,17 +30,17 @@ print "Do not edit below this line."
 printflush null
 set shouldRun true
 ubind @mono
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
 ubind @flare
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
 ubind @poly
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
 ubind @mega
-sensor unit.dead @unit @dead
-jump locate_core notEqual unit.dead true
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
 set core nucleus1
 jump core_found notEqual core null
 set core foundation1

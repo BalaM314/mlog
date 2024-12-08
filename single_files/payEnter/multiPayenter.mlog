@@ -167,10 +167,10 @@ printflush message1
 jump main_loop always 0 0
 bind_unit1:
 ubind unitType
-sensor unit.flag @unit @flag
-sensor unit.controlled @unit @controlled
-jump bind_unit1 notEqual unit.flag 0
-jump bind_unit1 greaterThan unit.controlled 1
+sensor @unit.flag @unit @flag
+sensor @unit.controlled @unit @controlled
+jump bind_unit1 notEqual @unit.flag 0
+jump bind_unit1 greaterThan @unit.controlled 1
 ucontrol within @thisx @thisy maxDist close
 jump bind_unit1 equal close false
 ucontrol flag cookie
@@ -179,10 +179,10 @@ print "Bound unit 1\n"
 jump unit1_ok always 0 0
 bind_unit2:
 ubind unitType
-sensor unit.flag @unit @flag
-sensor unit.controlled @unit @controlled
-jump bind_unit2 notEqual unit.flag 0
-jump bind_unit2 greaterThan unit.controlled 1
+sensor @unit.flag @unit @flag
+sensor @unit.controlled @unit @controlled
+jump bind_unit2 notEqual @unit.flag 0
+jump bind_unit2 greaterThan @unit.controlled 1
 ucontrol within @thisx @thisy maxDist close
 jump bind_unit2 equal close false
 ucontrol flag cookie
@@ -191,10 +191,10 @@ print "Bound unit 2\n"
 jump unit2_ok always 0 0
 bind_unit3:
 ubind unitType
-sensor unit.flag @unit @flag
-sensor unit.controlled @unit @controlled
-jump bind_unit3 notEqual unit.flag 0
-jump bind_unit3 greaterThan unit.controlled 1
+sensor @unit.flag @unit @flag
+sensor @unit.controlled @unit @controlled
+jump bind_unit3 notEqual @unit.flag 0
+jump bind_unit3 greaterThan @unit.controlled 1
 ucontrol within @thisx @thisy maxDist close
 jump bind_unit3 equal close false
 ucontrol flag cookie
@@ -203,10 +203,10 @@ print "Bound unit 3\n"
 jump unit3_ok always 0 0
 bind_unit4:
 ubind unitType
-sensor unit.flag @unit @flag
-sensor unit.controlled @unit @controlled
-jump bind_unit4 notEqual unit.flag 0
-jump bind_unit4 greaterThan unit.controlled 1
+sensor @unit.flag @unit @flag
+sensor @unit.controlled @unit @controlled
+jump bind_unit4 notEqual @unit.flag 0
+jump bind_unit4 greaterThan @unit.controlled 1
 ucontrol within @thisx @thisy maxDist close
 jump bind_unit4 equal close false
 ucontrol flag cookie
@@ -215,10 +215,10 @@ print "Bound unit 4\n"
 jump unit4_ok always 0 0
 bind_unit5:
 ubind unitType
-sensor unit.flag @unit @flag
-sensor unit.controlled @unit @controlled
-jump bind_unit5 notEqual unit.flag 0
-jump bind_unit5 greaterThan unit.controlled 1
+sensor @unit.flag @unit @flag
+sensor @unit.controlled @unit @controlled
+jump bind_unit5 notEqual @unit.flag 0
+jump bind_unit5 greaterThan @unit.controlled 1
 ucontrol within @thisx @thisy maxDist close
 jump bind_unit5 equal close false
 ucontrol flag cookie
@@ -227,10 +227,10 @@ print "Bound unit 5\n"
 jump unit5_ok always 0 0
 bind_unit6:
 ubind unitType
-sensor unit.flag @unit @flag
-sensor unit.controlled @unit @controlled
-jump bind_unit6 notEqual unit.flag 0
-jump bind_unit6 greaterThan unit.controlled 1
+sensor @unit.flag @unit @flag
+sensor @unit.controlled @unit @controlled
+jump bind_unit6 notEqual @unit.flag 0
+jump bind_unit6 greaterThan @unit.controlled 1
 ucontrol within @thisx @thisy maxDist close
 jump bind_unit6 equal close false
 ucontrol flag cookie

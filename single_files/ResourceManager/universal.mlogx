@@ -38,8 +38,8 @@ set shouldRun true
 get_core:
 	&for unit of mono flare poly mega {
 		ubind @$unit
-		sensor unit.dead @unit @dead
-		jump locate_core notEqual unit.dead true
+		sensor @unit.dead @unit @dead
+		jump locate_core notEqual @unit.dead true
 	}
 	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 vault2 {
 		set core $build

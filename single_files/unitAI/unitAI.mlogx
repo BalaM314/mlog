@@ -12,19 +12,19 @@ start:
 
 bind_new_unit:
 	ubind unitType
-	sensor unit.flag @unit @flag
-	jump bind_new_unit notEqual unit.flag 0
-	sensor unit.dead @unit @dead
-	jump bind_new_unit equal unit.dead true
-	sensor unit.controller @unit @controller
+	sensor @unit.flag @unit @flag
+	jump bind_new_unit notEqual @unit.flag 0
+	sensor @unit.dead @unit @dead
+	jump bind_new_unit equal @unit.dead true
+	sensor @unit.controller @unit @controller
 	jump bind_new_unit greaterThan 1 #@ctrlPlayer and @ctrlFormation are 2 and 3, so this saves a line.
 
 
 check_health:
-	sensor unit.health @unit @health
-	sensor unit.maxHealth @unit @maxHealth
-	op mul minHealth unit.maxHealth minHealthPercent
-	jump low_health lessThan unit.health minHealth
+	sensor @unit.health @unit @health
+	sensor @unit.maxHealth @unit @maxHealth
+	op mul minHealth @unit.maxHealth minHealthPercent
+	jump low_health lessThan @unit.health minHealth
 	jump find_turret always
 
 low_health:
@@ -44,13 +44,13 @@ find_turret:
 	get_turret_range:
 
 get_variables:
-	sensor unit.range @unit @range
+	sensor @unit.range @unit @range
 	ucontrol getBlock enemyTurret.x enemyTurret.y enemyTurret.type enemyTurret
 	jump turret_out_of_range equal enemyTurret null
 	sensor enemyTurret.range enemyTurret @range
 	sensor enemyTurret.shootX enemyTurret @shootX
 	sensor enemyTurret.shootY enemyTurret @shootY
-	ucontrol within enemyTurret.shootX enemyTurret.shootY enemyTurret.damageRadius unit.isBeingFiredAt
+	ucontrol within enemyTurret.shootX enemyTurret.shootY enemyTurret.damageRadius @unit.isBeingFiredAt
 	jump choose_ai_type always
 
 turret_out_of_range:

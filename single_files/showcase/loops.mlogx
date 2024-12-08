@@ -18,8 +18,8 @@ main_loop:
 	&for n in 1 3 {
 		bind_unit$n:
 		ubind unitType
-		sensor unit.flag
-		jump bind_unit$n notEqual unit.flag 0
+		sensor @unit.flag
+		jump bind_unit$n notEqual @unit.flag 0
 		ucontrol flag cookie
 		set unit$n @unit
 		jump unit$n_ok

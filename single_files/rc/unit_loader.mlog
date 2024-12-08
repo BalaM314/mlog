@@ -3,10 +3,10 @@ lookup unit unitType unit.id
 sensor bombingItem sorter1 @config
 bind_unit:
 ubind unitType
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
 ulocate building core false _ core.x core.y core.exists core
-sensor unit.firstItem @unit @firstItem
+sensor @unit.firstItem @unit @firstItem
 jump take_item equal unit.firstItem bombingItem
 ucontrol itemDrop core 9999
 take_item:

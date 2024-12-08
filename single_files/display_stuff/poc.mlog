@@ -1,20 +1,20 @@
 set i 0
 set r 0
 main_loop:
-op add i i 1
-op mod i i 255
 read cursor.x cell1 0
 read cursor.y cell1 1
 read cursor.down cell1 2
-jump mouse_not_down equal cursor.down false
-op rand r 1 0
-op mul r r 255
-mouse_not_down:
-draw clear 0 0 0
-draw color r i 255 255
-draw poly cursor.x cursor.y 8 20 0
+op div cursor.xCell cursor.x 20
+op div cursor.yCell cursor.y 20
+op floor cursor.xCell cursor.xCell 0
+op floor cursor.yCell cursor.yCell 0
+op mul cellId cursor.yCell 6
+op add cellId cellId cursor.xCell
+set offset @counter
+op add offset offset 2
+op mul offset cellId 2
 drawflush display1
-jump main_loop always
+jump main_loop always 0 0
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

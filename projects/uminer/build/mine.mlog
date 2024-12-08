@@ -4,20 +4,19 @@ set stderr message1
 set approachRadius 5
 set unitType @mega
 set memcellOffset 1
-get_core:
 ubind @mono
-sensor unit.dead @unit @dead
-jump _get_core equal unit.dead false
+sensor @unit.dead @unit @dead
+jump _get_core equal @unit.dead false
 ubind @flare
-sensor unit.dead @unit @dead
-jump _get_core equal unit.dead false
+sensor @unit.dead @unit @dead
+jump _get_core equal @unit.dead false
 ubind @mega
-sensor unit.dead @unit @dead
-jump _get_core equal unit.dead false
+sensor @unit.dead @unit @dead
+jump _get_core equal @unit.dead false
 ubind @poly
-sensor unit.dead @unit @dead
-jump _get_core equal unit.dead false
-jump no_units always
+sensor @unit.dead @unit @dead
+jump _get_core equal @unit.dead false
+jump no_units always 0 0
 _get_core:
 ulocate building core false _ core.x core.y core.exists core
 jump core_dead equal core.exists false
@@ -30,34 +29,28 @@ op add orePointer oreId memcellOffset
 read numberToMine cell orePointer
 jump reset_ore_type greaterThan oreId 8
 main_loop:
-check_ore_type:
 jump get_ore_type equal numberToMine 0
 bind_unit:
 ubind unitType
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
-check_items:
-sensor unit.firstItem @unit @firstItem
-jump mine equal unit.firstItem null
-jump drop_items notEqual unit.firstItem mineOreType
-sensor unit.totalItems @unit @totalItems
-sensor unit.itemCapacity @unit @itemCapacity
-jump drop_items greaterThanEq unit.totalItems unit.itemCapacity
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
+sensor @unit.firstItem @unit @firstItem
+jump mine equal @unit.firstItem null
+jump drop_items notEqual @unit.firstItem mineOreType
+sensor @unit.totalItems @unit @totalItems
+sensor @unit.itemCapacity @unit @itemCapacity
+jump drop_items greaterThanEq @unit.totalItems @unit.itemCapacity
 mine:
-find_ore:
 ulocate ore core _ mineOreType ore.x ore.y ore.exists _
 jump no_ore equal ore.exists false
-move_unit_to_ore:
 ucontrol approach ore.x ore.y approachRadius
-mine_ore:
 ucontrol mine ore.x ore.y
 op sub numberToMine numberToMine 1
-jump main_loop always
+jump main_loop always 0 0
 drop_items:
 ucontrol move core.x core.y
 ucontrol itemDrop core 69420
-jump main_loop always
-low_health:
+jump main_loop always 0 0
 ulocate building repair false _ repair.x repair.y repair.exists repair
 jump no_repair equal repair.exists false
 ucontrol approach repair.x repair.y approachRadius

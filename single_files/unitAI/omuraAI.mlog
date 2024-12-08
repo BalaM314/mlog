@@ -1,25 +1,25 @@
-set unit.maxHealth 22000
-set unit.range 61.5
+set @unit.maxHealth 22000
+set @unit.range 61.5
 set minHealth 0.5
 bind_unit:
 ubind @omura
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
-sensor unit.controlled @unit @controlled
-jump bind_unit greaterThan unit.controlled 1
-sensor unit.health @unit @health
-op div health unit.health unit.maxHealth
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
+sensor @unit.controlled @unit @controlled
+jump bind_unit greaterThan @unit.controlled 1
+sensor @unit.health @unit @health
+op div health @unit.health @unit.maxHealth
 jump heal lessThan health minHealth
 ulocate building turret true _ turret.x turret.y turret.found _
 ucontrol getBlock turret.x turret.y turret.type turret
 jump turret_in_range notEqual turret null
-ucontrol approach turret.x turret.y unit.range
-set approachDist unit.range
+ucontrol approach turret.x turret.y @unit.range
+set approachDist @unit.range
 jump fire always 0 0
 turret_in_range:
 sensor turret.range turret @range
 op add approachDist turret.range 1
-op min approachDist approachDist unit.range
+op min approachDist approachDist @unit.range
 jump fire always 0 0
 fire:
 ucontrol approach turret.x turret.y approachDist

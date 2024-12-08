@@ -20,17 +20,17 @@ set memcellOffset 1 #Offset for the memcell array of number of units mining each
 
 get_core:
 	ubind @mono
-	sensor unit.dead
-	jump _get_core equal unit.dead false
+	sensor @unit.dead
+	jump _get_core equal @unit.dead false
 	ubind @flare
-	sensor unit.dead
-	jump _get_core equal unit.dead false
+	sensor @unit.dead
+	jump _get_core equal @unit.dead false
 	ubind @mega
-	sensor unit.dead
-	jump _get_core equal unit.dead false
+	sensor @unit.dead
+	jump _get_core equal @unit.dead false
 	ubind @poly
-	sensor unit.dead
-	jump _get_core equal unit.dead false
+	sensor @unit.dead
+	jump _get_core equal @unit.dead false
 	jump no_units always
 
 	_get_core:
@@ -56,17 +56,17 @@ main_loop:
 
 	bind_unit:
 		ubind unitType
-		sensor unit.flag
-		jump bind_unit notEqual unit.flag 0
+		sensor @unit.flag
+		jump bind_unit notEqual @unit.flag 0
 	
 	
 	check_items:
-		sensor unit.firstItem
-		jump mine equal unit.firstItem null
-		jump drop_items notEqual unit.firstItem mineOreType
-		sensor unit.totalItems
-		sensor unit.itemCapacity
-		jump drop_items greaterThanEq unit.totalItems unit.itemCapacity
+		sensor @unit.firstItem
+		jump mine equal @unit.firstItem null
+		jump drop_items notEqual @unit.firstItem mineOreType
+		sensor @unit.totalItems
+		sensor @unit.itemCapacity
+		jump drop_items greaterThanEq @unit.totalItems @unit.itemCapacity
 
 	mine:
 

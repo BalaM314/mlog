@@ -1,4 +1,4 @@
-print "Fortress AI by BalaM314"
+print "Unit AI by BalaM314"
 print "Source code available at https://github.com/BalaM314/mlog/tree/main/single_files/unitAI/"
 set unitType @fortress
 set minHealthFrac 0.6
@@ -9,8 +9,8 @@ sensor @unit.range @unit @range
 op sub @unit.range @unit.range 3
 bind_unit:
 ubind unitType
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
 sensor @unit.health @unit @health
 jump heal lessThan @unit.health minHealth
 ulocate building turret true _ target.x target.y target.found target

@@ -39,21 +39,21 @@ unitSel_end:
 
 
 # Bind
-sensor unit.flag
-jump bind notEqual unit.flag flag
-sensor unit.controlled
-jump bind greaterThanEq unit.controlled 2
-sensor unit.dead
-jump bind_end equal unit.dead 0
+sensor @unit.flag
+jump bind notEqual @unit.flag flag
+sensor @unit.controlled
+jump bind greaterThanEq @unit.controlled 2
+sensor @unit.dead
+jump bind_end equal @unit.dead 0
 	bind:
 	# Binding
 	op add bindAttempts bindAttempts 1
 	jump bind_skip greaterThanEq bindAttempts 16
 	ubind @flare
-	sensor unit.flag
-	jump bind notEqual unit.flag 0
-	sensor unit.controlled
-	jump bind greaterThanEq unit.controlled 2
+	sensor @unit.flag
+	jump bind notEqual @unit.flag 0
+	sensor @unit.controlled
+	jump bind greaterThanEq @unit.controlled 2
 	# no need to include @dead as the likelihood of the unit dying immediately after binding is low
 	# besides it would be handled on the next unit validiticity check anyways :p
 
@@ -100,12 +100,12 @@ coreRadius_end:
 
 
 # Item take and drop
-sensor unit.firstItem
+sensor @unit.firstItem
 sensor conveyor1.titanium
 sensor projector1.phase-fabric
 
-jump itemdrop_titanium equal unit.firstItem @titanium
-jump itemdrop_phase equal unit.firstItem @phase-fabric
+jump itemdrop_titanium equal @unit.firstItem @titanium
+jump itemdrop_phase equal @unit.firstItem @phase-fabric
 jump itemtake always 0
 
 itemdrop_titanium:
@@ -115,8 +115,8 @@ itemdrop_titanium:
 		itemdrop_titanium_droploop:
 		ucontrol itemDrop conveyor1 999
 
-		sensor unit.firstItem
-		jump nextUnit equal unit.firstItem null
+		sensor @unit.firstItem
+		jump nextUnit equal @unit.firstItem null
 	jump nextUnit always 0
 itemdrop_titanium_end:
 
@@ -126,8 +126,8 @@ itemdrop_phase:
 	jump nextUnit equal projectorIsWithin 0
 		ucontrol itemDrop projector1 999
 
-		sensor unit.firstItem
-		jump itemdrop_phase_still notEqual unit.firstItem null
+		sensor @unit.firstItem
+		jump itemdrop_phase_still notEqual @unit.firstItem null
 			set takingPhase 0
 			ucontrol approach core.x core.y coreApproachRadius # send back for efficiency
 		itemdrop_phase_still:
@@ -143,16 +143,16 @@ jump nextUnit equal coreIsWithin 0
 	jump itemtake_titanium equal takingPhase 1
 
 		ucontrol itemTake core @phase-fabric 999
-		sensor unit.firstItem
-		jump itemtake_end equal unit.firstItem null
+		sensor @unit.firstItem
+		jump itemtake_end equal @unit.firstItem null
 		ucontrol approach projector1.x projector1.y 6.25
 		set takingPhase 1
 		jump itemtake_end always 0
 
 	itemtake_titanium:
 		ucontrol itemTake core @titanium 999
-		sensor unit.firstItem
-		jump itemtake_end equal unit.firstItem null
+		sensor @unit.firstItem
+		jump itemtake_end equal @unit.firstItem null
 		ucontrol approach conveyor1.x conveyor1.y 5.75
 		jump itemtake_end always 0
 

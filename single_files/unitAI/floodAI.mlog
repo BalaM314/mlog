@@ -3,18 +3,18 @@ print "Source code available at https://github.com/BalaM314/mlog/tree/main/singl
 set unitType @flare
 set minHealth 0.6
 ubind unitType
-sensor unit.maxHealth @unit @maxHealth
-sensor unit.range @unit @range
-op sub unit.range unit.range 3
+sensor @unit.maxHealth @unit @maxHealth
+sensor @unit.range @unit @range
+op sub @unit.range @unit.range 3
 bind_unit:
 ubind unitType
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
-sensor unit.health @unit @health
-op div health unit.health unit.maxHealth
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
+sensor @unit.health @unit @health
+op div health @unit.health @unit.maxHealth
 jump heal lessThan health minHealth
 ulocate building generator true _ outx outy found building
-ucontrol approach outx outy unit.range
+ucontrol approach outx outy @unit.range
 ucontrol target outx outy true
 jump bind_unit always 0 0
 heal:

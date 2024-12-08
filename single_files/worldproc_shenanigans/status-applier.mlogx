@@ -7,7 +7,7 @@ fetch unitCount unitCount @sharded
 
 fetch_loop:
 	fetch unit unit @sharded i
-	sensor unit.type unit @type
+	sensor unit.type
 	&for allowUnit of alpha beta gamma {
 		jump next_loop equal unit.type @$(allowUnit)
 	}

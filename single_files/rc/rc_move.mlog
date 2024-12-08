@@ -42,36 +42,36 @@ disable_overrange:
 set overrange 0
 overrange_disabled:
 ubind unitType
-sensor unit.range @unit @range
-sensor unit.itemCapacity @unit @itemCapacity
-sensor unit.maxHealth @unit @maxHealth
-op mul minHealth unit.maxHealth minHealthFrac
+sensor @unit.range @unit @range
+sensor @unit.itemCapacity @unit @itemCapacity
+sensor @unit.maxHealth @unit @maxHealth
+op mul minHealth @unit.maxHealth minHealthFrac
 set j 0
 set i 0
 send_commands_loop:
 bind_unit:
 ubind unitType
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
 jump load equal loading true
 loaded:
 jump heal equal healing true
 healed:
 ucontrol approach dest.x dest.y approachDistance
-ucontrol within shoot.x shoot.y unit.range unit.targetInRange
-jump target_position equal unit.targetInRange true
+ucontrol within shoot.x shoot.y @unit.range @unit.targetInRange
+jump target_position equal @unit.targetInRange true
 jump target_self equal overrange false
-sensor unit.x @unit @x
-sensor unit.y @unit @y
-op sub difference.x shoot.x unit.x
-op sub difference.y shoot.y unit.y
+sensor @unit.x @unit @x
+sensor @unit.y @unit @y
+op sub difference.x shoot.x @unit.x
+op sub difference.y shoot.y @unit.y
 op angle shoot.angle difference.x difference.y
 op cos shoot.normalized.x shoot.angle 0
 op sin shoot.normalized.y shoot.angle 0
-op mul shooting.x shoot.normalized.x unit.range
-op mul shooting.y shoot.normalized.y unit.range
-op add shooting.x shooting.x unit.x
-op add shooting.y shooting.y unit.y
+op mul shooting.x shoot.normalized.x @unit.range
+op mul shooting.y shoot.normalized.y @unit.range
+op add shooting.x shooting.x @unit.x
+op add shooting.y shooting.y @unit.y
 ucontrol target shooting.x shooting.y shouldFire
 op add i i 1
 jump send_commands_loop lessThan i unitControlLoops
@@ -93,14 +93,14 @@ op add j j 1
 jump send_commands_loop lessThan j quickLoops
 jump init_read_cell always 0 0
 load:
-sensor unit.firstItem @unit @firstItem
-sensor unit.totalItems @unit @totalItems
-jump handle_take_item notEqual unit.firstItem bombingItem
-jump loaded equal unit.totalItems unit.itemCapacity
+sensor @unit.firstItem @unit @firstItem
+sensor @unit.totalItems @unit @totalItems
+jump handle_take_item notEqual @unit.firstItem bombingItem
+jump loaded equal @unit.totalItems @unit.itemCapacity
 handle_take_item:
 ulocate building core false _ core.x core.y core.exists core
 ucontrol move core.x core.y
-jump item_cleared equal unit.firstItem null
+jump item_cleared equal @unit.firstItem null
 ucontrol itemDrop core 9999
 item_cleared:
 ucontrol itemTake core bombingItem 9999
@@ -110,8 +110,8 @@ op add j j 1
 jump send_commands_loop lessThan j quickLoops
 jump init_read_cell always 0 0
 heal:
-sensor unit.health @unit @health
-jump healed greaterThan unit.health minHealth
+sensor @unit.health @unit @health
+jump healed greaterThan @unit.health minHealth
 ulocate building repair false _ healTurret.x healTurret.y isFound healTurret
 jump healed equal isFound false
 ucontrol move healTurret.x healTurret.y

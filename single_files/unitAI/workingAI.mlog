@@ -3,24 +3,23 @@ print "Source code available at https://github.com/BalaM314/mlog/tree/main/singl
 set unitType @fortress
 set minHealthFrac 0.6
 ubind unitType
-sensor unit.maxHealth @unit @maxHealth
-op mul minHealth minHealthFrac unit.maxHealth
-sensor unit.range @unit @range
-op sub unit.range unit.range 3
+sensor @unit.maxHealth @unit @maxHealth
+op mul minHealth minHealthFrac @unit.maxHealth
+sensor @unit.range @unit @range
+op sub @unit.range @unit.range 3
 bind_unit:
 ubind unitType
-sensor unit.flag @unit @flag
-jump bind_unit notEqual unit.flag 0
-sensor unit.health @unit @health
-jump heal lessThan unit.health minHealth
+sensor @unit.flag @unit @flag
+jump bind_unit notEqual @unit.flag 0
+sensor @unit.health @unit @health
+jump heal lessThan @unit.health minHealth
 ulocate building turret true _ turret.x outy found building
 ucontrol within turret.x outy 30 close
 jump pathfind equal close false
-ucontrol approach turret.x outy unit.range
+ucontrol approach turret.x outy @unit.range
 ucontrol target turret.x outy true
 jump bind_unit always 0 0
 pathfind:
-ucontrol pathfind
 jump bind_unit always 0 0
 heal:
 ulocate building repair false _ repair.x repair.y repair.found repair

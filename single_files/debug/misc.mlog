@@ -1,4 +1,71 @@
-setprop @copper nucleus1 0
+init:
+set range 50
+sensor malign1.x malign1 @x
+sensor malign1.y malign1 @y
+sensor malign2.x malign2 @x
+sensor malign2.y malign2 @y
+sensor malign3.x malign3 @x
+sensor malign3.y malign3 @y
+sensor malign4.x malign4 @x
+sensor malign4.y malign4 @y
+sensor malign5.x malign5 @x
+sensor malign5.y malign5 @y
+sensor malign6.x malign6 @x
+sensor malign6.y malign6 @y
+sensor malign7.x malign7 @x
+sensor malign7.y malign7 @y
+sensor malign8.x malign8 @x
+sensor malign8.y malign8 @y
+sensor malign9.x malign9 @x
+sensor malign9.y malign9 @y
+sensor malign10.x malign10 @x
+sensor malign10.y malign10 @y
+jump init notEqual @links 11
+main_loop:
+sensor diode1.rotation diode1 @rotation
+jump right strictEqual diode1.rotation 0
+right:
+set dir.x 50
+set dir.y 0
+set dir.x 0
+set dir.y 50
+set dir.x -50
+set dir.y 0
+set dir.x 0
+set dir.y -50
+jump rotation_found always 0 0
+rotation_found:
+op add shoot.x malign1.x dir.x
+op add shoot.y malign1.y dir.y
+control shoot malign1 shoot.x shoot.y 1
+op add shoot.x malign2.x dir.x
+op add shoot.y malign2.y dir.y
+control shoot malign2 shoot.x shoot.y 1
+op add shoot.x malign3.x dir.x
+op add shoot.y malign3.y dir.y
+control shoot malign3 shoot.x shoot.y 1
+op add shoot.x malign4.x dir.x
+op add shoot.y malign4.y dir.y
+control shoot malign4 shoot.x shoot.y 1
+op add shoot.x malign5.x dir.x
+op add shoot.y malign5.y dir.y
+control shoot malign5 shoot.x shoot.y 1
+op add shoot.x malign6.x dir.x
+op add shoot.y malign6.y dir.y
+control shoot malign6 shoot.x shoot.y 1
+op add shoot.x malign7.x dir.x
+op add shoot.y malign7.y dir.y
+control shoot malign7 shoot.x shoot.y 1
+op add shoot.x malign8.x dir.x
+op add shoot.y malign8.y dir.y
+control shoot malign8 shoot.x shoot.y 1
+op add shoot.x malign9.x dir.x
+op add shoot.y malign9.y dir.y
+control shoot malign9 shoot.x shoot.y 1
+op add shoot.x malign10.x dir.x
+op add shoot.y malign10.y dir.y
+control shoot malign10 shoot.x shoot.y 1
+jump main_loop always 0 0
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"

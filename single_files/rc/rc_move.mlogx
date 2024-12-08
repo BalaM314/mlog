@@ -57,10 +57,10 @@ init_read_cell:
 		set overrange 0
 		overrange_disabled:
 		ubind unitType
-		sensor unit.range
-		sensor unit.itemCapacity
-		sensor unit.maxHealth
-		op mul minHealth unit.maxHealth minHealthFrac
+		sensor @unit.range
+		sensor @unit.itemCapacity
+		sensor @unit.maxHealth
+		op mul minHealth @unit.maxHealth minHealthFrac
 
 set j 0
 quick_loop:
@@ -69,8 +69,8 @@ set i 0
 send_commands_loop:
 	bind_unit:
 		ubind unitType
-		sensor unit.flag
-		jump bind_unit notEqual unit.flag 0
+		sensor @unit.flag
+		jump bind_unit notEqual @unit.flag 0
 	
 	#If loading or healing jump there and then jump back
 	jump load equal loading true
@@ -80,28 +80,28 @@ send_commands_loop:
 	
 	send_commands:
 		ucontrol approach dest.x dest.y approachDistance
-		ucontrol within shoot.x shoot.y unit.range unit.targetInRange
-		jump target_position equal unit.targetInRange true
+		ucontrol within shoot.x shoot.y @unit.range @unit.targetInRange
+		jump target_position equal @unit.targetInRange true
 		jump target_self equal overrange false
 
 		target_overrange:
-			sensor unit.x
-			sensor unit.y
+			sensor @unit.x
+			sensor @unit.y
 
 			#Trigonometry!
 			#Get the difference in position
-			op sub difference.x shoot.x unit.x
-			op sub difference.y shoot.y unit.y
+			op sub difference.x shoot.x @unit.x
+			op sub difference.y shoot.y @unit.y
 			#Make normalized vector
 			op angle shoot.angle difference.x difference.y
 			op cos shoot.normalized.x shoot.angle
 			op sin shoot.normalized.y shoot.angle
 			#Scale vector
-			op mul shooting.x shoot.normalized.x unit.range
-			op mul shooting.y shoot.normalized.y unit.range
+			op mul shooting.x shoot.normalized.x @unit.range
+			op mul shooting.y shoot.normalized.y @unit.range
 			#Move to unit position
-			op add shooting.x unit.x
-			op add shooting.y unit.y
+			op add shooting.x @unit.x
+			op add shooting.y @unit.y
 
 			#Fire!
 			ucontrol target shooting.x shooting.y shouldFire
@@ -133,16 +133,16 @@ send_commands_loop:
 
 	load:
 		#Optimization is painful.
-		sensor unit.firstItem
-		sensor unit.totalItems
-		jump handle_take_item notEqual unit.firstItem bombingItem
-		jump loaded equal unit.totalItems unit.itemCapacity
+		sensor @unit.firstItem
+		sensor @unit.totalItems
+		jump handle_take_item notEqual @unit.firstItem bombingItem
+		jump loaded equal @unit.totalItems @unit.itemCapacity
 
 	handle_take_item:
 		move_to_core:
 			ulocate building core false core.x core.y core.exists core #Core needs to be ulocated for each unit.
 			ucontrol move core.x core.y
-		jump item_cleared equal unit.firstItem null
+		jump item_cleared equal @unit.firstItem null
 	drop_item:
 		ucontrol itemDrop core 9999
 	item_cleared:
@@ -155,8 +155,8 @@ send_commands_loop:
 		jump init_read_cell
 
 	heal:
-		sensor unit.health
-		jump healed greaterThan unit.health minHealth
+		sensor @unit.health
+		jump healed greaterThan @unit.health minHealth
 		ulocate building repair false healTurret.x healTurret.y isFound healTurret
 		jump healed equal isFound false #remove this check eventually as the rc schem will have repair turret spam
 		ucontrol move healTurret.x healTurret.y

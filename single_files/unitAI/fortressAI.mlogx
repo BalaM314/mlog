@@ -14,8 +14,8 @@ get_static_vars:
 	op sub @unit.range 3
 bind_unit:
 	ubind unitType
-	sensor unit.flag @unit @flag
-	jump bind_unit notEqual unit.flag 0
+	sensor @unit.flag @unit @flag
+	jump bind_unit notEqual @unit.flag 0
 check_health:
 	sensor @unit.health
 	jump heal @unit.health < minHealth

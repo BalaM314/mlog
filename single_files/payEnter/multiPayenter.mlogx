@@ -70,10 +70,10 @@ main_loop:
 		bind_unit$(n):
 		#Bind a unit, but check if it's alive and unflagged.
 		ubind unitType
-		sensor unit.flag
-		sensor unit.controlled
-		jump bind_unit$(n) notEqual unit.flag 0
-		jump bind_unit$(n) greaterThan unit.controlled 1
+		sensor @unit.flag
+		sensor @unit.controlled
+		jump bind_unit$(n) notEqual @unit.flag 0
+		jump bind_unit$(n) greaterThan @unit.controlled 1
 		ucontrol within @thisx @thisy maxDist close
 		jump bind_unit$(n) equal close false
 		ucontrol flag cookie

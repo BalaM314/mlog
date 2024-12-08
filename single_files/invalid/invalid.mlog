@@ -1,14 +1,6 @@
 set hasInvalidCommands true
-set 56 "something"
-label:
-label:
-op add y thing ""
-two_types:
 set unit @poly
 set unit "poly"
 jump twoTypes always 0 0
 set unitName "poly"
 ubind unitName
-end
-print "Made with mlogx"
-print "github.com/BalaM314/mlogx/"

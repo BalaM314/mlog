@@ -1,14 +1,15 @@
-get_player:
-radar player player player distance foreshadow1 1 player
+get_variables:
+radar player any any distance foreshadow1 1 player
+jump get_variables equal display1 null
 sensor display1.x display1 @x
 sensor display1.y display1 @y
+sensor display1.size display1 @size
 op sub xOffset display1.x 3
 op sub yOffset display1.y 3
-sensor display1.size display1 @size
 op div scale 180 display1.size
 main_loop:
 sensor player.dead player @dead
-jump get_player equal player.dead true
+jump get_variables equal player.dead true
 sensor player.shootX player @shootX
 sensor player.shootY player @shootY
 sensor player.shooting player @shooting
@@ -16,10 +17,19 @@ op sub cursor.x player.shootX xOffset
 op sub cursor.y player.shootY yOffset
 op mul cursor.x cursor.x scale
 op mul cursor.y cursor.y scale
+jump cursor_out greaterThan cursor.x 180
+jump cursor_out greaterThan cursor.y 180
+jump cursor_out lessThan cursor.x 0
+jump cursor_out lessThan cursor.y 0
 write cursor.x cell1 0
 write cursor.y cell1 1
 write player.shooting cell1 2
-jump main_loop always
+jump main_loop always 0 0
+cursor_out:
+write 0 cell1 0
+write 0 cell1 1
+write player.shooting cell1 2
+jump main_loop always 0 0
 end
 print "Made with mlogx"
 print "github.com/BalaM314/mlogx/"
