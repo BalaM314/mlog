@@ -26,6 +26,8 @@ control enabled scorch21 false
 control enabled scorch22 false
 control enabled scorch23 false
 control enabled scorch24 false
+op mul flag @thisx @maph
+op add flag @thisy flag
 print "Keter-class Containment Cell\n"
 print "Status: Identifying contained entity...\n"
 print "\nby [#3141FF]BalaM314[]"
@@ -44,6 +46,7 @@ printflush message1
 ubind @flare
 sensor unit.flag @unit @flag
 jump bind_unit notEqual unit.flag 0
+ucontrol flag flag
 main_loop:
 print "Keter-class Containment Cell\n"
 sensor keter.shooting keter @shooting
@@ -91,14 +94,19 @@ health_ok:
 jump no_player_nearby equal player null
 print "[yellow][[WARN] Player nearby. This may cause issues with the anti-target system. Please move away from the containment cell.[]\n"
 no_player_nearby:
+ucontrol within keter.x keter.y 6 tooClose
 jump get_target equal tooClose false
+ucontrol approach keter.x keter.y 12
 jump end_main_loop always 0 0
 get_target:
 op sub theta keter.rotation 90
+op cos relX theta 0
+op sin relY theta 0
 op mul relX relX 10
 op mul relY relY 10
 op add target.x relX keter.x
 op add target.y relY keter.y
+ucontrol move target.x target.y
 end_main_loop:
 print "\nby [#3141FF]BalaM314[]"
 printflush message1

@@ -7,6 +7,8 @@ printflush message1
 &for i in 1 24 {
 	control enabled scorch$(i) false
 }
+set flag @thisx * @maph
+set flag @thisy + flag
 
 
 get_enemy:
@@ -28,7 +30,7 @@ bind_unit:
 	ubind @flare
 	sensor unit.flag @unit @flag
 	jump bind_unit notEqual unit.flag 0
-	ucontrol flag
+	ucontrol flag flag
 
 main_loop:
 
@@ -64,22 +66,22 @@ main_loop:
 		no_player_nearby:
 
 	bait:
-		ucontrol within keter.x keter.y 6 tooClose 0
+		ucontrol within keter.x keter.y 6 tooClose
 		jump get_target equal tooClose false
 		too_close:
-			ucontrol approach keter.x keter.y 12 0 0
+			ucontrol approach keter.x keter.y 12
 			jump end_main_loop always 0 0
 		get_target:
 			op sub theta keter.rotation 90
-			op cos relX theta b
-			op sin relY theta b
+			op cos relX theta
+			op sin relY theta
 			op mul relX relX 10
 			op mul relY relY 10
 			op add target.x relX keter.x
 			op add target.y relY keter.y
-		ucontrol move target.x target.y 0 0 0
+		ucontrol move target.x target.y
 
 	end_main_loop:
 	print "\nby [#3141FF]BalaM314[]"
 	printflush message1
-	jump main_loop always 0 0
+	jump main_loop
