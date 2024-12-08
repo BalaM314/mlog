@@ -1,0 +1,122 @@
+set displaySize 180
+set ymin -32
+set ymax 32
+set xmin -32
+set xmax 32
+set display_1_1 display1
+set display_1_2 display2
+set display_1_3 display3
+set display_2_1 display4
+set display_2_2 display5
+set display_2_3 display6
+set display_3_1 display7
+set display_3_2 display8
+set display_3_3 display9
+draw clear 0 0 0
+drawflush display1
+draw clear 0 0 0
+drawflush display2
+draw clear 0 0 0
+drawflush display3
+draw clear 0 0 0
+drawflush display4
+draw clear 0 0 0
+drawflush display5
+draw clear 0 0 0
+drawflush display6
+draw clear 0 0 0
+drawflush display7
+draw clear 0 0 0
+drawflush display8
+draw clear 0 0 0
+drawflush display9
+set x1 xmin
+x_loop:
+set y1 ymin
+y_loop:
+op mul x2 y1 -1
+op add y2 x1 1
+op mul x1_disp x1 8.4375
+op mul x2_disp x2 8.4375
+op mul y1_disp y1 8.4375
+op mul y2_disp y2 8.4375
+set r x1
+op add r r 32
+op mul r r 4
+set g y1
+op add g g 32
+op mul g g 4
+set b 128
+op sub y1_disp_c y1_disp 270
+op sub y2_disp_c y2_disp 270
+op sub x1_disp_c x1_disp 270
+op sub x2_disp_c x2_disp 270
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_1_1
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_1_2
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_1_3
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+op sub y1_disp_c y1_disp_c displaySize
+op sub y2_disp_c y2_disp_c displaySize
+op sub x1_disp_c x1_disp 270
+op sub x2_disp_c x2_disp 270
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_2_1
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_2_2
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_2_3
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+op sub y1_disp_c y1_disp_c displaySize
+op sub y2_disp_c y2_disp_c displaySize
+op sub x1_disp_c x1_disp 270
+op sub x2_disp_c x2_disp 270
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_3_1
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_3_2
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+draw color r g b 255
+draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+drawflush display_3_3
+op sub x1_disp_c x1_disp_c displaySize
+op sub x2_disp_c x2_disp_c displaySize
+op sub y1_disp_c y1_disp_c displaySize
+op sub y2_disp_c y2_disp_c displaySize
+op add y1 y1 2
+jump y_loop lessThan y1 ymax
+op add x1 x1 2
+jump x_loop lessThan x1 xmax
+wait_for_switch:
+sensor switch1.enabled switch1 @enabled
+jump wait_for_switch equal switch1.enabled false
+control enabled switch1 false
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

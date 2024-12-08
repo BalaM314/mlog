@@ -1,0 +1,76 @@
+set displaySize 180
+set ymin -32
+set ymax 32
+set xmin -32
+set xmax 32
+
+set display_1_1 display1
+set display_1_2 display2
+set display_1_3 display3
+set display_2_1 display4
+set display_2_2 display5
+set display_2_3 display6
+set display_3_1 display7
+set display_3_2 display8
+set display_3_3 display9
+
+&for i in 1 $displayCount {
+	draw clear 0 0 0
+	drawflush display$i
+}
+
+set x1 xmin
+x_loop:
+	set y1 ymin
+	y_loop:
+
+		set x2 y1 * -1
+		set y2 x1 + 1
+		&for var of x1 x2 y1 y2 {
+			set $(var)_disp $(var) * 8.4375
+		}
+
+		set r x1
+		set r r + 32
+		set r r * 4
+		set g y1
+		set g g + 32
+		set g g * 4
+		set b 128
+
+		&for yvar of y1_disp y2_disp {
+			set $(yvar)_c $yvar - 270
+		}
+		&for y in 1 $displayHeight {
+		
+			&for xvar of x1_disp x2_disp {
+				set $(xvar)_c $xvar - 270
+			}
+			&for x in 1 $displayWidth {
+				draw color r g b 255
+				draw line x1_disp_c y1_disp_c x2_disp_c y2_disp_c
+				drawflush display_$(y)_$(x)
+				&for xvar of x1_disp x2_disp {
+					op sub $(xvar)_c displaySize
+				}
+			}
+
+			&for yvar of y1_disp y2_disp {
+				op sub $(yvar)_c displaySize
+			}
+		}
+	
+		op add y1 2
+		jump y_loop y1 < ymax
+
+	op add x1 2
+	jump x_loop x1 < xmax
+
+wait_for_switch:
+sensor switch1.enabled
+jump wait_for_switch switch1.enabled ~= false
+control enabled switch1 false
+
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
