@@ -1,0 +1,84 @@
+
+wait:
+  //Processor has just begun to exist
+  //This might be because the user is building the schematic,
+  //or the schematic is actively firing at enemy units and the processor broke and got rebuilt
+  //Enable everything until:
+  // * the link count is correct
+  // * there are no enemies in range
+  // * there is some power in the network
+  enable_everything:
+    &for i in 1 7 {
+      control enabled heater$i 1
+    }
+    control enabled projector1 1
+  radar enemy distance 1 afflict1 e
+  jump wait e != null
+  sensor afflict1.powerNetStored
+  jump wait afflict1.powerNetStored < 1000
+
+init:
+  set range 40
+  get_rotation:
+    sensor heater7.rotation
+    jump up heater7.rotation == 1
+    jump left heater7.rotation == 2
+    jump down heater7.rotation == 3
+    # jump right heater7.rotation == 0
+
+    right:
+      set dir.x range
+      set dir.y 0
+      jump rotation_found
+    up:
+      set dir.x 0
+      set dir.y range
+      jump rotation_found
+    left:
+      set dir.x -1 * range
+      set dir.y 0
+      jump rotation_found
+    down:
+      set dir.x 0
+      set dir.y -1 * range
+      # jump rotation_found
+  rotation_found:
+
+  fire:
+    &for i in 1 7 {
+      control enabled heater$i 1
+    }
+    &for i in 1 3 {
+      sensor afflict1.x
+      sensor afflict1.y
+      set shoot.x afflict1.x + dir.x
+      set shoot.y afflict1.y + dir.y
+      control shoot afflict1 shoot.x shoot.y 1
+    }
+    wait 0.1
+    control shoot afflict1 shoot.x shoot.y 0
+    wait 1
+
+main_loop:
+
+  afflict_heat:
+    sensor afflict1.shooting
+    radar enemy distance 1 afflict1 e1
+    set fire afflict1.shooting || e1
+    &for i in 1 7 {
+      control enabled heater$i fire
+    }
+  shield_enable:
+    control enabled projector1 fire
+  overdrive:
+    sensor projector2.phase-fabric
+    sensor afflict1.timescale
+    jump no_phase projector2.phase-fabric == 0
+    set od afflict1.timescale <= 2.25
+    jump apply_overdrive
+    no_phase:
+    set od afflict1.timescale <= 1.5
+    apply_overdrive:
+    control enabled projector2 od
+
+  jump main_loop

@@ -1,0 +1,130 @@
+wait:
+control enabled heater1 1
+control enabled heater2 1
+control enabled heater3 1
+control enabled heater4 1
+control enabled heater5 1
+control enabled heater6 1
+control enabled heater7 1
+control enabled heater8 1
+control enabled heater9 1
+control enabled heater10 1
+control enabled heater11 1
+control enabled heater12 1
+control enabled heater13 1
+control enabled heater14 1
+control enabled heater15 1
+control enabled heater16 1
+control enabled heater17 1
+control enabled heater18 1
+control enabled heater19 1
+control enabled heater20 1
+control enabled projector1 1
+control enabled projector2 1
+control enabled projector3 1
+jump wait notEqual @links 30
+radar enemy any any distance afflict1 1 e2
+jump wait notEqual e2 null
+sensor afflict1.powerNetStored afflict1 @powerNetStored
+jump wait lessThan afflict1.powerNetStored 1000
+set range 40
+sensor diode1.rotation diode1 @rotation
+jump up strictEqual diode1.rotation 1
+jump left strictEqual diode1.rotation 2
+jump down strictEqual diode1.rotation 3
+set dir.x range
+set dir.y 0
+jump rotation_found always 0 0
+up:
+set dir.x 0
+set dir.y range
+jump rotation_found always 0 0
+left:
+op mul dir.x -1 range
+set dir.y 0
+jump rotation_found always 0 0
+down:
+set dir.x 0
+op mul dir.y -1 range
+rotation_found:
+print "this line stops the afflicts from wasting power"
+control enabled heater1 1
+control enabled heater2 1
+control enabled heater3 1
+control enabled heater4 1
+control enabled heater5 1
+control enabled heater6 1
+control enabled heater7 1
+control enabled heater8 1
+control enabled heater9 1
+control enabled heater10 1
+control enabled heater11 1
+control enabled heater12 1
+control enabled heater13 1
+control enabled heater14 1
+control enabled heater15 1
+control enabled heater16 1
+control enabled heater17 1
+control enabled heater18 1
+sensor afflict1.x afflict1 @x
+sensor afflict1.y afflict1 @y
+op add shoot.x afflict1.x dir.x
+op add shoot.y afflict1.y dir.y
+control shoot afflict1 shoot.x shoot.y 1
+sensor afflict2.x afflict2 @x
+sensor afflict2.y afflict2 @y
+op add shoot.x afflict2.x dir.x
+op add shoot.y afflict2.y dir.y
+control shoot afflict2 shoot.x shoot.y 1
+sensor afflict3.x afflict3 @x
+sensor afflict3.y afflict3 @y
+op add shoot.x afflict3.x dir.x
+op add shoot.y afflict3.y dir.y
+control shoot afflict3 shoot.x shoot.y 1
+control shoot afflict1 shoot.x shoot.y 0
+control shoot afflict2 shoot.x shoot.y 0
+control shoot afflict3 shoot.x shoot.y 0
+wait 1
+printflush null
+main_loop:
+sensor afflict1.shooting afflict1 @shooting
+sensor afflict2.shooting afflict2 @shooting
+sensor afflict3.shooting afflict3 @shooting
+radar enemy any any distance afflict1 1 e1
+radar enemy any any distance afflict1 1 e2
+radar enemy any any distance afflict3 1 e3
+op or temp1 e1 e2
+op or temp2 e3 afflict1.shooting
+op or temp3 afflict2.shooting afflict3.shooting
+op or fire temp1 temp2
+op or fire temp2 temp3
+control enabled heater1 fire
+control enabled heater2 fire
+control enabled heater3 fire
+control enabled heater4 fire
+control enabled heater5 fire
+control enabled heater6 fire
+control enabled heater7 fire
+control enabled heater8 fire
+control enabled heater9 fire
+control enabled heater10 fire
+control enabled heater11 fire
+control enabled heater12 fire
+control enabled heater13 fire
+control enabled heater14 fire
+control enabled heater15 fire
+control enabled heater16 fire
+control enabled heater17 fire
+control enabled heater18 fire
+sensor container1.nitrogen container1 @nitrogen
+op lessThan nitro container1.nitrogen 695
+control enabled heater19 nitro
+control enabled heater20 nitro
+control enabled projector2 fire
+control enabled projector3 fire
+sensor dome1.efficiency dome1 @efficiency
+op lessThan od dome1.efficiency 0.8
+control enabled projector1 od
+print "3x Afflict Defense by [#3141FF]BalaM[#31FF41]314"
+printflush message1
+jump main_loop always 0 0

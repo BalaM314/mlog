@@ -1,0 +1,80 @@
+wait:
+control enabled heater1 1
+control enabled heater2 1
+control enabled heater3 1
+control enabled heater4 1
+control enabled heater5 1
+control enabled heater6 1
+control enabled heater7 1
+control enabled projector1 1
+radar enemy any any distance afflict1 1 e
+jump wait notEqual e null
+sensor afflict1.powerNetStored afflict1 @powerNetStored
+jump wait lessThan afflict1.powerNetStored 1000
+set range 40
+sensor heater7.rotation heater7 @rotation
+jump up strictEqual heater7.rotation 1
+jump left strictEqual heater7.rotation 2
+jump down strictEqual heater7.rotation 3
+set dir.x range
+set dir.y 0
+jump rotation_found always 0 0
+up:
+set dir.x 0
+set dir.y range
+jump rotation_found always 0 0
+left:
+op mul dir.x -1 range
+set dir.y 0
+jump rotation_found always 0 0
+down:
+set dir.x 0
+op mul dir.y -1 range
+rotation_found:
+control enabled heater1 1
+control enabled heater2 1
+control enabled heater3 1
+control enabled heater4 1
+control enabled heater5 1
+control enabled heater6 1
+control enabled heater7 1
+sensor afflict1.x afflict1 @x
+sensor afflict1.y afflict1 @y
+op add shoot.x afflict1.x dir.x
+op add shoot.y afflict1.y dir.y
+control shoot afflict1 shoot.x shoot.y 1
+sensor afflict1.x afflict1 @x
+sensor afflict1.y afflict1 @y
+op add shoot.x afflict1.x dir.x
+op add shoot.y afflict1.y dir.y
+control shoot afflict1 shoot.x shoot.y 1
+sensor afflict1.x afflict1 @x
+sensor afflict1.y afflict1 @y
+op add shoot.x afflict1.x dir.x
+op add shoot.y afflict1.y dir.y
+control shoot afflict1 shoot.x shoot.y 1
+wait 0.1
+control shoot afflict1 shoot.x shoot.y 0
+wait 1
+main_loop:
+sensor afflict1.shooting afflict1 @shooting
+radar enemy any any distance afflict1 1 e1
+op or fire afflict1.shooting e1
+control enabled heater1 fire
+control enabled heater2 fire
+control enabled heater3 fire
+control enabled heater4 fire
+control enabled heater5 fire
+control enabled heater6 fire
+control enabled heater7 fire
+control enabled projector1 fire
+sensor projector2.phase-fabric projector2 @phase-fabric
+sensor afflict1.timescale afflict1 @timescale
+jump no_phase strictEqual projector2.phase-fabric 0
+op lessThanEq od afflict1.timescale 2.25
+jump apply_overdrive always 0 0
+no_phase:
+op lessThanEq od afflict1.timescale 1.5
+apply_overdrive:
+control enabled projector2 od
+jump main_loop always 0 0

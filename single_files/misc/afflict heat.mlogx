@@ -1,0 +1,103 @@
+
+wait:
+  //Processor has just begun to exist
+  //This might be because the user is building the schematic,
+  //or the schematic is actively firing at enemy units and the processor broke and got rebuilt
+  //Enable everything until:
+  // * the link count is correct
+  // * there are no enemies in range
+  // * there is some power in the network
+  enable_everything:
+    &for i in 1 20 {
+      control enabled heater$i 1
+    }
+    &for i in 1 3 {
+      control enabled projector$i 1
+    }
+  jump wait @links != 30
+  radar enemy distance 1 afflict1 e2
+  jump wait e2 != null
+  sensor afflict1.powerNetStored
+  jump wait afflict1.powerNetStored < 1000
+
+init:
+  set range 40
+  get_rotation:
+    sensor diode1.rotation
+    jump up diode1.rotation == 1
+    jump left diode1.rotation == 2
+    jump down diode1.rotation == 3
+    # jump right diode1.rotation == 0
+
+    right:
+      set dir.x range
+      set dir.y 0
+      jump rotation_found
+    up:
+      set dir.x 0
+      set dir.y range
+      jump rotation_found
+    left:
+      set dir.x -1 * range
+      set dir.y 0
+      jump rotation_found
+    down:
+      set dir.x 0
+      set dir.y -1 * range
+      # jump rotation_found
+  rotation_found:
+
+  print "this line stops the afflicts from wasting power"
+
+  fire:
+    &for i in 1 18 {
+      control enabled heater$i 1
+    }
+    &for i in 1 3 {
+      sensor afflict$(i).x
+      sensor afflict$(i).y
+      set shoot.x afflict$(i).x + dir.x
+      set shoot.y afflict$(i).y + dir.y
+      control shoot afflict$i shoot.x shoot.y 1
+    }
+    &for i in 1 3 {
+      control shoot afflict$i shoot.x shoot.y 0
+    }
+    wait 1
+
+  printflush null
+
+main_loop:
+
+  afflict_heat:
+    sensor afflict1.shooting
+    sensor afflict2.shooting
+    sensor afflict3.shooting
+    radar enemy distance 1 afflict1 e1
+    radar enemy distance 1 afflict1 e2
+    radar enemy distance 1 afflict3 e3
+    set temp1 e1 || e2
+    set temp2 e3 || afflict1.shooting
+    set temp3 afflict2.shooting || afflict3.shooting
+    set fire temp1 || temp2
+    set fire temp2 || temp3
+    &for i in 1 18 {
+      control enabled heater$i fire
+    }
+  nitro_heat:
+    sensor container1.nitrogen
+    set nitro container1.nitrogen < 695
+    &for i in 19 20 {
+      control enabled heater$i nitro
+    }
+  shield_enable:
+    control enabled projector2 fire
+    control enabled projector3 fire
+  overdrive:
+    sensor dome1.efficiency
+    set od dome1.efficiency < 0.8
+    control enabled projector1 od
+  
+  print "3x Afflict Defense by [#3141FF]BalaM[#31FF41]314"
+  printflush message1
+  jump main_loop
