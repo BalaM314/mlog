@@ -1,0 +1,200 @@
+ubind @mono
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
+ubind @flare
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
+ubind @poly
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
+ubind @mega
+sensor @unit.dead @unit @dead
+jump locate_core notEqual @unit.dead true
+set core nucleus1
+jump core_found notEqual core null
+set core foundation1
+jump core_found notEqual core null
+set core shard1
+jump core_found notEqual core null
+set core vault1
+jump core_found notEqual core null
+set core bastion1
+jump core_found notEqual core null
+set core citadel1
+jump core_found notEqual core null
+set core acropolis1
+jump core_found notEqual core null
+set core nucleus2
+jump core_found notEqual core null
+set core foundation2
+jump core_found notEqual core null
+set core vault2
+jump core_found notEqual core null
+print "Can't find the core. Please link the core or make a mono/flare."
+printflush message1
+jump configure_transport always 0 0
+locate_core:
+ulocate building core false _ coreX coreY _ core
+ubind null
+core_found:
+main_loop:
+set disable 0
+set statusGood 1
+sensor coreCap core @itemCapacity
+op div minRes coreCap 4
+op min minRes minRes 2e3
+printflush message1
+print "[slate]Pyra Mixer Core 18 v.1.2\n[sky]By[#ff7] Username\n[]Resource Manager by [#00f]SBytes[] and [#3141FF]BalaM[#31FF41]314\n"
+sensor coreLead core @lead
+jump item_ok_lead greaterThan coreLead minRes
+set disable 1
+op div coreLead% coreLead coreCap
+op idiv coreLead% coreLead% 1e-4
+op div coreLead% coreLead% 1e2
+print "\n[#fff]⚠ Low [white] []"
+print coreLead%
+print "% < 25% in core"
+item_ok_lead:
+sensor coreSand core @sand
+jump item_ok_sand greaterThan coreSand minRes
+set disable 1
+op div coreSand% coreSand coreCap
+op idiv coreSand% coreSand% 1e-4
+op div coreSand% coreSand% 1e2
+print "\n[#fff]⚠ Low [white] []"
+print coreSand%
+print "% < 25% in core"
+item_ok_sand:
+sensor coreCoal core @coal
+jump item_ok_coal greaterThan coreCoal minRes
+set disable 1
+op div coreCoal% coreCoal coreCap
+op idiv coreCoal% coreCoal% 1e-4
+op div coreCoal% coreCoal% 1e2
+print "\n[#fff]⚠ Low [white] []"
+print coreCoal%
+print "% < 25% in core"
+item_ok_coal:
+sensor powerNetCap node1 @powerNetCapacity
+sensor powerNetStored node1 @powerNetStored
+op div powerNetStored% powerNetStored powerNetCap
+jump power_ok greaterThan powerNetStored% 0.33
+set disable 1
+op idiv powerNetStoredF powerNetStored% 1e-4
+op div powerNetStoredF powerNetStoredF 1e2
+print "\n[#fff]⚠ Low  [white] []"
+print powerNetStoredF
+print "% < 33%"
+power_ok:
+jump disable_buildings equal disable 1
+configure_transport:
+sensor coal conveyor1 @coal
+jump jump_8_ greaterThan coal 1
+set unloaderConfig @coal
+jump jump_9_ always 0 0
+jump_8_:
+sensor lead conveyor1 @lead
+jump jump_10_ greaterThan lead 1
+set unloaderConfig @lead
+jump jump_9_ always 0 0
+jump_10_:
+set unloaderConfig @sand
+jump_9_:
+control config unloader1 unloaderConfig
+sensor totalItems conveyor1 @totalItems
+jump jump_11_ lessThan totalItems max
+jump jump_12_ lessThan @time t
+control enabled conveyor2 0
+control enabled conveyor3 0
+control enabled sorter1 0
+control config sorter1 null
+set max 0
+jump_12_:
+jump jump_13_ greaterThan totalItems 0
+control enabled conveyor2 1
+control enabled conveyor3 1
+control enabled sorter1 true
+control config sorter1 @pyratite
+control config unloader2 @lead
+control config unloader3 @sand
+set max 10
+jump_11_:
+op add t @time 500
+jump_13_:
+sensor pyratite mixer1 @pyratite
+jump jump_14_ lessThanEq pyratite 5
+control config sorter2 null
+jump enable_buildings always 0 0
+jump_14_:
+control config sorter2 @pyratite
+enable_buildings:
+jump main_loop equal cachedEnable 1
+control enabled unloader1 1
+control enabled unloader2 1
+control enabled unloader3 1
+control enabled unloader4 1
+control enabled unloader5 1
+control enabled unloader6 1
+control enabled mixer1 1
+control enabled mixer2 1
+control enabled mixer3 1
+control enabled mixer4 1
+control enabled mixer5 1
+control enabled mixer5 1
+control enabled mixer6 1
+control enabled mixer7 1
+control enabled mixer8 1
+control enabled mixer9 1
+control enabled mixer10 1
+control enabled mixer11 1
+control enabled mixer12 1
+control enabled mixer13 1
+control enabled mixer14 1
+control enabled mixer15 1
+control enabled mixer16 1
+control enabled mixer17 1
+control enabled mixer18 1
+control enabled conveyor2 1
+control enabled conveyor3 1
+control enabled conveyor4 1
+control enabled conveyor5 1
+control enabled conveyor6 1
+control enabled conveyor7 1
+set cachedEnable 1
+jump main_loop always 0 0
+disable_buildings:
+op sub timeSinceLastDisable @time lastDisabled
+jump main_loop lessThan timeSinceLastDisable 4e3
+set lastDisabled @time
+control enabled unloader1 0
+control enabled unloader2 0
+control enabled unloader3 0
+control enabled unloader4 0
+control enabled unloader5 0
+control enabled unloader6 0
+control enabled mixer1 0
+control enabled mixer2 0
+control enabled mixer3 0
+control enabled mixer4 0
+control enabled mixer5 0
+control enabled mixer5 0
+control enabled mixer6 0
+control enabled mixer7 0
+control enabled mixer8 0
+control enabled mixer9 0
+control enabled mixer10 0
+control enabled mixer11 0
+control enabled mixer12 0
+control enabled mixer13 0
+control enabled mixer14 0
+control enabled mixer15 0
+control enabled mixer16 0
+control enabled mixer17 0
+control enabled mixer18 0
+control enabled conveyor2 0
+control enabled conveyor3 0
+control enabled conveyor4 0
+control enabled conveyor5 0
+control enabled conveyor6 0
+control enabled conveyor7 0
+set cachedEnable 0

@@ -1,0 +1,131 @@
+
+get_core:
+	&for unit of mono flare poly mega {
+		ubind @$unit
+		sensor @unit.dead @unit @dead
+		jump locate_core notEqual @unit.dead true
+	}
+	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 vault2 {
+		set core $build
+		jump core_found notEqual core null
+	}
+
+	cant_find_core:
+		print "Can't find the core. Please link the core or make a mono/flare."
+    printflush message1
+		jump configure_transport
+
+	locate_core:
+		ulocate building core false coreX coreY _ core
+		ubind null
+core_found:
+
+main_loop:
+
+check_resources:
+  set disable 0
+  set statusGood 1
+  sensor coreCap core @itemCapacity
+  set minRes coreCap / 4
+  op min minRes 2e3
+  printflush message1
+  print "[slate]Pyra Mixer Core 18 v.1.2\n[sky]By[#ff7] Username\n[]Resource Manager by [#00f]SBytes[] and [#3141FF]BalaM[#31FF41]314\n"
+  
+  sensor coreLead core @lead
+  jump item_ok_lead coreLead > minRes
+  set disable 1
+  set coreLead% coreLead / coreCap
+  set coreLead% coreLead% \ 1e-4
+  set coreLead% coreLead% / 1e2
+  printf "\n[#fff]⚠ Low [white]$_lead []{coreLead%}% < 25% in core"
+  item_ok_lead:
+  
+  sensor coreSand core @sand
+  jump item_ok_sand coreSand > minRes
+  set disable 1
+  set coreSand% coreSand / coreCap
+  set coreSand% coreSand% \ 1e-4
+  set coreSand% coreSand% / 1e2
+  printf "\n[#fff]⚠ Low [white]$_sand []{coreSand%}% < 25% in core"
+  item_ok_sand:
+  
+  sensor coreCoal core @coal
+  jump item_ok_coal coreCoal > minRes
+  set disable 1
+  set coreCoal% coreCoal / coreCap
+  set coreCoal% coreCoal% \ 1e-4
+  set coreCoal% coreCoal% / 1e2
+  printf "\n[#fff]⚠ Low [white]$_coal []{coreCoal%}% < 25% in core"
+  item_ok_coal:
+  
+  sensor powerNetCap node1 @powerNetCapacity
+  sensor powerNetStored node1 @powerNetStored
+  set powerNetStored% powerNetStored / powerNetCap
+  jump power_ok powerNetStored% > 0.33
+  set disable 1
+  set powerNetStoredF powerNetStored% \ 1e-4
+  set powerNetStoredF powerNetStoredF / 1e2
+  printf "\n[#fff]⚠ Low  [white] []{powerNetStoredF}% < 33%"
+  power_ok:
+  jump disable_buildings disable ~= 1
+
+configure_transport:
+  sensor coal conveyor1 @coal
+  jump jump_8_ coal > 1
+  set unloaderConfig @coal
+  jump jump_9_
+  jump_8_:
+  sensor lead conveyor1 @lead
+  jump jump_10_ lead > 1
+  set unloaderConfig @lead
+  jump jump_9_
+  jump_10_:
+  set unloaderConfig @sand
+  jump_9_:
+  control config unloader1 unloaderConfig
+
+  sensor totalItems conveyor1 @totalItems
+  jump jump_11_ totalItems < max
+  jump jump_12_ @time < t
+  control enabled conveyor2 0
+  control enabled conveyor3 0
+  control enabled sorter1 0
+  control config sorter1 null
+  set max 0
+  jump_12_:
+  jump jump_13_ totalItems > 0
+  control enabled conveyor2 1
+  control enabled conveyor3 1
+  control enabled sorter1 true
+  control config sorter1 @pyratite
+  control config unloader2 @lead
+  control config unloader3 @sand
+  set max 10
+
+  jump_11_:
+  set t @time + 500
+  jump_13_:
+  sensor pyratite mixer1 @pyratite
+  jump jump_14_ pyratite <= 5
+  control config sorter2 null
+  jump enable_buildings
+  jump_14_:
+  control config sorter2 @pyratite
+
+
+enable_buildings:
+  jump main_loop cachedEnable ~= 1
+  &for building of unloader1 unloader2 unloader3 unloader4 unloader5 unloader6 mixer1 mixer2 mixer3 mixer4 mixer5 mixer5 mixer6 mixer7 mixer8 mixer9 mixer10 mixer11 mixer12 mixer13 mixer14 mixer15 mixer16 mixer17 mixer18 conveyor2 conveyor3 conveyor4 conveyor5 conveyor6 conveyor7 {
+    control enabled $building 1
+  }
+  set cachedEnable 1
+  jump main_loop
+
+  disable_buildings:
+  set timeSinceLastDisable @time - lastDisabled
+  jump main_loop timeSinceLastDisable < 4e3
+  set lastDisabled @time
+  &for building of unloader1 unloader2 unloader3 unloader4 unloader5 unloader6 mixer1 mixer2 mixer3 mixer4 mixer5 mixer5 mixer6 mixer7 mixer8 mixer9 mixer10 mixer11 mixer12 mixer13 mixer14 mixer15 mixer16 mixer17 mixer18 conveyor2 conveyor3 conveyor4 conveyor5 conveyor6 conveyor7 {
+    control enabled $building 0
+  }
+  set cachedEnable 0
