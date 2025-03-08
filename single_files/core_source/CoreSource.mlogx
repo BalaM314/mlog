@@ -1,12 +1,33 @@
 #Core Source by BalaM314
 print "Core Source by BalaM314"
-set core vault1
+
+get_core:
+	&for unit of mono flare poly mega {
+		ubind @$unit
+		sensor @unit.dead @unit @dead
+		jump locate_core notEqual @unit.dead true
+	}
+	&for build of nucleus1 foundation1 shard1 vault1 bastion1 citadel1 acropolis1 nucleus2 foundation2 vault2 {
+		set core $build
+		jump core_found notEqual core null
+	}
+
+	cant_find_core:
+		print "[red]Can't find the core. Please link the core or make a mono/flare."
+    printflush message1
+		jump get_core
+
+	locate_core:
+		ulocate building core false coreX coreY _ core
+		ubind null
+core_found:
+
 main_loop:
 	
 	get_item:
 		set i 0
 		set lowestItem @silicon
-		set lowestAmount 694200
+		set lowestAmount 1e12
 		get_item_loop:
 			lookup item item i
 			sensor core.item core item
