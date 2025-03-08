@@ -1,0 +1,46 @@
+set accelerator_sharded accelerator1
+set accelerator_crux accelerator2
+
+determine_core_hp:
+  op rand multiplier 5
+  op ceil multiplier
+  set actualMultiplier multiplier * 125
+  sync multiplier
+
+main_loop:
+  # The sync packet from the server hasn't arrived yet, so do this in a loop
+
+  &for team of sharded crux {
+    setrule blockHealth multiplier @$team
+    set maxHealth 3920 * actualMultiplier
+    set maxHealth_k maxHealth \ 1000
+    sensor health accelerator_$(team) @health
+    set rawDamage 3920 - health
+    set damage rawDamage * actualMultiplier
+    op floor damage
+    set damage_$(team)_k damage \ 1000
+    set damage_$(team)_o damage % 1000
+  }
+
+
+  print "Destroy the \n"
+
+  printf "[yellow]Sharded: {damage_sharded_k}[]"
+  jump print_sharded damage_sharded_o >= 100
+  print "0"
+  jump print_sharded damage_sharded_o >= 10
+  print "0"
+  print_sharded:
+  printf "{damage_sharded_o}/[yellow]{maxHealth_k}[]000\n"
+
+  printf "[red]Crux:       {damage_crux_k}[]"
+  jump print_crux damage_crux_o >= 100
+  print "0"
+  jump print_crux damage_crux_o >= 10
+  print "0"
+  print_crux:
+  printf "{damage_crux_o}/[red]{maxHealth_k}[]000"
+
+  message mission
+
+  jump main_loop

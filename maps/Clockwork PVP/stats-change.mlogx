@@ -1,0 +1,14 @@
+set clamped_time 30
+set exp_scale -10
+set scale 500
+
+main_loop:
+  op max clamped_second @second clamped_time
+  set exponent clamped_second / exp_scale
+  set power @e ** exponent
+  set boost power * scale
+  set blockDamage boost + 1
+  &for team of sharded crux {
+    setrule blockDamage blockDamage @$team
+  }
+  jump main_loop

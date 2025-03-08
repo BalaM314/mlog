@@ -1,0 +1,12 @@
+set clamped_time 30
+set exp_scale -10
+set scale 500
+main_loop:
+op max clamped_second @second clamped_time
+op div exponent clamped_second exp_scale
+op pow power @e exponent
+op mul boost power scale
+op add blockDamage boost 1
+setrule blockDamage blockDamage @sharded
+setrule blockDamage blockDamage @crux
+jump main_loop always 0 0

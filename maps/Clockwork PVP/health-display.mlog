@@ -1,0 +1,52 @@
+set accelerator_sharded accelerator1
+set accelerator_crux accelerator2
+op rand multiplier 5 0
+op ceil multiplier multiplier 0
+op mul actualMultiplier multiplier 125
+sync multiplier
+main_loop:
+setrule blockHealth multiplier @sharded
+op mul maxHealth 3920 actualMultiplier
+op idiv maxHealth_k maxHealth 1000
+sensor health accelerator_sharded @health
+op sub rawDamage 3920 health
+op mul damage rawDamage actualMultiplier
+op floor damage damage 0
+op idiv damage_sharded_k damage 1000
+op mod damage_sharded_o damage 1000
+setrule blockHealth multiplier @crux
+op mul maxHealth 3920 actualMultiplier
+op idiv maxHealth_k maxHealth 1000
+sensor health accelerator_crux @health
+op sub rawDamage 3920 health
+op mul damage rawDamage actualMultiplier
+op floor damage damage 0
+op idiv damage_crux_k damage 1000
+op mod damage_crux_o damage 1000
+print "Destroy the \n"
+print "[yellow]Sharded: "
+print damage_sharded_k
+print "[]"
+jump print_sharded greaterThanEq damage_sharded_o 100
+print "0"
+jump print_sharded greaterThanEq damage_sharded_o 10
+print "0"
+print_sharded:
+print damage_sharded_o
+print "/[yellow]"
+print maxHealth_k
+print "[]000\n"
+print "[red]Crux:       "
+print damage_crux_k
+print "[]"
+jump print_crux greaterThanEq damage_crux_o 100
+print "0"
+jump print_crux greaterThanEq damage_crux_o 10
+print "0"
+print_crux:
+print damage_crux_o
+print "/[red]"
+print maxHealth_k
+print "[]000"
+message mission
+jump main_loop always 0 0

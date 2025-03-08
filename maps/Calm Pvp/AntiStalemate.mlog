@@ -1,0 +1,60 @@
+setrate 50
+wait:
+jump wait lessThan @minute 70
+warn_loop:
+op ceil mins @minute 0
+op floor secs @second 0
+op mod secs secs 60
+op sub minsRemaining 75 mins
+op sub secsRemaining 60 secs
+jump one_digit lessThan secsRemaining 10
+print "[scarlet]⚠WALL WILL BE REMOVED⚠\n\n[yellow]0"
+print minsRemaining
+print ":"
+print secsRemaining
+jump print_message always 0 0
+one_digit:
+print "[scarlet]⚠WALL WILL BE REMOVED⚠\n\n[yellow]0"
+print minsRemaining
+print ":0"
+print secsRemaining
+print_message:
+message mission
+set y 0
+show_effects_loop_1:
+effect warn 192 y 0 0 0
+effect cross 208 y 0 0 0
+op add y y 10
+jump show_effects_loop_1 lessThan y @maph
+wait 0.4
+set y 0
+show_effects_loop_2:
+effect cross 192 y 0 0 0
+effect warn 208 y 0 0 0
+op add y y 10
+jump show_effects_loop_2 lessThan y @maph
+wait 0.4
+jump warn_loop lessThan @minute 75
+print "[scarlet]⚠WALL IS BEING REMOVED⚠\n\n[yellow]00:00"
+message mission
+setrate 500
+getflag removed "removed"
+jump done strictEqual removed true
+setflag "removed" true
+set y 0
+remove_wall_loop:
+set x 167
+remove_row_loop:
+getblock building building x y
+jump skip notEqual building null
+setblock block @air x y
+skip:
+op add x x 1
+jump remove_row_loop lessThanEq x 267
+wait 0.08
+op add y y 1
+jump remove_wall_loop lessThanEq y 200
+print "[white]The wall has been removed. Destroy your opponent."
+message mission
+done:
+stop
