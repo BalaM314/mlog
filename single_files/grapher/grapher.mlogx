@@ -1,0 +1,44 @@
+
+set display display1
+set xmin -5
+set xmax 5
+set xstep 1
+set ymin 0
+set ymax 30
+set Xmin 0
+set Xmax 180
+set Ymin 0
+set Ymax 180
+
+&for _ of x y X Y {
+  set $(_)range $(_)max - $(_)min
+}
+
+main_loop:
+&for red of 0 255 {
+  &for blue of 0 255 {
+    draw clear 0 0 0
+    draw color $red 255 $blue 255
+    set x xmin
+    draw_loop_$(red)_$(blue):
+      call calculate
+      set X x - xmin
+      set X X / xrange
+      set X X * Xrange
+      set X X + Xmin
+      set Y y - ymin
+      set Y Y / yrange
+      set Y Y * Yrange
+      set Y Y + Ymin
+      draw poly X Y 999 2 0
+      op add x xstep
+      drawflush display
+      jump draw_loop_$(red)_$(blue) x <= xmax
+  }
+}
+jump main_loop
+
+calculate:
+set y x * x
+return
+
