@@ -5,7 +5,7 @@ lookup unit unitType unit.id
 sensor bombingItem sorter1 @config
 bind_unit:
 	ubind unitType
-	sensor @unit.flag @unit @flag
+	sensor @unit.flag
 	jump bind_unit notEqual @unit.flag 0
 should_take_or_drop:
 	ulocate building core false core.x core.y core.exists core

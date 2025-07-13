@@ -1,6 +1,6 @@
 {
 	"compilerConstants": {
-		"numSources": 10
+		"numSources": 48
 	},
 	"compilerOptions": {
 		"removeCompilerMark": false,

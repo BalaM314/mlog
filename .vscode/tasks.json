@@ -9,11 +9,12 @@
 			"presentation": {
 				"reveal": "always",
 				"panel": "new",
-				"close": false,
+				"close": false
 			},
 			"runOptions": {
-				"runOn": "folderOpen",
-			}
+				"runOn": "folderOpen"
+			},
+			"problemMatcher": []
 		}
 	]
 }

@@ -1,5 +1,4 @@
-set unitType @mono
-set oreToMine @copper
+set unitType @poly
 set minHealthFrac 0.7
 set approachDistance 6
 set repairApproachDistance 5
@@ -12,6 +11,7 @@ sensor @unit.itemCapacity @unit @itemCapacity
 op sub @unit.itemCapacity @unit.itemCapacity 1
 op mul minHealth @unit.maxHealth minHealthFrac
 main_loop:
+sensor oreToMine sorter1 @config
 bind_new_unit:
 ubind unitType
 sensor @unit.flag @unit @flag
