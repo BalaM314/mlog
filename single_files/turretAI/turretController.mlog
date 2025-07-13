@@ -12,3 +12,6 @@ op add i i 1
 control shoot linkedBuilding player.shootX player.shootY player.shooting
 jump write_loop lessThan i @links
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

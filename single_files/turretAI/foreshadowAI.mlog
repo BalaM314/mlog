@@ -13,3 +13,6 @@ jump main_loop always 0 0
 controlled:
 control enabled foreshadow1 true
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

@@ -20,6 +20,7 @@ set minPowerPerc 30
 print "Do not edit below this line."
 printflush null
 set shouldRun true
+get_core:
 ubind @mono
 sensor @unit.dead @unit @dead
 jump locate_core notEqual @unit.dead true
@@ -52,12 +53,14 @@ set core foundation2
 jump core_found notEqual core null
 set core vault2
 jump core_found notEqual core null
+cant_find_core:
 set err "Can't find the core. Please link the core or make a mono/flare."
 jump err always 0 0
 locate_core:
 ulocate building core false _ coreX coreY _ core
 ubind null
 core_found:
+get_power_building:
 jump power_building_found notEqual powerBuilding null
 set i 0
 get_power_building_loop:
@@ -66,11 +69,14 @@ sensor powerBuilding.powerNetIn powerBuilding @powerNetIn
 jump power_building_found notEqual powerBuilding.powerNetIn 0
 op add i i 1
 jump get_power_building_loop lessThan i @links
+no_power_building:
 set err "Can't find any power buildings. Please link a power building or disable power management."
 jump err always 0 0
 power_building_found:
 main_loop:
+check_links:
 jump restart notEqual @links startingLinks
+get_data:
 sensor core.itemCapacity core @itemCapacity
 op min inputCoreCap core.itemCapacity maxCoreCap
 sensor powerBuilding.powerNetStored powerBuilding @powerNetStored
@@ -78,9 +84,13 @@ sensor powerBuilding.powerNetCapacity powerBuilding @powerNetCapacity
 op div powerPerc powerBuilding.powerNetStored powerBuilding.powerNetCapacity
 op idiv powerPerc powerPerc 0.001
 op div powerPerc powerPerc 10
+&for i in 1 sand coal.length {
+sensor core.sand coal[$i] core @sand coal[$i]
 op div inputPerc$i core.input$i inputCoreCap
 op idiv inputPerc$i inputPerc$i 0.001
 op div inputPerc$i inputPerc$i 10
+}
+inputs_done:
 sensor core.output core output
 op div outputPerc core.output core.itemCapacity
 op idiv outputPerc outputPerc 0.001
@@ -103,6 +113,7 @@ print minPowerPerc
 print "%)\n"
 set shouldRun false
 power_ok:
+&for i in 1 $numInputs {
 jump all_inputs_ok equal input$i null
 jump input$i_ok greaterThan inputPerc$i minInputPerc
 print "[yellow]⚠ Low "
@@ -114,6 +125,7 @@ print minInputPerc
 print "%)\n"
 set shouldRun false
 input$i_ok:
+}
 all_inputs_ok:
 jump output_not_low equal output null
 jump output_not_low greaterThanEq outputPerc minOutputPerc
@@ -145,6 +157,7 @@ set shouldRun true
 jump print_status always 0 0
 print_status:
 jump print_true equal shouldRun true
+print_false:
 print "Status: [red]Disabled[].\n"
 jump write always 0 0
 print_true:

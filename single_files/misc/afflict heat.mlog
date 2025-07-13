@@ -128,3 +128,6 @@ control enabled projector1 od
 print "3x Afflict Defense by [#3141FF]BalaM[#31FF41]314"
 printflush message1
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

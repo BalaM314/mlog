@@ -19,3 +19,6 @@ op mul ydiff2 sintheta rad
 op add y ydiff2 center.y
 ucontrol move x y
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

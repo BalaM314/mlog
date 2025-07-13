@@ -191,3 +191,6 @@ control shoot lustre189 @thisx @thisy fire
 control shoot lustre190 @thisx @thisy fire
 control shoot lustre191 @thisx @thisy fire
 control shoot lustre192 @thisx @thisy fire
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

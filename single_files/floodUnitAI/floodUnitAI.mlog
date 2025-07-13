@@ -14,5 +14,9 @@ ucontrol approach enemyBuilding.x enemyBuilding.y 11
 ucontrol target enemyBuilding.x enemyBuilding.y true
 end
 heal_unit:
+ulocate building repair false repairTurret.x repairTurret.y
 ucontrol move repairTurret.x repairTurret.y
 end
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

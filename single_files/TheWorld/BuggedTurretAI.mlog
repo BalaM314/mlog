@@ -1,7 +1,7 @@
 set theta 0
 loop:
-op cos x theta
-op sin y theta
+op cos x theta 0
+op sin y theta 0
 op mul x x 20
 op mul y y 20
 op add x x 57

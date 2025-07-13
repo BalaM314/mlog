@@ -12,7 +12,7 @@ set y ymin
 check_tile:
 getblock floor floor x y
 jump next notEqual floor @moss
-setblock ore @ore-thorium x y
+setblock ore @ore-thorium x y @derelict 0
 next:
 op add x x 1
 jump check_tile lessThanEq x xmax
@@ -20,3 +20,6 @@ set x xmin
 op add y y 1
 jump check_tile lessThanEq y ymax
 stop
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

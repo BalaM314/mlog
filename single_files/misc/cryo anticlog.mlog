@@ -22,3 +22,6 @@ control enabled mixer2 ok
 control enabled mixer3 ok
 control enabled mixer4 ok
 control enabled mixer5 ok
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

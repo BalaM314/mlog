@@ -78,3 +78,6 @@ op lessThanEq od afflict1.timescale 1.5
 apply_overdrive:
 control enabled projector2 od
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

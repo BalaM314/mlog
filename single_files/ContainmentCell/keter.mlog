@@ -111,3 +111,6 @@ end_main_loop:
 print "\nby [#3141FF]BalaM314[]"
 printflush message1
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"

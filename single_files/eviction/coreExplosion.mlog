@@ -59,3 +59,6 @@ unit_loop_next:
 op add i i 1
 jump unit_loop lessThan i unitCount
 jump main_loop always 0 0
+end
+print "Made with mlogx"
+print "github.com/BalaM314/mlogx/"
