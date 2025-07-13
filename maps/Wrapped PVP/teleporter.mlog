@@ -1,0 +1,211 @@
+print "Teleporter logic for Wrapped PVP"
+print "by [#3141FF]BalM[#31FF41]314"
+op sub nextTeleport 120 10
+wait_for_time:
+setrate 2
+wait_for_time_loop:
+jump wait_for_time_loop lessThan @second nextTeleport
+setrate 200
+set x 0
+effect_loop_2_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_2_1 lessThan x @mapw
+wait 2
+set x 0
+effect_loop_2_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_2_2 lessThan x @mapw
+wait 2
+set x 0
+effect_loop_1_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_1_1 lessThan x @mapw
+wait 1
+set x 0
+effect_loop_1_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_1_2 lessThan x @mapw
+wait 1
+set x 0
+effect_loop_0.5_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.5_1 lessThan x @mapw
+wait 0.5
+set x 0
+effect_loop_0.5_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.5_2 lessThan x @mapw
+wait 0.5
+set x 0
+effect_loop_0.50_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.50_1 lessThan x @mapw
+wait 0.50
+set x 0
+effect_loop_0.50_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.50_2 lessThan x @mapw
+wait 0.50
+set x 0
+effect_loop_0.25_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.25_1 lessThan x @mapw
+wait 0.25
+set x 0
+effect_loop_0.25_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.25_2 lessThan x @mapw
+wait 0.25
+set x 0
+effect_loop_0.250_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.250_1 lessThan x @mapw
+wait 0.250
+set x 0
+effect_loop_0.250_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.250_2 lessThan x @mapw
+wait 0.250
+set x 0
+effect_loop_0.2500_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.2500_1 lessThan x @mapw
+wait 0.2500
+set x 0
+effect_loop_0.2500_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.2500_2 lessThan x @mapw
+wait 0.2500
+set x 0
+effect_loop_0.25000_1:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.25000_1 lessThan x @mapw
+wait 0.25000
+set x 0
+effect_loop_0.25000_2:
+effect placeBlock x 3 2 0 0
+effect placeBlock x 465 2 0 0
+op add x x 2
+jump effect_loop_0.25000_2 lessThan x @mapw
+wait 0.25000
+setrate 500
+set x 0
+clear_bombs_loop:
+getblock block block x 1
+setblock block block x 1
+jump clear_bombs_next_1 always 0 0
+clear_bombs_next_1:
+getblock block block x 2
+setblock block block x 2
+jump clear_bombs_next_2 always 0 0
+clear_bombs_next_2:
+getblock block block x 3
+setblock block block x 3
+jump clear_bombs_next_3 always 0 0
+clear_bombs_next_3:
+getblock block block x 4
+setblock block block x 4
+jump clear_bombs_next_4 always 0 0
+clear_bombs_next_4:
+getblock block block x 5
+setblock block block x 5
+jump clear_bombs_next_5 always 0 0
+clear_bombs_next_5:
+getblock block block x 6
+setblock block block x 6
+jump clear_bombs_next_6 always 0 0
+clear_bombs_next_6:
+getblock block block x 7
+setblock block block x 7
+jump clear_bombs_next_7 always 0 0
+clear_bombs_next_7:
+getblock block block x 461
+setblock block block x 461
+jump clear_bombs_next_461 always 0 0
+clear_bombs_next_461:
+getblock block block x 462
+setblock block block x 462
+jump clear_bombs_next_462 always 0 0
+clear_bombs_next_462:
+getblock block block x 463
+setblock block block x 463
+jump clear_bombs_next_463 always 0 0
+clear_bombs_next_463:
+getblock block block x 464
+setblock block block x 464
+jump clear_bombs_next_464 always 0 0
+clear_bombs_next_464:
+getblock block block x 465
+setblock block block x 465
+jump clear_bombs_next_465 always 0 0
+clear_bombs_next_465:
+getblock block block x 466
+setblock block block x 466
+jump clear_bombs_next_466 always 0 0
+clear_bombs_next_466:
+getblock block block x 467
+setblock block block x 467
+jump clear_bombs_next_467 always 0 0
+clear_bombs_next_467:
+op add x x 1
+jump clear_bombs_loop lessThan x @mapw
+fetch unitCount units @sharded
+set i 0
+teleport_units_sharded_loop:
+fetch unit unit @sharded i
+sensor unit.y unit @y
+jump teleport_units_sharded_next greaterThan unit.y 5.5
+op sub y 468 unit.y
+setprop @y unit y
+teleport_units_sharded_next:
+op add i i 1
+jump teleport_units_sharded_loop lessThan i units
+fetch unitCount units @green
+set i 0
+teleport_units_green_loop:
+fetch unit unit @green i
+sensor unit.y unit @y
+jump teleport_units_green_next lessThan unit.y 462.5
+op sub y 468 unit.y
+setprop @y unit y
+teleport_units_green_next:
+op add i i 1
+jump teleport_units_green_loop lessThan i units
+set x 0
+explosion_loop:
+explosion @sharded x 464 10 5000 true true false
+explosion @green x 5 10 5000 true true false
+op add x x 1
+jump explosion_loop lessThan x @mapw
+op add nextTeleport nextTeleport 30
+jump wait_for_time always 0 0

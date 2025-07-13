@@ -1,0 +1,79 @@
+print "Teleporter logic for Wrapped PVP"
+print "by [#3141FF]BalM[#31FF41]314"
+
+set nextTeleport 120 - 10 //should be off by 10 because the effects take 10 seconds
+
+wait_for_time:
+	setrate 2
+	wait_for_time_loop:
+		jump wait_for_time_loop @second < nextTeleport
+
+show_warning:
+	setrate 200
+
+	&for delay of 2 1 0.5 0.50 0.25 0.250 0.2500 0.25000 {
+		&for _ in 1 2 {
+			set x 0
+			effect_loop_$(delay)_$(_):
+				&for y of 3 465 {
+					effect placeBlock x $y 2
+				}
+				op add x 2
+				jump effect_loop_$(delay)_$(_) x < @mapw
+			wait $delay
+		}
+	}
+
+run:
+	setrate 500
+
+	//Prevent oil/blast bombs
+	clear_bombs:
+		set x 0
+		clear_bombs_loop:
+			&for y of 1 2 3 4 5 6 7 461 462 463 464 465 466 467 {
+				# this will cause any stored items or fluids to be cleared
+				getblock block block x $y
+				setblock block block x $y
+				jump clear_bombs_next_$y
+				clear_bombs_next_$y:
+			}
+			op add x 1
+			jump clear_bombs_loop x < @mapw
+
+	teleport_units_sharded:
+		fetch unitCount units @sharded
+		set i 0
+		teleport_units_sharded_loop:
+			fetch unit unit @sharded i
+			sensor unit.y
+			jump teleport_units_sharded_next unit.y > 5.5
+			set y 468 - unit.y
+			setprop unit.y y
+			teleport_units_sharded_next:
+			op add i 1
+			jump teleport_units_sharded_loop i < units
+	
+	teleport_units_green:
+		fetch unitCount units @green
+		set i 0
+		teleport_units_green_loop:
+			fetch unit unit @green i
+			sensor unit.y
+			jump teleport_units_green_next unit.y < 462.5
+			set y 468 - unit.y
+			setprop unit.y y
+			teleport_units_green_next:
+			op add i 1
+			jump teleport_units_green_loop i < units
+
+	explosion:
+		set x 0
+		explosion_loop:
+			explosion @sharded x 464 10 5000 true true false
+			explosion @green x 5 10 5000 true true false
+			op add x 1
+			jump explosion_loop x < @mapw
+
+	op add nextTeleport nextTeleport 30
+	jump wait_for_time
